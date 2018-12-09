@@ -1,34 +1,52 @@
+
 package com.ben.xmlwiztool.application.wrapper.factory;
 
 import org.w3c.dom.Element;
 
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
+import com.ben.xmlwiztool.application.wrapper.impl.ComplexElementWrapper;
+import com.ben.xmlwiztool.application.wrapper.impl.SimpleElementWrapper;
 
-public class ElementWrapperFactory {
+public class ElementWrapperFactory
+{
 
-	private ElementWrapperFactory instance;
+      // private ElementWrapperFactory instance;
 
-	private ElementWrapperFactory() {
+      // private ElementWrapperFactory()
+      // {
+      //
+      // }
 
-	}
+      // public ElementWrapperFactory getInstance()
+      // {
+      //
+      // if (instance == null)
+      // {
+      // instance = new ElementWrapperFactory();
+      // }
+      //
+      // return instance;
+      //
+      // }
 
-	public ElementWrapperFactory getInstance() {
+      public static ElementWrapper getElementWrapper(Element element)
+      {
 
-		if (instance == null) {
-			instance = new ElementWrapperFactory();
-		}
+	    if (element.hasChildNodes())
+	    {
 
-		return instance;
+		  for (int i = 0; i < element.getChildNodes().getLength(); i++)
+		  {
 
-	}
+			if (element.getChildNodes().item(i) instanceof Element)
+			{
 
-	public ElementWrapper getElementWrapper(Element element) {
+			      return new ComplexElementWrapper(element);
+			}
+		  }
+	    }
 
-		ElementWrapper wrapper;
-
-		// TODO finish this
-
-		return wrapper;
-	}
+	    return new SimpleElementWrapper(element);
+      }
 
 }
