@@ -3,6 +3,7 @@ package com.ben.xmlwiztool.application.wrapper;
 import org.w3c.dom.Element;
 
 import com.ben.xmlwiztool.application.displayable.IDisplayable;
+import com.ben.xmlwiztool.gui.viewer.Viewer;
 
 public abstract class ElementWrapper implements IDisplayable {
 
@@ -23,7 +24,7 @@ public abstract class ElementWrapper implements IDisplayable {
 	}
 
 	@Override
-	public void dispay() {
+	public void dispay(Viewer parent) {
 
 	}
 

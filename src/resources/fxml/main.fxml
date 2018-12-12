@@ -5,12 +5,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 
+<?import com.ben.xmlwiztool.gui.controls.toolbar.ButBar?>
+
 
 <BorderPane id="rootPane"
 	fx:controller="com.ben.xmlwiztool.gui.main.MainController"
 	styleClass="main-panel" 
 	xmlns:fx="http://javafx.com/fxml">
 
+
+<top>
+	<ButBar fx:id="butBar" />
+</top>
 
 
 	
