@@ -2,18 +2,18 @@ package com.ben.xmlwiztool.application.wrapper;
 
 import org.w3c.dom.Element;
 
-import com.ben.xmlwiztool.application.displayable.IDisplayable;
-import com.ben.xmlwiztool.gui.viewer.Viewer;
+import javafx.beans.property.SimpleBooleanProperty;
 
-public abstract class ElementWrapper implements IDisplayable {
+public abstract class ElementWrapper {
 
 	protected Element element;
-	protected boolean visible, isFold;
+	protected SimpleBooleanProperty visible, fold;
 	protected ElementWrapper parent;
 
 	public ElementWrapper() {
 		super();
-		visible = isFold = false;
+		setFold(false);
+		setVisible(false);
 
 	}
 
@@ -24,13 +24,9 @@ public abstract class ElementWrapper implements IDisplayable {
 	}
 
 	@Override
-	public void dispay(Viewer parent) {
-
-	}
-
-	@Override
 	public String toString() {
-		return "ElementWrapper [element=" + element + ", visible=" + visible + ", isFold=" + isFold + "]";
+		return "ElementWrapper [element=" + element + ", visible=" + visible + ", fold=" + fold + ", parent=" + parent
+				+ "]";
 	}
 
 	@Override
@@ -80,6 +76,30 @@ public abstract class ElementWrapper implements IDisplayable {
 
 	public void setParent(ElementWrapper parent) {
 		this.parent = parent;
+	}
+
+	public final SimpleBooleanProperty visibleProperty() {
+		return this.visible;
+	}
+
+	public final boolean isVisible() {
+		return this.visibleProperty().get();
+	}
+
+	public final void setVisible(final boolean visible) {
+		this.visibleProperty().set(visible);
+	}
+
+	public final SimpleBooleanProperty foldProperty() {
+		return this.fold;
+	}
+
+	public final boolean isFold() {
+		return this.foldProperty().get();
+	}
+
+	public final void setFold(final boolean fold) {
+		this.foldProperty().set(fold);
 	}
 
 }

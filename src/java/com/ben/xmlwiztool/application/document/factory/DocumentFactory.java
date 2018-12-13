@@ -18,7 +18,6 @@ import com.ben.xmlwiztool.application.document.exception.InvalidFileFormatExcept
 public class DocumentFactory {
 
 	public static Document getDocument(String source) throws DocumentParsingException {
-		// TODO getDocument(String source)
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder;

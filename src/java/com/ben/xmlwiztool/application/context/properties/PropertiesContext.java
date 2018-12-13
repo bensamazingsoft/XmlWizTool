@@ -13,9 +13,7 @@ public class PropertiesContext {
 	private File propFile;
 	private final String defaultPropertiesFileName = "/properties/default.properties";
 
-	private static PropertiesContext instance;
-
-	private PropertiesContext() throws IOException {
+	public PropertiesContext() throws IOException {
 
 		initProperties();
 	}
@@ -62,14 +60,6 @@ public class PropertiesContext {
 	public void set(String key, String value) {
 
 		properties.setProperty(key, value);
-	}
-
-	public static PropertiesContext getInstance() throws IOException {
-
-		if (instance == null) {
-			instance = new PropertiesContext();
-		}
-		return instance;
 	}
 
 }

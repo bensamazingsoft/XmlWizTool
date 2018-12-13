@@ -1,5 +1,7 @@
 package com.ben.xmlwiztool.gui.facade;
 
+import com.ben.xmlwiztool.application.context.AppContext;
+
 import javafx.beans.property.SimpleDoubleProperty;
 
 public class GuiFacade {
@@ -9,6 +11,11 @@ public class GuiFacade {
 	SimpleDoubleProperty tabSize;
 
 	private GuiFacade() {
+
+		tabSize = new SimpleDoubleProperty();
+
+		Double value = Double.valueOf(AppContext.getProperties().get("tabSize"));
+		tabSize.setValue(value);
 
 	}
 
@@ -20,6 +27,14 @@ public class GuiFacade {
 
 		return instance;
 
+	}
+
+	public SimpleDoubleProperty getTabSize() {
+		return tabSize;
+	}
+
+	public void setTabSize(SimpleDoubleProperty tabSize) {
+		this.tabSize = tabSize;
 	}
 
 }

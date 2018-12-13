@@ -10,7 +10,6 @@ import org.w3c.dom.Element;
 
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.factory.ElementWrapperFactory;
-import com.ben.xmlwiztool.gui.viewer.Viewer;
 
 public class ComplexElementWrapper extends ElementWrapper {
 
@@ -53,13 +52,6 @@ public class ComplexElementWrapper extends ElementWrapper {
 	public void setChildren(List<ElementWrapper> children) {
 
 		this.children = children;
-	}
-
-	@Override
-	public void dispay(Viewer parent) {
-
-		// TODO dispay
-		super.dispay(parent);
 	}
 
 	@Override
