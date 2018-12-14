@@ -16,7 +16,8 @@ public class ElementViewer extends HBox {
 
 	private final ElementWrapper wrapper;
 	private SimpleDoubleProperty TABSIZE = GuiFacade.getInstance().getTabSize();
-	private SimpleBooleanProperty visible = new SimpleBooleanProperty();
+	private SimpleBooleanProperty visibleElement = new SimpleBooleanProperty();
+	private SimpleBooleanProperty fold = new SimpleBooleanProperty();
 	private Region region = new Region();
 	private VBox content = new VBox();
 
@@ -29,14 +30,23 @@ public class ElementViewer extends HBox {
 		showOrNot();
 	}
 
+	// fold and visible properties are binded to the wrapper properties so
+	// wrapper state directly change the gui state.
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void bindProperties() {
+
 		region.minWidthProperty().bind(TABSIZE);
 
-		visible.bindBidirectional(wrapper.visibleProperty());
-		visible.addListener((ChangeListener) (o, oldVal, newVal) -> {
+		visibleElement.bindBidirectional(wrapper.visibleProperty());
+		visibleElement.addListener((ChangeListener) (o, oldVal, newVal) -> {
 			showOrNot();
 		});
+
+		fold.bindBidirectional(wrapper.foldProperty());
+		fold.addListener((ChangeListener) (o, oldVal, newVal) -> {
+			showOrNot();
+		});
+
 	}
 
 	private void showOrNot() {
@@ -49,12 +59,15 @@ public class ElementViewer extends HBox {
 
 	private void show() {
 
+		this.getChildren().clear();
+		content.getChildren().clear();
+
 		this.getChildren().add(region);
 		this.getChildren().add(content);
 
 		content.getChildren().add(new Sticker(wrapper));
 
-		if (wrapper instanceof ComplexElementWrapper) {
+		if (wrapper instanceof ComplexElementWrapper && !isFold()) {
 
 			ComplexElementWrapper complexElement = (ComplexElementWrapper) wrapper;
 
@@ -87,6 +100,30 @@ public class ElementViewer extends HBox {
 
 	public final void setTABSIZE(final double TABSIZE) {
 		this.TABSIZEProperty().set(TABSIZE);
+	}
+
+	public final SimpleBooleanProperty foldProperty() {
+		return this.fold;
+	}
+
+	public final boolean isFold() {
+		return this.foldProperty().get();
+	}
+
+	public final void setFold(final boolean fold) {
+		this.foldProperty().set(fold);
+	}
+
+	public final SimpleBooleanProperty visibleElementProperty() {
+		return this.visibleElement;
+	}
+
+	public final boolean isVisibleElement() {
+		return this.visibleElementProperty().get();
+	}
+
+	public final void setVisibleElement(final boolean visibleElement) {
+		this.visibleElementProperty().set(visibleElement);
 	}
 
 }

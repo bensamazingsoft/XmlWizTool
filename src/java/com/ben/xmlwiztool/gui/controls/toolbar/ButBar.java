@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.ben.xmlwiztool.application.actions.impl.FoldAllAction;
+import com.ben.xmlwiztool.application.actions.impl.ShowAllAction;
+import com.ben.xmlwiztool.application.actions.impl.UnFoldAllAction;
+import com.ben.xmlwiztool.application.executor.Executor;
+
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -101,7 +106,7 @@ public class ButBar extends ToolBar implements Initializable {
 	}
 
 	private void handleActionSettings() {
-		// TODO Auto-generated method stub
+		// TODO handleActionSettings()
 
 	}
 
@@ -112,7 +117,7 @@ public class ButBar extends ToolBar implements Initializable {
 	}
 
 	private void handleActionLoadClipBoard() {
-		// TODO Auto-generated method stub
+		// TODO handleActionLoadClipBoard()
 
 	}
 
@@ -123,7 +128,7 @@ public class ButBar extends ToolBar implements Initializable {
 	}
 
 	private void handleActionloadFile() {
-		// TODO Auto-generated method stub
+		// TODO handleActionloadFile()
 
 	}
 
@@ -134,7 +139,7 @@ public class ButBar extends ToolBar implements Initializable {
 	}
 
 	private void handleActionUnFoldAll() {
-		// TODO Auto-generated method stub
+		Executor.execute(new UnFoldAllAction());
 
 	}
 
@@ -145,7 +150,7 @@ public class ButBar extends ToolBar implements Initializable {
 	}
 
 	private void handleActionFoldAll() {
-		// TODO Auto-generated method stub
+		Executor.execute(new FoldAllAction());
 
 	}
 
@@ -156,7 +161,7 @@ public class ButBar extends ToolBar implements Initializable {
 	}
 
 	private void handleActionToggleSeparator() {
-		// TODO Auto-generated method stub
+		// TODO handleActionToggleSeparator()
 
 	}
 
@@ -167,7 +172,7 @@ public class ButBar extends ToolBar implements Initializable {
 	}
 
 	private void handleActionManageNames() {
-		// TODO Auto-generated method stub
+		// TODO handleActionManageNames()
 
 	}
 
@@ -178,8 +183,7 @@ public class ButBar extends ToolBar implements Initializable {
 	}
 
 	private void handleActionShowAll() {
-		// TODO Auto-generated method stub
-
+		Executor.execute(new ShowAllAction());
 	}
 
 	@Override
