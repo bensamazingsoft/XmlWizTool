@@ -5,22 +5,37 @@
 <?import javafx.scene.layout.*?>
 
 
-<fx:root type="javafx.scene.control.ToolBar" xmlns:fx="http://javafx.com/fxml">
+<fx:root type="javafx.scene.control.ToolBar"
+	xmlns:fx="http://javafx.com/fxml">
 
 
-	<ToggleButton fx:id="settingsBut" onAction="#actionSettings">
+	<ToggleButton fx:id="settingsBut"
+		onAction="#actionSettings">
 	</ToggleButton>
-	<ToggleButton fx:id="loadClipBoardBut" onAction="#toggleDraw" />
-	<ToggleButton fx:id="loadFileBut" onAction="#togglePick" />
-	<ToggleButton fx:id="unFoldAllBut" onAction="#toggleMove" />
-	<ToggleButton fx:id="foldAllBut" onAction="#togglePan" />
-	<ToggleButton fx:id="toggleSeparatorBut" onAction="#toggleResize" />
-	<ToggleButton fx:id="manageNamesBut" toggleGroup="$toggleGroup"
-		onAction="#toggleZoomIn" />
-
-
-
 	
+	<ToggleButton fx:id="loadClipBoardBut"
+		onAction="#actionLoadClipBoard" />
+		
+	<ToggleButton fx:id="loadFileBut"
+		onAction="#actionLoadFile" />
+		
+			<ToggleButton fx:id="showAllBut"
+		onAction="#actionShowAll" />
+		
+	<ToggleButton fx:id="unFoldAllBut"
+		onAction="#actionUnFoldAll" />
+		
+	<ToggleButton fx:id="foldAllBut" onAction="#actionFoldAll" />
+	
+	<ToggleButton fx:id="toggleSeparatorBut"
+		onAction="#actionToggleSeparator" toggleGroup="$toggleGroup" />
+		
+	<ToggleButton fx:id="manageNamesBut"
+		onAction="#actionManageNames" />
+
+
+
+
 
 
 </fx:root>

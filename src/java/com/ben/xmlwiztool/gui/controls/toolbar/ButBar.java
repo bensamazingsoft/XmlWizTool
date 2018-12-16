@@ -20,209 +20,249 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class ButBar extends ToolBar implements Initializable {
+public class ButBar extends ToolBar implements Initializable
+{
 
-	private final String IMAGEPATH = "images/gui/buttons";
+      private final String    IMAGEPATH			      = "images/buttons/";
 
-	@FXML
-	private ToggleButton settingsBut;
+      @FXML
+      private ToggleButton    settingsBut;
 
-	@FXML
-	private ToggleButton loadClipBoardBut;
+      @FXML
+      private ToggleButton    loadClipBoardBut;
 
-	@FXML
-	private ToggleButton loadFileBut;
+      @FXML
+      private ToggleButton    loadFileBut;
 
-	@FXML
-	private ToggleButton showAllBut;
+      @FXML
+      private ToggleButton    showAllBut;
 
-	@FXML
-	private ToggleButton unFoldAllBut;
+      @FXML
+      private ToggleButton    unFoldAllBut;
 
-	@FXML
-	private ToggleButton foldAllBut;
+      @FXML
+      private ToggleButton    foldAllBut;
 
-	@FXML
-	private ToggleButton toggleSeparatorBut;
+      @FXML
+      private ToggleButton    toggleSeparatorBut;
 
-	@FXML
-	private ToggleButton manageNamesBut;
+      @FXML
+      private ToggleButton    manageNamesBut;
 
-	// get images
-	final private Image settingsButImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "settingsBut.png"));
-	final private ImageView settingsButImgView = new ImageView();
+      // get images
+      final private Image     settingsButImg		      = new Image(getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "settingsBut.png"));
+      final private ImageView settingsButImgView	      = new ImageView();
 
-	final private Image loadClipBoardButImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "loadClipBoardBut.png"));
-	final private ImageView loadClipBoardButImgView = new ImageView();
+      final private Image     loadClipBoardButImg	      = new Image(getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "loadClipBoardBut.png"));
+      final private ImageView loadClipBoardButImgView	      = new ImageView();
 
-	final private Image loadFileImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "loadFile.png"));
-	final private ImageView loadFileImgView = new ImageView();
+      final private Image     loadFileImg		      = new Image(getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "loadFileBut.png"));
+      final private ImageView loadFileImgView		      = new ImageView();
 
-	final private Image unFoldAllImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "unFoldAll.png"));
-	final private ImageView unFoldAllImgView = new ImageView();
+      final private Image     unFoldAllImg		      = new Image(getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "unFoldAll.png"));
+      final private ImageView unFoldAllImgView		      = new ImageView();
 
-	final private Image foldAllButImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "foldAllBut.png"));
-	final private ImageView foldAllButImgView = new ImageView();
+      final private Image     foldAllButImg		      = new Image(getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "foldAllBut.png"));
+      final private ImageView foldAllButImgView		      = new ImageView();
 
-	final private Image manageNamesButImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "manageNamesBut.png"));
-	final private ImageView manageNamesButImgView = new ImageView();
+      final private Image     manageNamesButImg		      = new Image(getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "manageNamesBut.png"));
+      final private ImageView manageNamesButImgView	      = new ImageView();
 
-	final private Image showAllButImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "showAllBut.png"));
-	final private ImageView showAllButImgView = new ImageView();
+      final private Image     showAllButImg		      = new Image(getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "showAllBut.png"));
+      final private ImageView showAllButImgView		      = new ImageView();
 
-	final private Image toggleSeparatorButSelectedImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleSeparatorButSelected.png"));
-	final private Image toggleSeparatorButUnSelectedImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleSeparatorButUnSelected.png"));
-	final private ImageView toggleSeparatorButImgView = new ImageView();
+      final private Image     toggleSeparatorButSelectedImg   = new Image(getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleSeparatorButSelected.png"));
+      final private Image     toggleSeparatorButUnSelectedImg = new Image(getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleSeparatorButUnSelected.png"));
+      final private ImageView toggleSeparatorButImgView	      = new ImageView();
 
-	private String separator = ".";
+      private String	      separator			      = ".";
 
-	public ButBar() {
 
-		ResourceBundle bundle = ResourceBundle.getBundle("i18n/trad");
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ButBar.fxml"), bundle);
-		fxmlLoader.setRoot(this);
-		fxmlLoader.setController(this);
+      public ButBar()
+      {
 
-		try {
-			fxmlLoader.load();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+	    ResourceBundle bundle = ResourceBundle.getBundle("i18n/trad");
+	    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ButBar.fxml"), bundle);
+	    fxmlLoader.setRoot(this);
+	    fxmlLoader.setController(this);
 
-	@FXML
-	private void actionSettings(ActionEvent event) {
+	    try
+	    {
+		  fxmlLoader.load();
+	    }
+	    catch (IOException e)
+	    {
+		  throw new RuntimeException(e);
+	    }
+      }
 
-		handleActionSettings();
-	}
 
-	private void handleActionSettings() {
-		// TODO handleActionSettings()
+      @FXML
+      private void actionSettings(ActionEvent event)
+      {
 
-	}
+	    handleActionSettings();
+      }
 
-	@FXML
-	private void actionLoadClipBoard(ActionEvent event) {
 
-		handleActionLoadClipBoard();
-	}
+      private void handleActionSettings()
+      {
+	    // TODO handleActionSettings()
 
-	private void handleActionLoadClipBoard() {
-		// TODO handleActionLoadClipBoard()
+      }
 
-	}
 
-	@FXML
-	private void actionLoadFile(ActionEvent event) {
+      @FXML
+      private void actionLoadClipBoard(ActionEvent event)
+      {
 
-		handleActionloadFile();
-	}
+	    handleActionLoadClipBoard();
+      }
 
-	private void handleActionloadFile() {
-		// TODO handleActionloadFile()
 
-	}
+      private void handleActionLoadClipBoard()
+      {
+	    // TODO handleActionLoadClipBoard()
 
-	@FXML
-	private void actionUnFoldAll(ActionEvent event) {
+      }
 
-		handleActionUnFoldAll();
-	}
 
-	private void handleActionUnFoldAll() {
-		Executor.execute(new UnFoldAllAction());
+      @FXML
+      private void actionLoadFile(ActionEvent event)
+      {
 
-	}
+	    handleActionloadFile();
+      }
 
-	@FXML
-	private void actionFoldAll(ActionEvent event) {
 
-		handleActionFoldAll();
-	}
+      private void handleActionloadFile()
+      {
+	    // TODO handleActionloadFile()
 
-	private void handleActionFoldAll() {
-		Executor.execute(new FoldAllAction());
+      }
 
-	}
 
-	@FXML
-	private void actionToggleSeparator(ActionEvent event) {
+      @FXML
+      private void actionUnFoldAll(ActionEvent event)
+      {
 
-		handleActionToggleSeparator();
-	}
+	    handleActionUnFoldAll();
+      }
 
-	private void handleActionToggleSeparator() {
-		// TODO handleActionToggleSeparator()
 
-	}
+      private void handleActionUnFoldAll()
+      {
 
-	@FXML
-	private void actionManageNames(ActionEvent event) {
+	    Executor.getInstance().execute(new UnFoldAllAction());
 
-		handleActionManageNames();
-	}
+      }
 
-	private void handleActionManageNames() {
-		// TODO handleActionManageNames()
 
-	}
+      @FXML
+      private void actionFoldAll(ActionEvent event)
+      {
 
-	@FXML
-	private void actionShowAll(ActionEvent event) {
+	    handleActionFoldAll();
+      }
 
-		handleActionShowAll();
-	}
 
-	private void handleActionShowAll() {
-		Executor.execute(new ShowAllAction());
-	}
+      private void handleActionFoldAll()
+      {
 
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
+	    Executor.getInstance().execute(new FoldAllAction());
 
-		settingsBut.setGraphic(settingsButImgView);
-		settingsButImgView.imageProperty().set(settingsButImg);
+      }
 
-		loadClipBoardBut.setGraphic(loadClipBoardButImgView);
-		loadClipBoardButImgView.imageProperty().set(loadClipBoardButImg);
 
-		loadFileBut.setGraphic(loadFileImgView);
-		loadFileImgView.imageProperty().set(loadFileImg);
+      @FXML
+      private void actionToggleSeparator(ActionEvent event)
+      {
 
-		unFoldAllBut.setGraphic(unFoldAllImgView);
-		unFoldAllImgView.imageProperty().set(unFoldAllImg);
+	    handleActionToggleSeparator();
+      }
 
-		foldAllBut.setGraphic(foldAllButImgView);
-		foldAllButImgView.imageProperty().set(foldAllButImg);
 
-		showAllBut.setGraphic(foldAllButImgView);
-		showAllButImgView.imageProperty().set(showAllButImg);
+      private void handleActionToggleSeparator()
+      {
+	    // TODO handleActionToggleSeparator()
 
-		toggleSeparatorBut.setGraphic(toggleSeparatorButImgView);
-		toggleSeparatorBut.setUserData(separator);
-		toggleSeparatorButImgView.imageProperty().bind(Bindings.when(toggleSeparatorBut.selectedProperty())
-				.then(toggleSeparatorButSelectedImg).otherwise(toggleSeparatorButUnSelectedImg));
+      }
 
-		manageNamesBut.setGraphic(manageNamesButImgView);
-		manageNamesButImgView.imageProperty().set(manageNamesButImg);
 
-	}
+      @FXML
+      private void actionManageNames(ActionEvent event)
+      {
 
-	public String getSeparator() {
-		return separator;
-	}
+	    handleActionManageNames();
+      }
 
-	public void setSeparator(String separator) {
-		this.separator = separator;
-	}
+
+      private void handleActionManageNames()
+      {
+	    // TODO handleActionManageNames()
+
+      }
+
+
+      @FXML
+      private void actionShowAll(ActionEvent event)
+      {
+
+	    handleActionShowAll();
+      }
+
+
+      private void handleActionShowAll()
+      {
+
+	    Executor.getInstance().execute(new ShowAllAction());
+      }
+
+
+      @Override
+      public void initialize(URL arg0, ResourceBundle arg1)
+      {
+
+	    settingsBut.setGraphic(settingsButImgView);
+	    settingsButImgView.imageProperty().set(settingsButImg);
+
+	    loadClipBoardBut.setGraphic(loadClipBoardButImgView);
+	    loadClipBoardButImgView.imageProperty().set(loadClipBoardButImg);
+
+	    loadFileBut.setGraphic(loadFileImgView);
+	    loadFileImgView.imageProperty().set(loadFileImg);
+
+	    unFoldAllBut.setGraphic(unFoldAllImgView);
+	    unFoldAllImgView.imageProperty().set(unFoldAllImg);
+
+	    foldAllBut.setGraphic(foldAllButImgView);
+	    foldAllButImgView.imageProperty().set(foldAllButImg);
+
+	    showAllBut.setGraphic(showAllButImgView);
+	    showAllButImgView.imageProperty().set(showAllButImg);
+
+	    toggleSeparatorBut.setGraphic(toggleSeparatorButImgView);
+	    toggleSeparatorBut.setUserData(separator);
+	    toggleSeparatorButImgView.imageProperty().bind(Bindings.when(toggleSeparatorBut.selectedProperty())
+			.then(toggleSeparatorButSelectedImg).otherwise(toggleSeparatorButUnSelectedImg));
+
+	    manageNamesBut.setGraphic(manageNamesButImgView);
+	    manageNamesButImgView.imageProperty().set(manageNamesButImg);
+
+      }
+
+
+      public String getSeparator()
+      {
+
+	    return separator;
+      }
+
+
+      public void setSeparator(String separator)
+      {
+
+	    this.separator = separator;
+      }
 
 }

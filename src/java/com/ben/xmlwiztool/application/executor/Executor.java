@@ -1,3 +1,4 @@
+
 package com.ben.xmlwiztool.application.executor;
 
 import java.util.ArrayList;
@@ -5,29 +6,38 @@ import java.util.List;
 
 import com.ben.xmlwiztool.application.actions.IAction;
 
-public class Executor {
+public class Executor
+{
 
-	private static Executor instance;
-	private static List<IAction> history;
+      private static Executor	   instance;
+      private static List<IAction> history;
 
-	private Executor() {
-		history = new ArrayList<>();
-	}
 
-	public static void execute(IAction action) {
+      private Executor()
+      {
 
-		history.add(action);
-		action.execute();
+	    history = new ArrayList<>();
+      }
 
-	}
 
-	public static Executor getInstance() {
+      public void execute(IAction action)
+      {
 
-		if (instance == null) {
-			instance = new Executor();
-		}
+	    history.add(action);
+	    action.execute();
 
-		return instance;
-	}
+      }
+
+
+      public static Executor getInstance()
+      {
+
+	    if (instance == null)
+	    {
+		  instance = new Executor();
+	    }
+
+	    return instance;
+      }
 
 }
