@@ -12,6 +12,10 @@ public abstract class ElementWrapper {
 
 	public ElementWrapper() {
 		super();
+
+		visible = new SimpleBooleanProperty();
+		fold = new SimpleBooleanProperty();
+
 		setFold(false);
 		setVisible(false);
 

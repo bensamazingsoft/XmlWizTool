@@ -7,46 +7,22 @@ import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.impl.ComplexElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.impl.SimpleElementWrapper;
 
-public class ElementWrapperFactory
-{
+public class ElementWrapperFactory {
 
-      // private ElementWrapperFactory instance;
+	public static ElementWrapper getElementWrapper(Element element) {
 
-      // private ElementWrapperFactory()
-      // {
-      //
-      // }
+		if (element.hasChildNodes()) {
 
-      // public ElementWrapperFactory getInstance()
-      // {
-      //
-      // if (instance == null)
-      // {
-      // instance = new ElementWrapperFactory();
-      // }
-      //
-      // return instance;
-      //
-      // }
+			for (int i = 0; i < element.getChildNodes().getLength(); i++) {
 
-      public static ElementWrapper getElementWrapper(Element element)
-      {
+				if (element.getChildNodes().item(i) instanceof Element) {
 
-	    if (element.hasChildNodes())
-	    {
-
-		  for (int i = 0; i < element.getChildNodes().getLength(); i++)
-		  {
-
-			if (element.getChildNodes().item(i) instanceof Element)
-			{
-
-			      return new ComplexElementWrapper(element);
+					return new ComplexElementWrapper(element);
+				}
 			}
-		  }
-	    }
+		}
 
-	    return new SimpleElementWrapper(element);
-      }
+		return new SimpleElementWrapper(element);
+	}
 
 }

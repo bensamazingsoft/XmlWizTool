@@ -11,7 +11,7 @@ public class PropertiesContext {
 
 	private Properties defaultProp, properties;
 	private File propFile;
-	private final String defaultPropertiesFileName = "/properties/default.properties";
+	private final String defaultPropertiesFileName = "properties/default.properties";
 
 	public PropertiesContext() throws IOException {
 
@@ -22,7 +22,10 @@ public class PropertiesContext {
 
 		// initialize default properties
 
-		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+		defaultProp = new Properties();
+		properties = new Properties();
+
+		ClassLoader classloader = getClass().getClassLoader();
 		InputStream is = classloader.getResourceAsStream(defaultPropertiesFileName);
 		defaultProp.load(is);
 

@@ -13,76 +13,79 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class Sticker extends VBox
-{
+public class Sticker extends VBox {
 
-      private static final String IMAGEPATH = "images/gui/buttons";
-      private HBox		  top	    = new HBox();
-      private HBox		  bottom    = new HBox();
-      private Node		  nameLabel;
+	private static final String IMAGEPATH = "images/buttons/";
+	private HBox top = new HBox();
+	private HBox bottom = new HBox();
+	private Node nameLabel;
 
+	public Sticker(ElementWrapper wrapper) {
 
-      public Sticker(ElementWrapper wrapper)
-      {
+		this.getStyleClass().add("sticker");
 
-	    this.getChildren().addAll(top, bottom);
+		this.getChildren().addAll(top, bottom);
 
-	    if (wrapper instanceof ComplexElementWrapper)
-	    {
+		if (wrapper instanceof ComplexElementWrapper) {
 
-		  ToggleButton toggleFoldBut = new ToggleButton();
-		  toggleFoldBut.setOnAction((Event) -> {
-			toggleFold(wrapper);
-		  });
+			ToggleButton toggleFoldBut = new ToggleButton();
+			toggleFoldBut.setOnAction((Event) -> {
+				toggleFold(wrapper);
+			});
 
-		  Image toggleFoldButSelectedImg = new Image(
-			      getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleFoldButSelected.png"));
-		  Image toggleFoldButUnSelectedImg = new Image(
-			      getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleFoldButUnSelected.png"));
-		  ImageView toggleFoldButImgView = new ImageView();
+			Image toggleFoldButSelectedImg = new Image(
+					getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleFoldButSelected.png"));
+			Image toggleFoldButUnSelectedImg = new Image(
+					getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleFoldButUnSelected.png"));
+			ImageView toggleFoldButImgView = new ImageView();
 
-		  toggleFoldBut.setGraphic(toggleFoldButImgView);
-		  toggleFoldButImgView.imageProperty().bind(Bindings.when(toggleFoldBut.selectedProperty())
-			      .then(toggleFoldButSelectedImg).otherwise(toggleFoldButUnSelectedImg));
+			toggleFoldBut.setGraphic(toggleFoldButImgView);
+			toggleFoldButImgView.imageProperty().bind(Bindings.when(toggleFoldBut.selectedProperty())
+					.then(toggleFoldButSelectedImg).otherwise(toggleFoldButUnSelectedImg));
 
-		  top.getChildren().add(toggleFoldBut);
-	    }
+			top.getChildren().add(toggleFoldBut);
+		}
 
-	    nameLabel = new Label(wrapper.getElement().getTagName());
-	    top.getChildren().add(nameLabel);
+		nameLabel = new Label(wrapper.getElement().getTagName());
+		top.getChildren().add(nameLabel);
 
-	    ToggleButton toggleShowBut = new ToggleButton();
-	    toggleShowBut.setOnAction((Event) -> {
-		  toggleShow(wrapper);
-	    });
+		ToggleButton toggleShowBut = new ToggleButton();
+		toggleShowBut.setOnAction((Event) -> {
+			toggleShow(wrapper);
+		});
 
-	    Image toggleShowButSelectedImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleShowButSelected.png"));
-	    Image toggleShowButUnSelectedImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleShowButUnSelected.png"));
-	    ImageView toggleFoldButImgView = new ImageView();
+		// TODO need an image
+		// Image toggleShowButSelectedImg = new Image(
+		// getClass().getClassLoader().getResourceAsStream(IMAGEPATH +
+		// "toggleShowButSelected.png"));
+		// Image toggleShowButUnSelectedImg = new Image(
+		// getClass().getClassLoader().getResourceAsStream(IMAGEPATH +
+		// "toggleShowButUnSelected.png"));
+		// ImageView toggleFoldButImgView = new ImageView();
+		//
+		// toggleShowBut.setGraphic(toggleFoldButImgView);
+		// toggleFoldButImgView.imageProperty().bind(Bindings.when(toggleShowBut.selectedProperty())
+		// .then(toggleShowButSelectedImg).otherwise(toggleShowButUnSelectedImg));
 
-	    toggleShowBut.setGraphic(toggleFoldButImgView);
-	    toggleFoldButImgView.imageProperty().bind(Bindings.when(toggleShowBut.selectedProperty())
-			.then(toggleShowButSelectedImg).otherwise(toggleShowButUnSelectedImg));
+		top.getChildren().add(toggleShowBut);
 
-	    top.getChildren().add(toggleShowBut);
+		// TODO fix this, it returns all descendant as well as text content
+		// if (wrapper.getElement().getTextContent().length() > 0) {
+		// bottom.getChildren().add(new
+		// Label(wrapper.getElement().getTextContent()));
+		// }
 
-      }
+	}
 
+	private void toggleShow(ElementWrapper wrapper) {
 
-      private void toggleShow(ElementWrapper wrapper)
-      {
+		wrapper.setVisible(!wrapper.isVisible());
 
-	    wrapper.setVisible(!wrapper.isVisible());
+	}
 
-      }
+	private void toggleFold(ElementWrapper wrapper) {
 
-
-      private void toggleFold(ElementWrapper wrapper)
-      {
-
-	    wrapper.setFold(!wrapper.isFold());
-      }
+		wrapper.setFold(!wrapper.isFold());
+	}
 
 }

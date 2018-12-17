@@ -2,6 +2,7 @@ package com.ben.xmlwiztool.application.document.exception;
 
 import java.util.ResourceBundle;
 
+@SuppressWarnings("serial")
 public class DocumentParsingException extends Exception {
 	String message;
 

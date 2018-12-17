@@ -18,6 +18,9 @@
 	<ButBar fx:id="butBar" />
 </top>
 
+<center>
+	<TabPane fx:id="tabPane"/>
+</center>
 
 	
 </BorderPane>

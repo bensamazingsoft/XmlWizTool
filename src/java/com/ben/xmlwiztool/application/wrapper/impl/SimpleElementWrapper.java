@@ -8,7 +8,7 @@ public class SimpleElementWrapper extends ElementWrapper {
 
 	public SimpleElementWrapper(Element element) {
 		super(element);
-		// TODO SimpleElementWrapper
+
 	}
 
 }
