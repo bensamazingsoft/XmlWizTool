@@ -1,3 +1,4 @@
+
 package com.ben.xmlwiztool.gui.facade;
 
 import java.util.List;
@@ -9,69 +10,123 @@ import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.control.TabPane;
 
-public class GuiFacade {
+public class GuiFacade
+{
 
-	private static GuiFacade instance;
+      private static GuiFacade	   instance;
 
-	private SimpleDoubleProperty tabSize;
+      private SimpleDoubleProperty tabSize;
+      private SimpleDoubleProperty tabLength;
 
-	private String separator = ".";
+      private String		   separator = ".";
 
-	private TabPane tabPane;
+      private TabPane		   tabPane;
 
-	private GuiFacade() {
 
-		tabSize = new SimpleDoubleProperty();
+      private GuiFacade()
+      {
 
-		Double value = Double.valueOf(AppContext.getInstance().getProperties().get("tabSize"));
-		tabSize.setValue(value);
+	    tabSize = new SimpleDoubleProperty();
+	    tabLength = new SimpleDoubleProperty();
 
-	}
+	    Double value = Double.valueOf(AppContext.getInstance().getProperties().get("tabSize"));
+	    Double length = Double.valueOf(AppContext.getInstance().getProperties().get("tabLength"));
 
-	public static GuiFacade getInstance() {
+	    tabSize.setValue(value);
+	    tabLength.setValue(length);
 
-		if (instance == null) {
-			instance = new GuiFacade();
-		}
+      }
 
-		return instance;
 
-	}
+      public static GuiFacade getInstance()
+      {
 
-	public SimpleDoubleProperty getTabSize() {
-		return tabSize;
-	}
+	    if (instance == null)
+	    {
+		  instance = new GuiFacade();
+	    }
 
-	public void setTabSize(SimpleDoubleProperty tabSize) {
-		this.tabSize = tabSize;
-	}
+	    return instance;
 
-	public void toggleSeparator() {
+      }
 
-		separator = separator == "." ? "\\" : ".";
 
-	}
+      public SimpleDoubleProperty getTabSize()
+      {
 
-	public String getSeparator() {
-		return separator;
-	}
+	    return tabSize;
+      }
 
-	public void setSeparator(String separator) {
-		this.separator = separator;
-	}
 
-	public List<ElementWrapper> getOpenElements() {
+      public void setTabSize(SimpleDoubleProperty tabSize)
+      {
 
-		return tabPane.getTabs().stream().map(tab -> (ElementWrapper) tab.getUserData()).collect(Collectors.toList());
+	    this.tabSize = tabSize;
+      }
 
-	}
 
-	public TabPane getTabPane() {
-		return tabPane;
-	}
+      public void toggleSeparator()
+      {
 
-	public void setTabPane(TabPane tabPane) {
-		this.tabPane = tabPane;
-	}
+	    separator = separator == "." ? "\\" : ".";
+
+      }
+
+
+      public String getSeparator()
+      {
+
+	    return separator;
+      }
+
+
+      public void setSeparator(String separator)
+      {
+
+	    this.separator = separator;
+      }
+
+
+      public List<ElementWrapper> getOpenElements()
+      {
+
+	    return tabPane.getTabs().stream().map(tab -> (ElementWrapper) tab.getUserData()).collect(Collectors.toList());
+
+      }
+
+
+      public TabPane getTabPane()
+      {
+
+	    return tabPane;
+      }
+
+
+      public void setTabPane(TabPane tabPane)
+      {
+
+	    this.tabPane = tabPane;
+      }
+
+
+      public final SimpleDoubleProperty tabLengthProperty()
+      {
+
+	    return this.tabLength;
+      }
+
+
+      public final double getTabLength()
+      {
+
+	    return this.tabLengthProperty().get();
+      }
+
+
+      public final void setTabLength(final double tabLength)
+      {
+
+	    this.tabLengthProperty().set(tabLength);
+      }
 
 }

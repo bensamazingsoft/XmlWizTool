@@ -6,4 +6,9 @@
 
 .sticker {
 	-fx-border-color:#000000;
+	-fx-padding:4px;
+}
+
+.elementviewer {
+
 }
