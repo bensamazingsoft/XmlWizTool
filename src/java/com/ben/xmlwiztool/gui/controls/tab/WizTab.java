@@ -15,6 +15,7 @@ public class WizTab extends Tab {
 
 		ScrollPane scrollPane = new ScrollPane();
 		scrollPane.setContent(new ElementViewer(wrapper));
+
 		this.setContent(scrollPane);
 	}
 

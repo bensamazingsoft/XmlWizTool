@@ -11,6 +11,7 @@ import com.ben.xmlwiztool.application.document.exception.DocumentParsingExceptio
 import com.ben.xmlwiztool.application.document.factory.DocumentFactory;
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.factory.ElementWrapperFactory;
+import com.ben.xmlwiztool.application.wrapper.processor.impl.AliasesProcessor;
 import com.ben.xmlwiztool.gui.controls.tab.WizTab;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
 
@@ -25,6 +26,9 @@ public class LoadClipBoardAction implements IAction {
 			Document doc = DocumentFactory.getDocument(source);
 
 			ElementWrapper wrapper = ElementWrapperFactory.getElementWrapper(doc.getDocumentElement());
+
+			AliasesProcessor processor = new AliasesProcessor(wrapper);
+			processor.process(wrapper);
 
 			GuiFacade.getInstance().getTabPane().getTabs().add(new WizTab(wrapper));
 

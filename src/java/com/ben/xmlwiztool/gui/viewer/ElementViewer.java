@@ -13,174 +13,134 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
-public class ElementViewer extends HBox
-{
+public class ElementViewer extends HBox {
 
-      private final ElementWrapper  wrapper;
-      private SimpleDoubleProperty  TABSIZE	   = GuiFacade.getInstance().getTabSize();
-      // TODO get rid of that shit and binf the Node visible prop instead
-      private SimpleBooleanProperty visibleElement = new SimpleBooleanProperty();
-      private SimpleBooleanProperty fold	   = new SimpleBooleanProperty();
-      private Region		    region	   = new Region();
-      private VBox		    content	   = new VBox();
+	private final ElementWrapper wrapper;
+	private SimpleDoubleProperty TABSIZE = GuiFacade.getInstance().getTabSize();
+	private SimpleBooleanProperty visibleElement = new SimpleBooleanProperty();
+	private SimpleBooleanProperty fold = new SimpleBooleanProperty();
+	private Region region = new Region();
+	private VBox content = new VBox();
 
+	public ElementViewer(ElementWrapper wrapper) {
 
-      public ElementViewer(ElementWrapper wrapper)
-      {
+		super();
 
-	    super();
+		this.getStyleClass().add("elementviewer");
 
-	    this.getStyleClass().add("elementviewer");
+		this.wrapper = wrapper;
 
-	    this.wrapper = wrapper;
+		bindProperties();
 
-	    bindProperties();
+		showOrNot();
+	}
 
-	    showOrNot();
-      }
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void bindProperties() {
 
+		region.minWidthProperty().bind(TABSIZE);
 
-      // fold and visible properties are binded to the wrapper properties so
-      // wrapper state directly change the gui state.
-      @SuppressWarnings({
-		  "unchecked",
-		  "rawtypes" })
-      private void bindProperties()
-      {
+		// Node visibility binded to wrapper and viewer visible prop.
+		visibleElement.bindBidirectional(visibleProperty());
+		visibleElement.bindBidirectional(wrapper.visibleProperty());
+		visibleElement.addListener((ChangeListener) (o, oldVal, newVal) -> {
+			showOrNot();
+		});
 
-	    region.minWidthProperty().bind(TABSIZE);
+		fold.bindBidirectional(wrapper.foldProperty());
+		fold.addListener((ChangeListener) (o, oldVal, newVal) -> {
+			showOrNot();
+		});
 
-	    visibleElement.bindBidirectional(wrapper.visibleProperty());
-	    visibleElement.addListener((ChangeListener) (o, oldVal, newVal) -> {
-		  showOrNot();
-	    });
+	}
 
-	    fold.bindBidirectional(wrapper.foldProperty());
-	    fold.addListener((ChangeListener) (o, oldVal, newVal) -> {
-		  showOrNot();
-	    });
+	private void showOrNot() {
 
-      }
+		if (isVisible()) {
+			show();
+		} else {
+			hide();
+		}
+	}
 
+	private void show() {
 
-      private void showOrNot()
-      {
+		this.getChildren().clear();
+		content.getChildren().clear();
 
-	    if (isVisible())
-	    {
-		  show();
-	    }
-	    else
-	    {
-		  hide();
-	    }
-      }
+		this.getChildren().add(region);
+		this.getChildren().add(content);
 
+		content.getChildren().add(new Sticker(wrapper));
 
-      private void show()
-      {
+		if (wrapper instanceof ComplexElementWrapper && !isFold()) {
 
-	    this.getChildren().clear();
-	    content.getChildren().clear();
+			ComplexElementWrapper complexElement = (ComplexElementWrapper) wrapper;
 
-	    this.getChildren().add(region);
-	    this.getChildren().add(content);
+			if (!complexElement.getChildren().isEmpty()) {
 
-	    content.getChildren().add(new Sticker(wrapper));
+				for (ElementWrapper child : complexElement.getChildren()) {
+					content.getChildren().add(new ElementViewer(child));
+				}
 
-	    if (wrapper instanceof ComplexElementWrapper && !isFold())
-	    {
-
-		  ComplexElementWrapper complexElement = (ComplexElementWrapper) wrapper;
-
-		  if (!complexElement.getChildren().isEmpty())
-		  {
-
-			for (ElementWrapper child : complexElement.getChildren())
-			{
-			      content.getChildren().add(new ElementViewer(child));
 			}
 
-		  }
+		}
+	}
 
-	    }
-      }
+	private void hide() {
 
+		this.getChildren().clear();
+	}
 
-      private void hide()
-      {
+	public ElementWrapper getElement() {
 
-	    this.getChildren().clear();
-      }
+		return wrapper;
+	}
 
+	public final SimpleDoubleProperty TABSIZEProperty() {
 
-      public ElementWrapper getElement()
-      {
+		return this.TABSIZE;
+	}
 
-	    return wrapper;
-      }
+	public final double getTABSIZE() {
 
+		return this.TABSIZEProperty().get();
+	}
 
-      public final SimpleDoubleProperty TABSIZEProperty()
-      {
+	public final void setTABSIZE(final double TABSIZE) {
 
-	    return this.TABSIZE;
-      }
+		this.TABSIZEProperty().set(TABSIZE);
+	}
 
+	public final SimpleBooleanProperty foldProperty() {
 
-      public final double getTABSIZE()
-      {
+		return this.fold;
+	}
 
-	    return this.TABSIZEProperty().get();
-      }
+	public final boolean isFold() {
 
+		return this.foldProperty().get();
+	}
 
-      public final void setTABSIZE(final double TABSIZE)
-      {
+	public final void setFold(final boolean fold) {
 
-	    this.TABSIZEProperty().set(TABSIZE);
-      }
+		this.foldProperty().set(fold);
+	}
 
+	public final SimpleBooleanProperty visibleElementProperty() {
 
-      public final SimpleBooleanProperty foldProperty()
-      {
+		return this.visibleElement;
+	}
 
-	    return this.fold;
-      }
+	public final boolean isVisibleElement() {
 
+		return this.visibleElementProperty().get();
+	}
 
-      public final boolean isFold()
-      {
+	public final void setVisibleElement(final boolean visibleElement) {
 
-	    return this.foldProperty().get();
-      }
-
-
-      public final void setFold(final boolean fold)
-      {
-
-	    this.foldProperty().set(fold);
-      }
-
-
-      public final SimpleBooleanProperty visibleElementProperty()
-      {
-
-	    return this.visibleElement;
-      }
-
-
-      public final boolean isVisibleElement()
-      {
-
-	    return this.visibleElementProperty().get();
-      }
-
-
-      public final void setVisibleElement(final boolean visibleElement)
-      {
-
-	    this.visibleElementProperty().set(visibleElement);
-      }
+		this.visibleElementProperty().set(visibleElement);
+	}
 
 }

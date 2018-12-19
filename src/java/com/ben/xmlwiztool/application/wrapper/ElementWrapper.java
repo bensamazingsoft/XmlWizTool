@@ -1,162 +1,153 @@
 
 package com.ben.xmlwiztool.application.wrapper;
 
+import java.util.LinkedList;
+
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import javafx.beans.property.SimpleBooleanProperty;
 
-public abstract class ElementWrapper
-{
+public abstract class ElementWrapper {
 
-      protected Element		      element;
-      protected SimpleBooleanProperty visible, fold;
-      protected ElementWrapper	      parent;
+	protected Element element;
+	protected SimpleBooleanProperty visible, fold;
+	protected ElementWrapper parent;
 
+	public ElementWrapper() {
 
-      public ElementWrapper()
-      {
+		super();
 
-	    super();
+		visible = new SimpleBooleanProperty();
+		fold = new SimpleBooleanProperty();
 
-	    visible = new SimpleBooleanProperty();
-	    fold = new SimpleBooleanProperty();
+		setFold(false);
+		setVisible(true);
 
-	    setFold(false);
-	    setVisible(true);
+	}
 
-      }
+	public ElementWrapper(Element element) {
 
+		this();
+		this.element = element;
 
-      public ElementWrapper(Element element)
-      {
+	}
 
-	    this();
-	    this.element = element;
+	@Override
+	public String toString() {
 
-      }
+		return "ElementWrapper [element=" + element.getTagName() + "]";
+	}
 
+	@Override
+	public int hashCode() {
 
-      @Override
-      public String toString()
-      {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((element == null) ? 0 : element.hashCode());
+		return result;
+	}
 
-	    return "ElementWrapper [element=" + element + ", visible=" + visible + ", fold=" + fold + ", parent=" + parent
-			+ "]";
-      }
+	@Override
+	public boolean equals(Object obj) {
 
-
-      @Override
-      public int hashCode()
-      {
-
-	    final int prime = 31;
-	    int result = 1;
-	    result = prime * result + ((element == null) ? 0 : element.hashCode());
-	    return result;
-      }
-
-
-      @Override
-      public boolean equals(Object obj)
-      {
-
-	    if (this == obj)
-		  return true;
-	    if (obj == null)
-		  return false;
-	    if (getClass() != obj.getClass())
-		  return false;
-	    ElementWrapper other = (ElementWrapper) obj;
-	    if (element == null)
-	    {
-		  if (other.element != null)
+		if (this == obj)
+			return true;
+		if (obj == null)
 			return false;
-	    }
-	    else if (!element.getTextContent().equals(other.element.getTextContent()))
-		  return false;
-	    return true;
-      }
+		if (getClass() != obj.getClass())
+			return false;
+		ElementWrapper other = (ElementWrapper) obj;
+		if (element == null) {
+			if (other.element != null)
+				return false;
+		} else if (!element.getTextContent().equals(other.element.getTextContent()))
+			return false;
+		return true;
+	}
 
+	public String getValue() {
 
-      public String getValue()
-      {
+		if (element != null && element.hasChildNodes()) {
 
-	    if (element != null)
-	    {
-		  return element.getTextContent();
-	    }
+			Node clone = element.cloneNode(true);
 
-	    return "";
-      }
+			for (int i = 0; i < clone.getChildNodes().getLength(); i++) {
 
+				Node node = clone.getChildNodes().item(i);
+				if (node.getNodeType() != Node.TEXT_NODE) {
 
-      public Element getElement()
-      {
+					clone.removeChild(node);
+				}
+			}
 
-	    return element;
-      }
+			return element.getTextContent();
+		}
 
+		return "";
+	}
 
-      public void setElement(Element element)
-      {
+	public LinkedList<ElementWrapper> getAncestors() {
 
-	    this.element = element;
-      }
+		LinkedList<ElementWrapper> ancestors = new LinkedList<>();
 
+		ElementWrapper ancestor = parent;
+		while (ancestor != null) {
+			ancestors.addFirst(ancestor);
+			ancestor = ancestor.getParent();
+		}
 
-      public ElementWrapper getParent()
-      {
+		return ancestors;
+	}
 
-	    return parent;
-      }
+	public Element getElement() {
 
+		return element;
+	}
 
-      public void setParent(ElementWrapper parent)
-      {
+	public void setElement(Element element) {
 
-	    this.parent = parent;
-      }
+		this.element = element;
+	}
 
+	public ElementWrapper getParent() {
 
-      public final SimpleBooleanProperty visibleProperty()
-      {
+		return parent;
+	}
 
-	    return this.visible;
-      }
+	public void setParent(ElementWrapper parent) {
 
+		this.parent = parent;
+	}
 
-      public final boolean isVisible()
-      {
+	public final SimpleBooleanProperty visibleProperty() {
 
-	    return this.visibleProperty().get();
-      }
+		return this.visible;
+	}
 
+	public final boolean isVisible() {
 
-      public final void setVisible(final boolean visible)
-      {
+		return this.visibleProperty().get();
+	}
 
-	    this.visibleProperty().set(visible);
-      }
+	public final void setVisible(final boolean visible) {
 
+		this.visibleProperty().set(visible);
+	}
 
-      public final SimpleBooleanProperty foldProperty()
-      {
+	public final SimpleBooleanProperty foldProperty() {
 
-	    return this.fold;
-      }
+		return this.fold;
+	}
 
+	public final boolean isFold() {
 
-      public final boolean isFold()
-      {
+		return this.foldProperty().get();
+	}
 
-	    return this.foldProperty().get();
-      }
+	public final void setFold(final boolean fold) {
 
-
-      public final void setFold(final boolean fold)
-      {
-
-	    this.foldProperty().set(fold);
-      }
+		this.foldProperty().set(fold);
+	}
 
 }

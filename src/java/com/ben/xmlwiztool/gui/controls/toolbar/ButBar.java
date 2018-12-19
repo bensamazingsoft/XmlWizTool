@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import com.ben.xmlwiztool.application.actions.impl.FoldAllAction;
 import com.ben.xmlwiztool.application.actions.impl.LoadClipBoardAction;
+import com.ben.xmlwiztool.application.actions.impl.LoadFileAction;
 import com.ben.xmlwiztool.application.actions.impl.ShowAllAction;
 import com.ben.xmlwiztool.application.actions.impl.UnFoldAllAction;
 import com.ben.xmlwiztool.application.executor.Executor;
@@ -80,9 +81,9 @@ public class ButBar extends ToolBar implements Initializable {
 	final private ImageView showAllButImgView = new ImageView();
 
 	final private Image toggleSeparatorButSelectedImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleSeparatorButSelected.png"));
-	final private Image toggleSeparatorButUnSelectedImg = new Image(
 			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleSeparatorButUnSelected.png"));
+	final private Image toggleSeparatorButUnSelectedImg = new Image(
+			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleSeparatorButSelected.png"));
 	final private ImageView toggleSeparatorButImgView = new ImageView();
 
 	private String separator = ".";
@@ -119,7 +120,6 @@ public class ButBar extends ToolBar implements Initializable {
 	}
 
 	private void handleActionLoadClipBoard() {
-		// TODO handleActionLoadClipBoard()
 		Executor.getInstance().execute(new LoadClipBoardAction());
 
 	}
@@ -131,7 +131,7 @@ public class ButBar extends ToolBar implements Initializable {
 	}
 
 	private void handleActionloadFile() {
-		// TODO handleActionloadFile()
+		Executor.getInstance().execute(new LoadFileAction());
 
 	}
 

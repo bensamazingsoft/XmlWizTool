@@ -54,11 +54,20 @@ public class ComplexElementWrapper extends ElementWrapper {
 		this.children = children;
 	}
 
-	@Override
-	public String toString() {
+	// @Override
+	// public String toString() {
+	//
+	// return "ComplexElementWrapper (element = " + element + "[children=" +
+	// children + ", isCollection="
+	// + isCollection + "]";
+	// }
 
-		return "ComplexElementWrapper (element = " + element + "[children=" + children + ", isCollection="
-				+ isCollection + "]";
+	public boolean isCollection() {
+		return isCollection;
+	}
+
+	public void setCollection(boolean isCollection) {
+		this.isCollection = isCollection;
 	}
 
 }

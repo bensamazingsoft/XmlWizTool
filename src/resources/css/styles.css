@@ -5,9 +5,18 @@
 }
 
 .sticker {
+	-fx-spacing:5px;
+	-fx-alignment:center;
 	-fx-border-color:#000000;
+	-fx-background-color:paleturquoise;
 	-fx-padding:4px;
+	-fx-text-alignment:center;
 }
+
+#bottom{
+	-fx-background-color:whitesmoke;
+}
+
 
 .elementviewer {
 
