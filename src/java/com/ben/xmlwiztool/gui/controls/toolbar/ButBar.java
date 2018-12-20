@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.ben.xmlwiztool.application.actions.impl.FilterElementAction;
 import com.ben.xmlwiztool.application.actions.impl.FoldAllAction;
 import com.ben.xmlwiztool.application.actions.impl.LoadClipBoardAction;
 import com.ben.xmlwiztool.application.actions.impl.LoadFileAction;
 import com.ben.xmlwiztool.application.actions.impl.ShowAllAction;
 import com.ben.xmlwiztool.application.actions.impl.UnFoldAllAction;
+import com.ben.xmlwiztool.application.context.AppContext;
 import com.ben.xmlwiztool.application.executor.Executor;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
 
@@ -18,6 +20,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
@@ -50,6 +53,9 @@ public class ButBar extends ToolBar implements Initializable {
 
 	@FXML
 	private ToggleButton manageNamesBut;
+
+	@FXML
+	private TextField textField;
 
 	// get images
 	final private Image settingsButImg = new Image(
@@ -88,9 +94,11 @@ public class ButBar extends ToolBar implements Initializable {
 
 	private String separator = ".";
 
+	private final ResourceBundle bundle;
+
 	public ButBar() {
 
-		ResourceBundle bundle = ResourceBundle.getBundle("i18n/trad");
+		bundle = AppContext.getInstance().getBundle();
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ButBar.fxml"), bundle);
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
@@ -192,6 +200,13 @@ public class ButBar extends ToolBar implements Initializable {
 		Executor.getInstance().execute(new ShowAllAction());
 	}
 
+	@FXML
+
+	private void actionTextField() {
+		String text = textField.getText();
+		Executor.getInstance().execute(new FilterElementAction(text));
+	}
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
@@ -220,6 +235,8 @@ public class ButBar extends ToolBar implements Initializable {
 
 		manageNamesBut.setGraphic(manageNamesButImgView);
 		manageNamesButImgView.imageProperty().set(manageNamesButImg);
+
+		textField.setPromptText(bundle.getString("textFieldPromptText"));
 
 	}
 

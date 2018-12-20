@@ -27,7 +27,7 @@ public class Main extends Application {
 		FXMLLoader loader = new FXMLLoader();
 		Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(fxmlFile));
 
-		Scene scene = new Scene(rootNode, 400, 200);
+		Scene scene = new Scene(rootNode, 800, 600);
 		scene.getStylesheets().add("/css/styles.css");
 
 		stage.setTitle(bundle.getString("appTitle"));

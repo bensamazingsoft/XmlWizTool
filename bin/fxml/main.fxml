@@ -4,6 +4,7 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 
 <?import com.ben.xmlwiztool.gui.controls.toolbar.ButBar?>
 
@@ -15,7 +16,9 @@
 
 
 <top>
-	<ButBar fx:id="butBar" />
+
+		<ButBar fx:id="butBar" />
+
 </top>
 
 <center>

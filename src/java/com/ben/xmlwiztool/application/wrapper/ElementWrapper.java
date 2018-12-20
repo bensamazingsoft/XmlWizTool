@@ -135,6 +135,19 @@ public abstract class ElementWrapper {
 		this.visibleProperty().set(visible);
 	}
 
+	public void setBranchVisible(boolean b) {
+
+		setVisible(true);
+
+		ElementWrapper father = parent;
+
+		while (father != null) {
+			father.setVisible(true);
+			father = father.getParent();
+		}
+
+	}
+
 	public final SimpleBooleanProperty foldProperty() {
 
 		return this.fold;
@@ -148,6 +161,14 @@ public abstract class ElementWrapper {
 	public final void setFold(final boolean fold) {
 
 		this.foldProperty().set(fold);
+	}
+
+	public boolean match(String text) {
+
+		boolean inTag = element.getTagName().toLowerCase().matches(text.toLowerCase());
+		boolean inVal = getValue().toLowerCase().matches(text.toLowerCase());
+
+		return inTag || inVal;
 	}
 
 }
