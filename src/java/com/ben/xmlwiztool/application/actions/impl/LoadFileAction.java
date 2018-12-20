@@ -32,7 +32,7 @@ public class LoadFileAction implements IAction {
 
 		File file = fileChooser.showOpenDialog(null);
 		if (file != null) {
-
+			Long before = System.currentTimeMillis();
 			List<String> sources = new ArrayList<>();
 			try {
 				sources = Files.readAllLines(file.toPath());
@@ -43,10 +43,22 @@ public class LoadFileAction implements IAction {
 
 				ElementWrapper wrapper = ElementWrapperFactory.getElementWrapper(doc.getDocumentElement());
 
+				Long docu = System.currentTimeMillis();
+				System.out.println("Document made in " + (docu - before) + "ms");
+
 				AliasesProcessor processor = new AliasesProcessor(wrapper);
 				processor.process(wrapper);
 
+				Long alias = System.currentTimeMillis();
+				System.out.println("Aliases made in " + (alias - docu) + "ms");
+
 				GuiFacade.getInstance().getTabPane().getTabs().add(new WizTab(wrapper));
+
+				Long after = System.currentTimeMillis();
+
+				System.out.println("Tab made in " + (after - alias) + "ms");
+				System.out.println("loaded in : " + (after - before) + " ms");
+
 			} catch (IOException | DocumentParsingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
