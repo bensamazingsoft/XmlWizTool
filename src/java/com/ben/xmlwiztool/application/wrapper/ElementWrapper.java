@@ -11,7 +11,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 public abstract class ElementWrapper {
 
 	protected Element element;
-	protected SimpleBooleanProperty visible, fold;
+	protected SimpleBooleanProperty visible, fold, filterable;
 	protected ElementWrapper parent;
 
 	public ElementWrapper() {
@@ -20,9 +20,11 @@ public abstract class ElementWrapper {
 
 		visible = new SimpleBooleanProperty();
 		fold = new SimpleBooleanProperty();
+		filterable = new SimpleBooleanProperty();
 
 		setFold(false);
 		setVisible(true);
+		setFilterable(true);
 
 	}
 
@@ -137,12 +139,25 @@ public abstract class ElementWrapper {
 
 	public void setBranchVisible(boolean b) {
 
-		setVisible(true);
+		setVisible(b);
 
 		ElementWrapper father = parent;
 
 		while (father != null) {
-			father.setVisible(true);
+			father.setVisible(b);
+			father = father.getParent();
+		}
+
+	}
+
+	public void setBranchFilterable(boolean b) {
+
+		setFilterable(b);
+
+		ElementWrapper father = parent;
+
+		while (father != null) {
+			father.setFilterable(b);
 			father = father.getParent();
 		}
 
@@ -169,6 +184,18 @@ public abstract class ElementWrapper {
 		boolean inVal = getValue().toLowerCase().matches(text.toLowerCase());
 
 		return inTag || inVal;
+	}
+
+	public final SimpleBooleanProperty filterableProperty() {
+		return this.filterable;
+	}
+
+	public final boolean isFilterable() {
+		return this.filterableProperty().get();
+	}
+
+	public final void setFilterable(final boolean filterable) {
+		this.filterableProperty().set(filterable);
 	}
 
 }

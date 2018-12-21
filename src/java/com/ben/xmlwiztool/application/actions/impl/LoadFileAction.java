@@ -14,6 +14,7 @@ import com.ben.xmlwiztool.application.document.exception.DocumentParsingExceptio
 import com.ben.xmlwiztool.application.document.factory.DocumentFactory;
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.factory.ElementWrapperFactory;
+import com.ben.xmlwiztool.application.wrapper.processor.SetFilterableProcessor;
 import com.ben.xmlwiztool.application.wrapper.processor.impl.AliasesProcessor;
 import com.ben.xmlwiztool.gui.controls.tab.WizTab;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
@@ -51,6 +52,12 @@ public class LoadFileAction implements IAction {
 
 				Long alias = System.currentTimeMillis();
 				System.out.println("Aliases made in " + (alias - docu) + "ms");
+
+				SetFilterableProcessor filtering = new SetFilterableProcessor();
+				filtering.process(wrapper);
+
+				Long filter = System.currentTimeMillis();
+				System.out.println("Filtering made in " + (filter - alias) + "ms");
 
 				GuiFacade.getInstance().getTabPane().getTabs().add(new WizTab(wrapper));
 

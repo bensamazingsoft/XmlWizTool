@@ -23,165 +23,151 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-public class Sticker extends VBox
-{
+public class Sticker extends VBox {
 
-      private HBox		  top	    = new HBox();
-      private VBox		  bottom    = new VBox();
-      private Node		  nameLabel;
+	private HBox top = new HBox();
+	private VBox bottom = new VBox();
+	private Node nameLabel;
 
-      private static final String IMAGEPATH = "images/buttons/";
-      private final Image	  toggleFoldButSelectedImg;
-      private final Image	  toggleFoldButUnSelectedImg;
-      private final ImageView	  toggleFoldButImgView;
-      private final Image	  toggleShowButSelectedImg;
-      private final Image	  toggleShowButUnSelectedImg;
-      private final ImageView	  toggleShowButImgView;
+	private static final String IMAGEPATH = "images/buttons/";
+	private final Image toggleFoldButSelectedImg;
+	private final Image toggleFoldButUnSelectedImg;
+	private final ImageView toggleFoldButImgView;
+	private final Image toggleShowButSelectedImg;
+	private final Image toggleShowButUnSelectedImg;
+	private final ImageView toggleShowButImgView;
 
+	public Sticker(ElementWrapper wrapper) {
 
-      public Sticker(ElementWrapper wrapper)
-      {
+		toggleFoldButSelectedImg = new Image(
+				getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleFoldButUnSelected.png"));
+		toggleFoldButUnSelectedImg = new Image(
+				getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleFoldButSelected.png"));
+		toggleFoldButImgView = new ImageView();
 
-	    toggleFoldButSelectedImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleFoldButUnSelected.png"));
-	    toggleFoldButUnSelectedImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleFoldButSelected.png"));
-	    toggleFoldButImgView = new ImageView();
+		toggleShowButSelectedImg = new Image(
+				getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleShowButSelected.png"));
+		toggleShowButUnSelectedImg = new Image(
+				getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleFoldButSelected.png"));
+		toggleShowButImgView = new ImageView();
 
-	    toggleShowButSelectedImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleShowButSelected.png"));
-	    toggleShowButUnSelectedImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleFoldButSelected.png"));
-	    toggleShowButImgView = new ImageView();
+		final Image pathLabelImg = new Image(
+				getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "pathLabelImg.png"));
+		final ImageView pathLabelImgView = new ImageView(pathLabelImg);
 
-	    final Image pathLabelImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "pathLabelImg.png"));
-	    final ImageView pathLabelImgView = new ImageView(pathLabelImg);
+		this.getStyleClass().add("sticker");
+		this.getChildren().addAll(top, bottom);
+		this.minWidthProperty().bind(GuiFacade.getInstance().tabLengthProperty());
+		// this.maxWidthProperty().bind(GuiFacade.getInstance().tabLengthProperty());
 
-	    this.getStyleClass().add("sticker");
-	    this.getChildren().addAll(top, bottom);
-	    this.minWidthProperty().bind(GuiFacade.getInstance().tabLengthProperty());
-	    // this.maxWidthProperty().bind(GuiFacade.getInstance().tabLengthProperty());
+		// top
+		if (wrapper instanceof ComplexElementWrapper) {
 
-	    // top
-	    if (wrapper instanceof ComplexElementWrapper)
-	    {
+			addFoldBut(wrapper);
+		}
 
-		  addFoldBut(wrapper);
-	    }
+		nameLabel = new Label("<" + wrapper.getElement().getTagName() + ">" + wrapper.isFilterable());
+		nameLabel.getStyleClass().add("tagNameLabel");
+		top.getChildren().add(nameLabel);
 
-	    nameLabel = new Label(wrapper.getElement().getTagName());
-	    top.getChildren().add(nameLabel);
+		addShowBut(wrapper);
 
-	    addShowBut(wrapper);
+		// bottom
+		bottom.setId("bottom");
+		if (wrapper.getValue().length() > 0 && wrapper instanceof SimpleElementWrapper) {
 
-	    // bottom
-	    bottom.setId("bottom");
-	    if (wrapper.getValue().length() > 0 && wrapper instanceof SimpleElementWrapper)
-	    {
-		  bottom.getChildren()
-			      .add(new Label(AppContext.getInstance().getProperties().get("value") + " : " + wrapper.getValue()));
-	    }
+			Label label = new Label(
+					AppContext.getInstance().getBundle().getString("value") + " : " + wrapper.getValue());
+			label.getStyleClass().add("valueLabel");
 
-	    HBox pathBox = new HBox(pathLabelImgView, getElemPathTextFlow(wrapper));
-	    bottom.getChildren().add(pathBox);
+			bottom.getChildren().add(label);
+		}
 
-      }
+		HBox pathBox = new HBox(pathLabelImgView, getElemPathTextFlow(wrapper));
+		bottom.getChildren().add(pathBox);
 
+	}
 
-      private void addShowBut(ElementWrapper wrapper)
-      {
+	private void addShowBut(ElementWrapper wrapper) {
 
-	    ToggleButton toggleShowBut = new ToggleButton();
-	    toggleShowBut.setOnAction((Event) -> {
-		  toggleShow(wrapper);
-	    });
+		ToggleButton toggleShowBut = new ToggleButton();
+		toggleShowBut.setOnAction((Event) -> {
+			toggleShow(wrapper);
+		});
 
-	    toggleShowBut.setGraphic(toggleShowButImgView);
-	    toggleShowButImgView.imageProperty().bind(Bindings.when(wrapper.visibleProperty())
-			.then(toggleShowButSelectedImg).otherwise(toggleShowButUnSelectedImg));
+		toggleShowBut.setGraphic(toggleShowButImgView);
+		toggleShowButImgView.imageProperty().bind(Bindings.when(wrapper.visibleProperty())
+				.then(toggleShowButSelectedImg).otherwise(toggleShowButUnSelectedImg));
 
-	    Region region = new Region();
-	    top.getChildren().add(region);
-	    HBox.setHgrow(region, Priority.ALWAYS);
-	    top.getChildren().add(toggleShowBut);
-      }
+		Region region = new Region();
+		top.getChildren().add(region);
+		HBox.setHgrow(region, Priority.ALWAYS);
+		top.getChildren().add(toggleShowBut);
+	}
 
+	private void addFoldBut(ElementWrapper wrapper) {
 
-      private void addFoldBut(ElementWrapper wrapper)
-      {
+		ToggleButton toggleFoldBut = new ToggleButton();
+		toggleFoldBut.setOnAction((Event) -> {
+			toggleFold(wrapper);
+		});
 
-	    ToggleButton toggleFoldBut = new ToggleButton();
-	    toggleFoldBut.setOnAction((Event) -> {
-		  toggleFold(wrapper);
-	    });
+		toggleFoldBut.setGraphic(toggleFoldButImgView);
+		toggleFoldButImgView.imageProperty().bind(Bindings.when(wrapper.foldProperty()).then(toggleFoldButSelectedImg)
+				.otherwise(toggleFoldButUnSelectedImg));
 
-	    toggleFoldBut.setGraphic(toggleFoldButImgView);
-	    toggleFoldButImgView.imageProperty().bind(Bindings.when(wrapper.foldProperty()).then(toggleFoldButSelectedImg)
-			.otherwise(toggleFoldButUnSelectedImg));
+		top.getChildren().add(toggleFoldBut);
+	}
 
-	    top.getChildren().add(toggleFoldBut);
-      }
+	private TextFlow getElemPathTextFlow(ElementWrapper wrapper) {
 
+		TextFlow textFlow = new TextFlow();
+		LinkedList<ElementWrapper> ancestors = new LinkedList<>(wrapper.getAncestors());
+		ElementWrapper rootWrapper = ancestors.peekFirst();
 
-      private TextFlow getElemPathTextFlow(ElementWrapper wrapper)
-      {
+		while (!ancestors.isEmpty()) {
 
-	    TextFlow textFlow = new TextFlow();
-	    LinkedList<ElementWrapper> ancestors = new LinkedList<>(wrapper.getAncestors());
-	    ElementWrapper rootWrapper = ancestors.peekFirst();
+			ElementWrapper current = ancestors.poll();
 
-	    while (!ancestors.isEmpty())
-	    {
+			Text text = testForTagNameAlias(rootWrapper, current);
 
-		  ElementWrapper current = ancestors.poll();
+			textFlow.getChildren().add(text);
 
-		  Text text = testForTagNameAlias(rootWrapper, current);
+			Text sep = new Text(GuiFacade.getInstance().getSeparator());
+			textFlow.getChildren().add(sep);
+		}
 
-		  textFlow.getChildren().add(text);
+		Text thisTag = testForTagNameAlias(rootWrapper, wrapper);
+		textFlow.getChildren().add(thisTag);
 
-		  Text sep = new Text(GuiFacade.getInstance().getSeparator());
-		  textFlow.getChildren().add(sep);
-	    }
+		return textFlow;
+	}
 
-	    Text thisTag = testForTagNameAlias(rootWrapper, wrapper);
-	    textFlow.getChildren().add(thisTag);
+	private Text testForTagNameAlias(ElementWrapper rootWrapper, ElementWrapper current) {
+		// String tag =
+		// AppContext.getInstance().getTagNameAliasManager().getAlias(rootWrapper,
+		// current);
 
-	    return textFlow;
-      }
+		Text text = new Text(current.getElement().getTagName());
 
+		if (AppContext.getInstance().getTagNameAliasManager().aliased(current)) {
 
-      private Text testForTagNameAlias(ElementWrapper rootWrapper, ElementWrapper current)
-      {
-	    // String tag =
-	    // AppContext.getInstance().getTagNameAliasManager().getAlias(rootWrapper,
-	    // current);
+			text = new Text(AppContext.getInstance().getTagNameAliasManager().getAlias(rootWrapper, current));
+			text.setFill(Color.RED);
+		}
 
-	    Text text = new Text(current.getElement().getTagName());
+		return text;
+	}
 
-	    if (AppContext.getInstance().getTagNameAliasManager().aliased(current))
-	    {
+	private void toggleShow(ElementWrapper wrapper) {
 
-		  text = new Text(AppContext.getInstance().getTagNameAliasManager().getAlias(rootWrapper, current));
-		  text.setFill(Color.RED);
-	    }
+		wrapper.setVisible(!wrapper.isVisible());
 
-	    return text;
-      }
+	}
 
+	private void toggleFold(ElementWrapper wrapper) {
 
-      private void toggleShow(ElementWrapper wrapper)
-      {
-
-	    wrapper.setVisible(!wrapper.isVisible());
-
-      }
-
-
-      private void toggleFold(ElementWrapper wrapper)
-      {
-
-	    wrapper.setFold(!wrapper.isFold());
-      }
+		wrapper.setFold(!wrapper.isFold());
+	}
 
 }

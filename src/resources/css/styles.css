@@ -8,7 +8,7 @@
 	-fx-spacing:5px;
 	-fx-alignment:center;
 	-fx-border-color:#000000;
-	-fx-background-color:paleturquoise;
+	-fx-background-color:#90ee90;
 	-fx-padding:4px;
 	-fx-text-alignment:center;
 }
@@ -17,6 +17,17 @@
 	-fx-background-color:whitesmoke;
 }
 
+.valueLabel{
+	-fx-font-size:1.2em;
+	-fx-font-weight: bold;
+	-fx-text-fill:#1e90ff;
+}
+
+.tagNameLabel{
+	-fx-font-size:1.2em;
+	-fx-font-weight: bold;
+	-fx-text-fill:#008080;
+}
 
 .elementviewer {
 

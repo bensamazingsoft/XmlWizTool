@@ -1,5 +1,5 @@
 
-package com.ben.xmlwiztool.gui.controls.toolbar;
+package com.ben.xmlwiztool.gui.controls.controlbar;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,15 +20,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class ButBar extends ToolBar implements Initializable {
+public class ControlBar extends ToolBar implements Initializable {
 
 	private final String IMAGEPATH = "images/buttons/";
+
+	private double imgSize = Double.valueOf(AppContext.getInstance().getProperties().get("butImgSize"));
 
 	@FXML
 	private ToggleButton settingsBut;
@@ -57,49 +60,61 @@ public class ButBar extends ToolBar implements Initializable {
 	@FXML
 	private TextField textField;
 
+	@FXML
+	private CheckBox hideEmptyCb;
+
 	// get images
 	final private Image settingsButImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "settingsBut.png"));
+			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "settingsBut.png"), imgSize, imgSize, true,
+			true);
+
 	final private ImageView settingsButImgView = new ImageView();
 
 	final private Image loadClipBoardButImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "loadClipBoardBut.png"));
+			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "loadClipBoardBut.png"), imgSize, imgSize, true,
+			true);
 	final private ImageView loadClipBoardButImgView = new ImageView();
 
 	final private Image loadFileImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "loadFileBut.png"));
+			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "loadFileBut.png"), imgSize, imgSize, true,
+			true);
 	final private ImageView loadFileImgView = new ImageView();
 
 	final private Image unFoldAllImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "unFoldAll.png"));
+			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "unFoldAll.png"), imgSize, imgSize, true, true);
 	final private ImageView unFoldAllImgView = new ImageView();
 
 	final private Image foldAllButImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "foldAllBut.png"));
+			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "foldAllBut.png"), imgSize, imgSize, true,
+			true);
 	final private ImageView foldAllButImgView = new ImageView();
 
 	final private Image manageNamesButImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "manageNamesBut.png"));
+			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "manageNamesBut.png"), imgSize, imgSize, true,
+			true);
 	final private ImageView manageNamesButImgView = new ImageView();
 
 	final private Image showAllButImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "showAllBut.png"));
+			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "showAllBut.png"), imgSize, imgSize, true,
+			true);
 	final private ImageView showAllButImgView = new ImageView();
 
 	final private Image toggleSeparatorButSelectedImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleSeparatorButUnSelected.png"));
+			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleSeparatorButUnSelected.png"), imgSize,
+			imgSize, true, true);
 	final private Image toggleSeparatorButUnSelectedImg = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleSeparatorButSelected.png"));
+			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleSeparatorButSelected.png"), imgSize,
+			imgSize, true, true);
 	final private ImageView toggleSeparatorButImgView = new ImageView();
 
 	private String separator = ".";
 
 	private final ResourceBundle bundle;
 
-	public ButBar() {
+	public ControlBar() {
 
 		bundle = AppContext.getInstance().getBundle();
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ButBar.fxml"), bundle);
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ControlBar.fxml"), bundle);
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
 
@@ -237,6 +252,9 @@ public class ButBar extends ToolBar implements Initializable {
 		manageNamesButImgView.imageProperty().set(manageNamesButImg);
 
 		textField.setPromptText(bundle.getString("textFieldPromptText"));
+
+		hideEmptyCb.selectedProperty().bindBidirectional(GuiFacade.getInstance().hideEmptyProperty());
+		hideEmptyCb.selectedProperty().set(false);
 
 	}
 

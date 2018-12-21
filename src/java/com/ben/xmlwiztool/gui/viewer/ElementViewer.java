@@ -19,6 +19,9 @@ public class ElementViewer extends HBox {
 	private SimpleDoubleProperty TABSIZE = GuiFacade.getInstance().getTabSize();
 	private SimpleBooleanProperty visibleElement = new SimpleBooleanProperty();
 	private SimpleBooleanProperty fold = new SimpleBooleanProperty();
+	private SimpleBooleanProperty filter = new SimpleBooleanProperty();
+	private SimpleBooleanProperty state = new SimpleBooleanProperty();
+
 	private Region region = new Region();
 	private VBox content = new VBox();
 
@@ -52,15 +55,35 @@ public class ElementViewer extends HBox {
 			showOrNot();
 		});
 
+		filter.bind(wrapper.filterableProperty());
+
+		state.bind(GuiFacade.getInstance().hideEmptyProperty());
+		state.addListener((ChangeListener) (observable, oldVal, newVal) -> {
+			showOrNot();
+		});
+
 	}
 
 	private void showOrNot() {
 
-		if (isVisible()) {
+		if (isVisible() && !isFiltered()) {
 			show();
 		} else {
 			hide();
 		}
+	}
+
+	private boolean isFiltered() {
+
+		if (!GuiFacade.getInstance().isHideEmpty()) {
+			return false;
+		}
+
+		if (!wrapper.isFilterable()) {
+			return false;
+		}
+
+		return true;
 	}
 
 	private void show() {
@@ -141,6 +164,14 @@ public class ElementViewer extends HBox {
 	public final void setVisibleElement(final boolean visibleElement) {
 
 		this.visibleElementProperty().set(visibleElement);
+	}
+
+	public VBox getContent() {
+		return content;
+	}
+
+	public void setContent(VBox content) {
+		this.content = content;
 	}
 
 }

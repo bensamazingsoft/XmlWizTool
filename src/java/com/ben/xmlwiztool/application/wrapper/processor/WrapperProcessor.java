@@ -6,7 +6,7 @@ import com.ben.xmlwiztool.application.wrapper.impl.ComplexElementWrapper;
 //provides recursive element processing
 public interface WrapperProcessor {
 
-	public void processSingle(ElementWrapper wrapper);
+	abstract void processSingle(ElementWrapper wrapper);
 
 	default void process(ElementWrapper wrapper) {
 

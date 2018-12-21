@@ -21,6 +21,7 @@ public class ComplexElementWrapper extends ElementWrapper {
 	public ComplexElementWrapper(Element element) {
 
 		super(element);
+		// setFilterable(true);
 
 		for (int i = 0; i < element.getChildNodes().getLength(); i++) {
 
@@ -35,6 +36,7 @@ public class ComplexElementWrapper extends ElementWrapper {
 				children.add(newWrapper);
 
 				names.add(newElem.getTagName());
+
 			}
 
 			// if all child tags are the same it's a collection

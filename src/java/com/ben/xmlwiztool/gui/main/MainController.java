@@ -3,7 +3,7 @@ package com.ben.xmlwiztool.gui.main;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.ben.xmlwiztool.gui.controls.toolbar.ButBar;
+import com.ben.xmlwiztool.gui.controls.controlbar.ControlBar;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
 
 import javafx.fxml.FXML;
@@ -13,7 +13,7 @@ import javafx.scene.control.TabPane;
 public class MainController implements Initializable {
 
 	@FXML
-	ButBar butBar;
+	ControlBar controlBar;
 
 	@FXML
 	TabPane tabPane;

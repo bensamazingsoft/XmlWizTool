@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.CheckBox?>
+
+
+<fx:root type="javafx.scene.control.ToolBar" xmlns:fx="http://javafx.com/fxml">
+
+
+	<ToggleButton fx:id="settingsBut" onAction="#actionSettings">
+	</ToggleButton>
+
+	<ToggleButton fx:id="loadClipBoardBut" onAction="#actionLoadClipBoard" />
+
+	<ToggleButton fx:id="loadFileBut" onAction="#actionLoadFile" />
+
+	<ToggleButton fx:id="showAllBut" onAction="#actionShowAll" />
+
+	<ToggleButton fx:id="unFoldAllBut" onAction="#actionUnFoldAll" />
+
+	<ToggleButton fx:id="foldAllBut" onAction="#actionFoldAll" />
+
+	<ToggleButton fx:id="toggleSeparatorBut" onAction="#actionToggleSeparator"
+		toggleGroup="$toggleGroup" />
+
+	<ToggleButton fx:id="manageNamesBut" onAction="#actionManageNames" />
+
+	<Separator />
+
+	<TextField fx:id="textField" onAction="#actionTextField" />
+	
+	<Separator />
+	
+	<CheckBox fx:id="hideEmptyCb" text="%hideEmpty" />
+
+
+
+
+
+</fx:root>

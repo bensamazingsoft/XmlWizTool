@@ -9,6 +9,10 @@ public class SimpleElementWrapper extends ElementWrapper {
 	public SimpleElementWrapper(Element element) {
 		super(element);
 
+		if (getValue().length() > 0) {
+			setFilterable(false);
+		}
+
 	}
 
 }
