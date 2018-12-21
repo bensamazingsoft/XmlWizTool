@@ -20,6 +20,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
@@ -34,28 +35,28 @@ public class ControlBar extends ToolBar implements Initializable {
 	private double imgSize = Double.valueOf(AppContext.getInstance().getProperties().get("butImgSize"));
 
 	@FXML
-	private ToggleButton settingsBut;
+	private Button settingsBut;
 
 	@FXML
-	private ToggleButton loadClipBoardBut;
+	private Button loadClipBoardBut;
 
 	@FXML
-	private ToggleButton loadFileBut;
+	private Button loadFileBut;
 
 	@FXML
-	private ToggleButton showAllBut;
+	private Button showAllBut;
 
 	@FXML
-	private ToggleButton unFoldAllBut;
+	private Button unFoldAllBut;
 
 	@FXML
-	private ToggleButton foldAllBut;
+	private Button foldAllBut;
 
 	@FXML
 	private ToggleButton toggleSeparatorBut;
 
 	@FXML
-	private ToggleButton manageNamesBut;
+	private Button manageNamesBut;
 
 	@FXML
 	private TextField textField;

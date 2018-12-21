@@ -4,13 +4,24 @@
 
 }
 
+.button { 
+	
+}
+
 .sticker {
-	-fx-spacing:5px;
+
 	-fx-alignment:center;
 	-fx-border-color:#000000;
 	-fx-background-color:#90ee90;
-	-fx-padding:4px;
+	-fx-padding:2.0px;
 	-fx-text-alignment:center;
+}
+
+.foldBut{
+	-fx-font-size:1.4em;
+	-fx-font-weight: bold;
+	-fx-background-color:rgba(100,100,100,0.2);
+	-fx-padding:0.0,2.0,0.0,2.0;
 }
 
 #bottom{

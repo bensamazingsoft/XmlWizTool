@@ -6,18 +6,9 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.w3c.dom.Document;
-
 import com.ben.xmlwiztool.application.actions.IAction;
 import com.ben.xmlwiztool.application.context.AppContext;
-import com.ben.xmlwiztool.application.document.exception.DocumentParsingException;
-import com.ben.xmlwiztool.application.document.factory.DocumentFactory;
-import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
-import com.ben.xmlwiztool.application.wrapper.factory.ElementWrapperFactory;
-import com.ben.xmlwiztool.application.wrapper.processor.SetFilterableProcessor;
-import com.ben.xmlwiztool.application.wrapper.processor.impl.AliasesProcessor;
-import com.ben.xmlwiztool.gui.controls.tab.WizTab;
-import com.ben.xmlwiztool.gui.facade.GuiFacade;
+import com.ben.xmlwiztool.application.executor.Executor;
 
 import javafx.stage.FileChooser;
 
@@ -33,40 +24,17 @@ public class LoadFileAction implements IAction {
 
 		File file = fileChooser.showOpenDialog(null);
 		if (file != null) {
-			Long before = System.currentTimeMillis();
+
 			List<String> sources = new ArrayList<>();
 			try {
+
 				sources = Files.readAllLines(file.toPath());
 
 				String source = String.join("\n", sources);
 
-				Document doc = DocumentFactory.getDocument(source);
+				Executor.getInstance().execute(new LoadStringSourceAction(source));
 
-				ElementWrapper wrapper = ElementWrapperFactory.getElementWrapper(doc.getDocumentElement());
-
-				Long docu = System.currentTimeMillis();
-				System.out.println("Document made in " + (docu - before) + "ms");
-
-				AliasesProcessor processor = new AliasesProcessor(wrapper);
-				processor.process(wrapper);
-
-				Long alias = System.currentTimeMillis();
-				System.out.println("Aliases made in " + (alias - docu) + "ms");
-
-				SetFilterableProcessor filtering = new SetFilterableProcessor();
-				filtering.process(wrapper);
-
-				Long filter = System.currentTimeMillis();
-				System.out.println("Filtering made in " + (filter - alias) + "ms");
-
-				GuiFacade.getInstance().getTabPane().getTabs().add(new WizTab(wrapper));
-
-				Long after = System.currentTimeMillis();
-
-				System.out.println("Tab made in " + (after - alias) + "ms");
-				System.out.println("loaded in : " + (after - before) + " ms");
-
-			} catch (IOException | DocumentParsingException e) {
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

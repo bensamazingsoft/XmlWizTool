@@ -4,38 +4,17 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 
-import org.w3c.dom.Document;
-
 import com.ben.xmlwiztool.application.actions.IAction;
-import com.ben.xmlwiztool.application.document.exception.DocumentParsingException;
-import com.ben.xmlwiztool.application.document.factory.DocumentFactory;
-import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
-import com.ben.xmlwiztool.application.wrapper.factory.ElementWrapperFactory;
-import com.ben.xmlwiztool.application.wrapper.processor.impl.AliasesProcessor;
-import com.ben.xmlwiztool.gui.controls.tab.WizTab;
-import com.ben.xmlwiztool.gui.facade.GuiFacade;
+import com.ben.xmlwiztool.application.executor.Executor;
 
 public class LoadClipBoardAction implements IAction {
 
 	@Override
 	public void execute() {
-		try {
 
-			String source = getString();
+		String source = getString();
 
-			Document doc = DocumentFactory.getDocument(source);
-
-			ElementWrapper wrapper = ElementWrapperFactory.getElementWrapper(doc.getDocumentElement());
-
-			AliasesProcessor processor = new AliasesProcessor(wrapper);
-			processor.process(wrapper);
-
-			GuiFacade.getInstance().getTabPane().getTabs().add(new WizTab(wrapper));
-
-		} catch (DocumentParsingException e) {
-			// TODO handle action fail
-
-		}
+		Executor.getInstance().execute(new LoadStringSourceAction(source));
 
 	}
 

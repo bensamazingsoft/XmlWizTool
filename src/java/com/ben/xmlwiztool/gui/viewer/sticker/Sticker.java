@@ -11,6 +11,7 @@ import com.ben.xmlwiztool.gui.facade.GuiFacade;
 
 import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
@@ -30,26 +31,8 @@ public class Sticker extends VBox {
 	private Node nameLabel;
 
 	private static final String IMAGEPATH = "images/buttons/";
-	private final Image toggleFoldButSelectedImg;
-	private final Image toggleFoldButUnSelectedImg;
-	private final ImageView toggleFoldButImgView;
-	private final Image toggleShowButSelectedImg;
-	private final Image toggleShowButUnSelectedImg;
-	private final ImageView toggleShowButImgView;
 
 	public Sticker(ElementWrapper wrapper) {
-
-		toggleFoldButSelectedImg = new Image(
-				getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleFoldButUnSelected.png"));
-		toggleFoldButUnSelectedImg = new Image(
-				getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleFoldButSelected.png"));
-		toggleFoldButImgView = new ImageView();
-
-		toggleShowButSelectedImg = new Image(
-				getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleShowButSelected.png"));
-		toggleShowButUnSelectedImg = new Image(
-				getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "toggleFoldButSelected.png"));
-		toggleShowButImgView = new ImageView();
 
 		final Image pathLabelImg = new Image(
 				getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "pathLabelImg.png"));
@@ -66,7 +49,7 @@ public class Sticker extends VBox {
 			addFoldBut(wrapper);
 		}
 
-		nameLabel = new Label("<" + wrapper.getElement().getTagName() + ">" + wrapper.isFilterable());
+		nameLabel = new Label("<" + wrapper.getElement().getTagName() + ">");
 		nameLabel.getStyleClass().add("tagNameLabel");
 		top.getChildren().add(nameLabel);
 
@@ -90,31 +73,27 @@ public class Sticker extends VBox {
 
 	private void addShowBut(ElementWrapper wrapper) {
 
-		ToggleButton toggleShowBut = new ToggleButton();
-		toggleShowBut.setOnAction((Event) -> {
-			toggleShow(wrapper);
+		Button hideBut = new Button();
+		// hideBut.getStyleClass().add("foldBut");
+		hideBut.setText("X");
+		hideBut.setOnAction((Event) -> {
+			hide(wrapper);
 		});
-
-		toggleShowBut.setGraphic(toggleShowButImgView);
-		toggleShowButImgView.imageProperty().bind(Bindings.when(wrapper.visibleProperty())
-				.then(toggleShowButSelectedImg).otherwise(toggleShowButUnSelectedImg));
 
 		Region region = new Region();
 		top.getChildren().add(region);
 		HBox.setHgrow(region, Priority.ALWAYS);
-		top.getChildren().add(toggleShowBut);
+		top.getChildren().add(hideBut);
 	}
 
 	private void addFoldBut(ElementWrapper wrapper) {
 
 		ToggleButton toggleFoldBut = new ToggleButton();
+		toggleFoldBut.getStyleClass().add("foldBut");
+		toggleFoldBut.textProperty().bind(Bindings.when(wrapper.foldProperty()).then("+").otherwise("-"));
 		toggleFoldBut.setOnAction((Event) -> {
 			toggleFold(wrapper);
 		});
-
-		toggleFoldBut.setGraphic(toggleFoldButImgView);
-		toggleFoldButImgView.imageProperty().bind(Bindings.when(wrapper.foldProperty()).then(toggleFoldButSelectedImg)
-				.otherwise(toggleFoldButUnSelectedImg));
 
 		top.getChildren().add(toggleFoldBut);
 	}
@@ -159,7 +138,7 @@ public class Sticker extends VBox {
 		return text;
 	}
 
-	private void toggleShow(ElementWrapper wrapper) {
+	private void hide(ElementWrapper wrapper) {
 
 		wrapper.setVisible(!wrapper.isVisible());
 

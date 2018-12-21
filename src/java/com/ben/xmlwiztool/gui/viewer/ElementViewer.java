@@ -1,6 +1,9 @@
 
 package com.ben.xmlwiztool.gui.viewer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.impl.ComplexElementWrapper;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
@@ -16,6 +19,7 @@ import javafx.scene.layout.VBox;
 public class ElementViewer extends HBox {
 
 	private final ElementWrapper wrapper;
+	private final List<ElementViewer> foldContent = new ArrayList<>();
 	private SimpleDoubleProperty TABSIZE = GuiFacade.getInstance().getTabSize();
 	private SimpleBooleanProperty visibleElement = new SimpleBooleanProperty();
 	private SimpleBooleanProperty fold = new SimpleBooleanProperty();
@@ -24,6 +28,7 @@ public class ElementViewer extends HBox {
 
 	private Region region = new Region();
 	private VBox content = new VBox();
+	private Sticker sticker;
 
 	public ElementViewer(ElementWrapper wrapper) {
 
@@ -34,6 +39,8 @@ public class ElementViewer extends HBox {
 		this.wrapper = wrapper;
 
 		bindProperties();
+
+		init();
 
 		showOrNot();
 	}
@@ -66,10 +73,10 @@ public class ElementViewer extends HBox {
 
 	private void showOrNot() {
 
+		hide();
+
 		if (isVisible() && !isFiltered()) {
 			show();
-		} else {
-			hide();
 		}
 	}
 
@@ -86,15 +93,9 @@ public class ElementViewer extends HBox {
 		return true;
 	}
 
-	private void show() {
+	private void init() {
 
-		this.getChildren().clear();
-		content.getChildren().clear();
-
-		this.getChildren().add(region);
-		this.getChildren().add(content);
-
-		content.getChildren().add(new Sticker(wrapper));
+		sticker = new Sticker(wrapper);
 
 		if (wrapper instanceof ComplexElementWrapper && !isFold()) {
 
@@ -103,10 +104,25 @@ public class ElementViewer extends HBox {
 			if (!complexElement.getChildren().isEmpty()) {
 
 				for (ElementWrapper child : complexElement.getChildren()) {
-					content.getChildren().add(new ElementViewer(child));
+					foldContent.add(new ElementViewer(child));
 				}
 
 			}
+
+		}
+
+	}
+
+	private void show() {
+
+		this.getChildren().add(region);
+		this.getChildren().add(content);
+
+		content.getChildren().add(sticker);
+
+		if (wrapper instanceof ComplexElementWrapper && !isFold()) {
+
+			content.getChildren().addAll(foldContent);
 
 		}
 	}
@@ -114,6 +130,7 @@ public class ElementViewer extends HBox {
 	private void hide() {
 
 		this.getChildren().clear();
+		this.content.getChildren().clear();
 	}
 
 	public ElementWrapper getElement() {

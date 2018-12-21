@@ -10,23 +10,23 @@
 <fx:root type="javafx.scene.control.ToolBar" xmlns:fx="http://javafx.com/fxml">
 
 
-	<ToggleButton fx:id="settingsBut" onAction="#actionSettings">
-	</ToggleButton>
+	<Button fx:id="settingsBut" onAction="#actionSettings"/>
 
-	<ToggleButton fx:id="loadClipBoardBut" onAction="#actionLoadClipBoard" />
 
-	<ToggleButton fx:id="loadFileBut" onAction="#actionLoadFile" />
+	<Button fx:id="loadClipBoardBut" onAction="#actionLoadClipBoard" />
 
-	<ToggleButton fx:id="showAllBut" onAction="#actionShowAll" />
+	<Button fx:id="loadFileBut" onAction="#actionLoadFile" />
 
-	<ToggleButton fx:id="unFoldAllBut" onAction="#actionUnFoldAll" />
+	<Button fx:id="showAllBut" onAction="#actionShowAll" />
 
-	<ToggleButton fx:id="foldAllBut" onAction="#actionFoldAll" />
+	<Button fx:id="unFoldAllBut" onAction="#actionUnFoldAll" />
+
+	<Button fx:id="foldAllBut" onAction="#actionFoldAll" />
 
 	<ToggleButton fx:id="toggleSeparatorBut" onAction="#actionToggleSeparator"
 		toggleGroup="$toggleGroup" />
 
-	<ToggleButton fx:id="manageNamesBut" onAction="#actionManageNames" />
+	<Button fx:id="manageNamesBut" onAction="#actionManageNames" />
 
 	<Separator />
 

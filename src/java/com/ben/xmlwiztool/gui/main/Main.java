@@ -12,6 +12,9 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+	// TODO implement error popup
+	// TODO implement a real filter phrase search
+
 	public static void main(String[] args) throws Exception {
 
 		launch(args);
