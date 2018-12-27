@@ -77,13 +77,13 @@ public abstract class ElementWrapper {
 			for (int i = 0; i < clone.getChildNodes().getLength(); i++) {
 
 				Node node = clone.getChildNodes().item(i);
-				if (node.getNodeType() != Node.TEXT_NODE) {
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
 
 					clone.removeChild(node);
 				}
 			}
 
-			return element.getTextContent();
+			return clone.getTextContent();
 		}
 
 		return "";
@@ -180,10 +180,26 @@ public abstract class ElementWrapper {
 
 	public boolean match(String text) {
 
-		boolean inTag = element.getTagName().toLowerCase().matches(text.toLowerCase());
-		boolean inVal = getValue().toLowerCase().matches(text.toLowerCase());
+		String tagName = element.getTagName().toLowerCase().trim();
+		String val = getValue().toLowerCase().trim();
 
-		return inTag || inVal;
+		return match(text, tagName) || match(text, val);
+	}
+
+	private boolean match(String patt, String text) {
+
+		int length = text.length() - patt.length();
+
+		for (int i = 0; i < length; i++) {
+
+			if (text.regionMatches(i, patt, 0, patt.length())) {
+				System.out.println("matched : " + patt + " in " + text);
+				return true;
+			}
+
+		}
+
+		return false;
 	}
 
 	public final SimpleBooleanProperty filterableProperty() {
