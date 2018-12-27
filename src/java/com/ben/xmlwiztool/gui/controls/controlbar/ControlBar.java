@@ -14,6 +14,7 @@ import com.ben.xmlwiztool.application.actions.impl.UnFoldAllAction;
 import com.ben.xmlwiztool.application.context.AppContext;
 import com.ben.xmlwiztool.application.executor.Executor;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
+import com.ben.xmlwiztool.gui.settings.popup.SettingPopUp;
 
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
@@ -133,7 +134,7 @@ public class ControlBar extends ToolBar implements Initializable {
 	}
 
 	private void handleActionSettings() {
-		// TODO handleActionSettings()
+		new SettingPopUp();
 
 	}
 

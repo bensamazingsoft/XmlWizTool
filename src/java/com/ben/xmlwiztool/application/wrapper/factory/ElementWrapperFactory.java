@@ -23,6 +23,7 @@ public class ElementWrapperFactory {
 		}
 
 		return new SimpleElementWrapper(element);
+
 	}
 
 }

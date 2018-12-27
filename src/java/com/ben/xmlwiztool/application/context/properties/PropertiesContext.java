@@ -3,6 +3,8 @@ package com.ben.xmlwiztool.application.context.properties;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -10,7 +12,7 @@ import java.util.Properties;
 public class PropertiesContext {
 
 	private Properties defaultProp, properties;
-	private File propFile;
+	private File propFile = new File("config.properties");
 	private final String defaultPropertiesFileName = "properties/default.properties";
 
 	public PropertiesContext() throws IOException {
@@ -32,13 +34,16 @@ public class PropertiesContext {
 		// initialize properties with default in case there are new ones
 		properties = new Properties(defaultProp);
 
-		propFile = new File("data/config.properties");
 		if (propFile.exists()) {
 
 			properties.load(new FileInputStream(propFile.toString()));
 
 		}
 
+	}
+
+	public void save() throws FileNotFoundException, IOException {
+		properties.store(new FileOutputStream(propFile), null);
 	}
 
 	public void reset() {

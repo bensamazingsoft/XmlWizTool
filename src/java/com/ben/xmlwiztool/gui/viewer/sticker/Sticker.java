@@ -113,6 +113,9 @@ public class Sticker extends VBox {
 			textFlow.getChildren().add(text);
 
 			Text sep = new Text(GuiFacade.getInstance().getSeparator());
+
+			sep.textProperty().bind(GuiFacade.getInstance().separatorProperty());
+
 			textFlow.getChildren().add(sep);
 		}
 
@@ -123,9 +126,6 @@ public class Sticker extends VBox {
 	}
 
 	private Text testForTagNameAlias(ElementWrapper rootWrapper, ElementWrapper current) {
-		// String tag =
-		// AppContext.getInstance().getTagNameAliasManager().getAlias(rootWrapper,
-		// current);
 
 		Text text = new Text(current.getElement().getTagName());
 

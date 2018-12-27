@@ -72,23 +72,28 @@ public class ElementViewer extends HBox {
 	}
 
 	private void init() {
-	
+
 		sticker = new Sticker(wrapper);
-	
+
 		if (wrapper instanceof ComplexElementWrapper && !isFold()) {
-	
+
 			ComplexElementWrapper complexElement = (ComplexElementWrapper) wrapper;
-	
+
 			if (!complexElement.getChildren().isEmpty()) {
-	
+
 				for (ElementWrapper child : complexElement.getChildren()) {
+
+					if (GuiFacade.getInstance().isFastLoad() && child.isFilterable()) {
+						continue;
+					}
 					foldContent.add(new ElementViewer(child));
+
 				}
-	
+
 			}
-	
+
 		}
-	
+
 	}
 
 	private void showOrNot() {
@@ -121,15 +126,15 @@ public class ElementViewer extends HBox {
 	}
 
 	private boolean isFiltered() {
-	
+
 		if (!GuiFacade.getInstance().isHideEmpty()) {
 			return false;
 		}
-	
+
 		if (!wrapper.isFilterable()) {
 			return false;
 		}
-	
+
 		return true;
 	}
 

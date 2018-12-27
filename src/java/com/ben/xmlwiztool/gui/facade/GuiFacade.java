@@ -9,6 +9,7 @@ import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TabPane;
 
 public class GuiFacade {
@@ -18,13 +19,17 @@ public class GuiFacade {
 	private SimpleDoubleProperty tabSize;
 	private SimpleDoubleProperty tabLength;
 
-	private String separator = ".";
+	private SimpleStringProperty separator;
+	private final String POINT = ".";
+	private final String SLASH = "\\";
 
 	private TabPane tabPane;
 
-	private SimpleBooleanProperty hideEmpty;
+	private SimpleBooleanProperty hideEmpty, fastLoad;
 
 	private GuiFacade() {
+
+		separator = new SimpleStringProperty(POINT);
 
 		tabSize = new SimpleDoubleProperty();
 		tabLength = new SimpleDoubleProperty();
@@ -36,6 +41,11 @@ public class GuiFacade {
 		tabLength.setValue(length);
 
 		hideEmpty = new SimpleBooleanProperty();
+		fastLoad = new SimpleBooleanProperty();
+		fastLoad.set(Boolean.valueOf(AppContext.getInstance().getProperties().get("fastLoad")));
+		fastLoad.addListener((o, oldVal, newVal) -> {
+			AppContext.getInstance().getProperties().set("fastLoad", newVal.toString());
+		});
 
 	}
 
@@ -61,19 +71,8 @@ public class GuiFacade {
 
 	public void toggleSeparator() {
 
-		// TODO implement change in Stickers
-		separator = separator == "." ? "\\" : ".";
+		separator.set(separator.get().equals(POINT) ? SLASH : POINT);
 
-	}
-
-	public String getSeparator() {
-
-		return separator;
-	}
-
-	public void setSeparator(String separator) {
-
-		this.separator = separator;
 	}
 
 	public List<ElementWrapper> getOpenElements() {
@@ -117,6 +116,30 @@ public class GuiFacade {
 
 	public final void setHideEmpty(final boolean hideEmpty) {
 		this.hideEmptyProperty().set(hideEmpty);
+	}
+
+	public final SimpleStringProperty separatorProperty() {
+		return this.separator;
+	}
+
+	public final String getSeparator() {
+		return this.separatorProperty().get();
+	}
+
+	public final void setSeparator(final String separator) {
+		this.separatorProperty().set(separator);
+	}
+
+	public final SimpleBooleanProperty fastLoadProperty() {
+		return this.fastLoad;
+	}
+
+	public final boolean isFastLoad() {
+		return this.fastLoadProperty().get();
+	}
+
+	public final void setFastLoad(final boolean fastLoad) {
+		this.fastLoadProperty().set(fastLoad);
 	}
 
 }

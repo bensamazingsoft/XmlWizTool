@@ -8,8 +8,8 @@ import com.ben.xmlwiztool.application.document.factory.DocumentFactory;
 import com.ben.xmlwiztool.application.exception.popup.ExceptionPopUp;
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.factory.ElementWrapperFactory;
-import com.ben.xmlwiztool.application.wrapper.processor.SetFilterableProcessor;
 import com.ben.xmlwiztool.application.wrapper.processor.impl.AliasesProcessor;
+import com.ben.xmlwiztool.application.wrapper.processor.impl.SetFilterableProcessor;
 import com.ben.xmlwiztool.gui.controls.tab.WizTab;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
 
