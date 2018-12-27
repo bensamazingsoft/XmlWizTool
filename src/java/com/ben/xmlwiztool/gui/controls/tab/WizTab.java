@@ -13,6 +13,8 @@ import javafx.scene.control.Tab;
 
 public class WizTab extends Tab {
 
+	ScrollPane scrollPane = new ScrollPane();
+
 	public WizTab(ElementWrapper wrapper) {
 		super();
 
@@ -23,7 +25,6 @@ public class WizTab extends Tab {
 			onClose(wrapper);
 		});
 
-		ScrollPane scrollPane = new ScrollPane();
 		scrollPane.setContent(new ElementViewer(wrapper));
 
 		this.setContent(scrollPane);
@@ -35,12 +36,11 @@ public class WizTab extends Tab {
 	}
 
 	private void onClose(ElementWrapper wrapper) {
+
 		Map<ElementWrapper, Map<ElementWrapper, String>> aliases = AppContext.getInstance().getTagNameAliasManager()
 				.getNameMap();
-		System.out.println(aliases.keySet());
 		aliases.remove(wrapper);
 
-		System.out.println(aliases.keySet());
 	}
 
 	@Override

@@ -52,7 +52,7 @@ public class LoadStringSourceAction implements IAction {
 			Long after = System.currentTimeMillis();
 
 			System.out.println("Tab made in " + (after - alias) + "ms");
-			System.out.println("loaded in : " + (after - before) + " ms");
+			System.out.println("loaded in : " + (after - before) + "ms");
 
 		} catch (DocumentParsingException e) {
 			new ExceptionPopUp(e);

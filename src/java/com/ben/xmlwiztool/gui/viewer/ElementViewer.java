@@ -196,4 +196,8 @@ public class ElementViewer extends HBox {
 		this.content = content;
 	}
 
+	public List<ElementViewer> getFoldContent() {
+		return foldContent;
+	}
+
 }
