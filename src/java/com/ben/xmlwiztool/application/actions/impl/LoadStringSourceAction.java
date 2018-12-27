@@ -5,6 +5,7 @@ import org.w3c.dom.Document;
 import com.ben.xmlwiztool.application.actions.IAction;
 import com.ben.xmlwiztool.application.document.exception.DocumentParsingException;
 import com.ben.xmlwiztool.application.document.factory.DocumentFactory;
+import com.ben.xmlwiztool.application.exception.popup.ExceptionPopUp;
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.factory.ElementWrapperFactory;
 import com.ben.xmlwiztool.application.wrapper.processor.SetFilterableProcessor;
@@ -54,8 +55,7 @@ public class LoadStringSourceAction implements IAction {
 			System.out.println("loaded in : " + (after - before) + " ms");
 
 		} catch (DocumentParsingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			new ExceptionPopUp(e);
 		}
 
 	}

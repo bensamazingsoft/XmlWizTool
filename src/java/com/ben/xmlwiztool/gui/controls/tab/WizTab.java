@@ -37,7 +37,10 @@ public class WizTab extends Tab {
 	private void onClose(ElementWrapper wrapper) {
 		Map<ElementWrapper, Map<ElementWrapper, String>> aliases = AppContext.getInstance().getTagNameAliasManager()
 				.getNameMap();
-		aliases.remove(aliases.get(wrapper));
+		System.out.println(aliases.keySet());
+		aliases.remove(wrapper);
+
+		System.out.println(aliases.keySet());
 	}
 
 	@Override

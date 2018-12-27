@@ -6,38 +6,30 @@ import java.util.List;
 
 import com.ben.xmlwiztool.application.actions.IAction;
 
-public class Executor
-{
+public class Executor {
 
-      private static Executor	   instance;
-      private static List<IAction> history;
+	private static Executor instance;
+	private static List<IAction> history;
 
+	private Executor() {
 
-      private Executor()
-      {
+		history = new ArrayList<>();
+	}
 
-	    history = new ArrayList<>();
-      }
+	public void execute(IAction action) {
 
+		history.add(action);
+		action.execute();
 
-      public void execute(IAction action)
-      {
+	}
 
-	    history.add(action);
-	    action.execute();
+	public static Executor getInstance() {
 
-      }
+		if (instance == null) {
+			instance = new Executor();
+		}
 
-
-      public static Executor getInstance()
-      {
-
-	    if (instance == null)
-	    {
-		  instance = new Executor();
-	    }
-
-	    return instance;
-      }
+		return instance;
+	}
 
 }

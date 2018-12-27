@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.ben.xmlwiztool.application.actions.IAction;
 import com.ben.xmlwiztool.application.context.AppContext;
+import com.ben.xmlwiztool.application.exception.popup.ExceptionPopUp;
 import com.ben.xmlwiztool.application.executor.Executor;
 
 import javafx.stage.FileChooser;
@@ -35,8 +36,7 @@ public class LoadFileAction implements IAction {
 				Executor.getInstance().execute(new LoadStringSourceAction(source));
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				new ExceptionPopUp(e);
 			}
 
 		}

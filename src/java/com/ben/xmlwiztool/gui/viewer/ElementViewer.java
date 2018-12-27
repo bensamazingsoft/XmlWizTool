@@ -71,6 +71,26 @@ public class ElementViewer extends HBox {
 
 	}
 
+	private void init() {
+	
+		sticker = new Sticker(wrapper);
+	
+		if (wrapper instanceof ComplexElementWrapper && !isFold()) {
+	
+			ComplexElementWrapper complexElement = (ComplexElementWrapper) wrapper;
+	
+			if (!complexElement.getChildren().isEmpty()) {
+	
+				for (ElementWrapper child : complexElement.getChildren()) {
+					foldContent.add(new ElementViewer(child));
+				}
+	
+			}
+	
+		}
+	
+	}
+
 	private void showOrNot() {
 
 		hide();
@@ -78,39 +98,6 @@ public class ElementViewer extends HBox {
 		if (isVisible() && !isFiltered()) {
 			show();
 		}
-	}
-
-	private boolean isFiltered() {
-
-		if (!GuiFacade.getInstance().isHideEmpty()) {
-			return false;
-		}
-
-		if (!wrapper.isFilterable()) {
-			return false;
-		}
-
-		return true;
-	}
-
-	private void init() {
-
-		sticker = new Sticker(wrapper);
-
-		if (wrapper instanceof ComplexElementWrapper && !isFold()) {
-
-			ComplexElementWrapper complexElement = (ComplexElementWrapper) wrapper;
-
-			if (!complexElement.getChildren().isEmpty()) {
-
-				for (ElementWrapper child : complexElement.getChildren()) {
-					foldContent.add(new ElementViewer(child));
-				}
-
-			}
-
-		}
-
 	}
 
 	private void show() {
@@ -131,6 +118,19 @@ public class ElementViewer extends HBox {
 
 		this.getChildren().clear();
 		this.content.getChildren().clear();
+	}
+
+	private boolean isFiltered() {
+	
+		if (!GuiFacade.getInstance().isHideEmpty()) {
+			return false;
+		}
+	
+		if (!wrapper.isFilterable()) {
+			return false;
+		}
+	
+		return true;
 	}
 
 	public ElementWrapper getElement() {

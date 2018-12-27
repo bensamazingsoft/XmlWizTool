@@ -61,6 +61,7 @@ public class GuiFacade {
 
 	public void toggleSeparator() {
 
+		// TODO implement change in Stickers
 		separator = separator == "." ? "\\" : ".";
 
 	}
