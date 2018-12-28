@@ -1,12 +1,12 @@
 
-package com.ben.xmlwiztool.gui.controls.tab;
+package com.ben.xmlwiztool.gui.controls.viewer.tab;
 
 import java.util.Map;
 
 import com.ben.xmlwiztool.application.context.AppContext;
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
+import com.ben.xmlwiztool.gui.controls.viewer.ElementViewer;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
-import com.ben.xmlwiztool.gui.viewer.ElementViewer;
 
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;

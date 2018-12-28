@@ -1,8 +1,8 @@
-package com.ben.xmlwiztool.gui.controls.tab.factory;
+package com.ben.xmlwiztool.gui.controls.viewer.tabfactory;
 
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
-import com.ben.xmlwiztool.gui.controls.tab.StickerTab;
-import com.ben.xmlwiztool.gui.controls.tab.TreeViewTab;
+import com.ben.xmlwiztool.gui.controls.viewer.tab.StickerTab;
+import com.ben.xmlwiztool.gui.controls.viewer.treeviewer.tab.TreeViewTab;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
 
 import javafx.scene.control.Tab;

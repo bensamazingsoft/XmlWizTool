@@ -1,13 +1,13 @@
 
-package com.ben.xmlwiztool.gui.viewer;
+package com.ben.xmlwiztool.gui.controls.viewer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.impl.ComplexElementWrapper;
+import com.ben.xmlwiztool.gui.controls.viewer.sticker.Sticker;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
-import com.ben.xmlwiztool.gui.viewer.sticker.Sticker;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;

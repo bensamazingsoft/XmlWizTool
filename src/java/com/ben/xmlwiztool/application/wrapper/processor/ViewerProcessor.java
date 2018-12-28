@@ -1,6 +1,6 @@
 package com.ben.xmlwiztool.application.wrapper.processor;
 
-import com.ben.xmlwiztool.gui.viewer.ElementViewer;
+import com.ben.xmlwiztool.gui.controls.viewer.ElementViewer;
 
 public interface ViewerProcessor {
 

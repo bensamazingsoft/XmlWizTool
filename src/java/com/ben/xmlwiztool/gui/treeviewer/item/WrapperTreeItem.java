@@ -1,3 +1,4 @@
+
 package com.ben.xmlwiztool.gui.treeviewer.item;
 
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
@@ -8,50 +9,70 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 
-public class WrapperTreeItem extends TreeItem<ElementWrapper> {
+public class WrapperTreeItem extends TreeItem<ElementWrapper>
+{
 
-	private final ElementWrapper wrapper;
+      private final ElementWrapper wrapper;
+      private boolean		   load;
 
-	public WrapperTreeItem(ElementWrapper wrapper) {
-		super();
-		this.wrapper = wrapper;
-		this.setValue(wrapper);
-		this.expandedProperty().bindBidirectional(wrapper.foldProperty());
-	}
 
-	@Override
-	public ObservableList<TreeItem<ElementWrapper>> getChildren() {
+      public WrapperTreeItem(ElementWrapper wrapper)
+      {
 
-		if (wrapper instanceof ComplexElementWrapper) {
+	    super();
+
+	    load = true;
+	    this.wrapper = wrapper;
+	    this.setValue(wrapper);
+	    this.expandedProperty().bindBidirectional(wrapper.foldProperty());
+      }
+
+
+      @Override
+      public ObservableList<TreeItem<ElementWrapper>> getChildren()
+      {
+
+	    if (load)
+	    {
+		  if (wrapper instanceof ComplexElementWrapper)
+		  {
 
 			ComplexElementWrapper complex = (ComplexElementWrapper) wrapper;
 
-			if (!complex.getChildren().isEmpty()) {
+			if (!complex.getChildren().isEmpty())
+			{
 
-				super.getChildren().setAll(makeChilds(complex));
+			      super.getChildren().setAll(makeChilds(complex));
 
 			}
-		}
+		  }
+		  load = false;
+	    }
+	    return super.getChildren();
+      }
 
-		return super.getChildren();
-	}
 
-	private ObservableList<TreeItem<ElementWrapper>> makeChilds(ComplexElementWrapper complex) {
+      private ObservableList<TreeItem<ElementWrapper>> makeChilds(ComplexElementWrapper complex)
+      {
 
-		ObservableList<TreeItem<ElementWrapper>> children = FXCollections.observableArrayList();
+	    ObservableList<TreeItem<ElementWrapper>> children = FXCollections.observableArrayList();
 
-		for (ElementWrapper child : complex.getChildren()) {
+	    for (ElementWrapper child : complex.getChildren())
+	    {
 
-			children.add(new WrapperTreeItem(child));
+		  children.add(new WrapperTreeItem(child));
 
-		}
+	    }
 
-		return children;
-	}
+	    return children;
+      }
 
-	@Override
-	public boolean isLeaf() {
-		return wrapper instanceof SimpleElementWrapper;
-	}
+
+      @Override
+      public boolean isLeaf()
+      {
+
+	    return wrapper instanceof SimpleElementWrapper;
+      }
 
 }

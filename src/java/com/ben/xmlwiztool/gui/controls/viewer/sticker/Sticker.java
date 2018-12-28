@@ -1,5 +1,5 @@
 
-package com.ben.xmlwiztool.gui.viewer.sticker;
+package com.ben.xmlwiztool.gui.controls.viewer.sticker;
 
 import java.util.LinkedList;
 

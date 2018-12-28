@@ -10,7 +10,7 @@ import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.factory.ElementWrapperFactory;
 import com.ben.xmlwiztool.application.wrapper.processor.impl.AliasesProcessor;
 import com.ben.xmlwiztool.application.wrapper.processor.impl.SetFilterableProcessor;
-import com.ben.xmlwiztool.gui.controls.tab.factory.TabFactory;
+import com.ben.xmlwiztool.gui.controls.viewer.tabfactory.TabFactory;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
 
 public class LoadStringSourceAction implements IAction {

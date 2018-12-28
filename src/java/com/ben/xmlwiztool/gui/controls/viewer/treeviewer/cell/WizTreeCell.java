@@ -1,7 +1,7 @@
-package com.ben.xmlwiztool.gui.treeviewer.cell;
+package com.ben.xmlwiztool.gui.controls.viewer.treeviewer.cell;
 
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
-import com.ben.xmlwiztool.gui.viewer.sticker.Sticker;
+import com.ben.xmlwiztool.gui.controls.viewer.sticker.Sticker;
 
 import javafx.scene.control.TreeCell;
 
