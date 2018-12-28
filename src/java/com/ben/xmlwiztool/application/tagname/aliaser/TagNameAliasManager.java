@@ -2,8 +2,6 @@ package com.ben.xmlwiztool.application.tagname.aliaser;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 
@@ -63,10 +61,18 @@ public class TagNameAliasManager {
 
 	public boolean aliased(ElementWrapper wrapper) {
 
-		Set<ElementWrapper> set = nameMap.values().stream().map(Map::keySet).flatMap(Set::stream)
-				.collect(Collectors.toSet());
+		for (Map<ElementWrapper, String> map : nameMap.values()) {
+			if (map.keySet().contains(wrapper)) {
+				return true;
+			}
+		}
+		return false;
 
-		return set.contains(wrapper);
+		// Set<ElementWrapper> set =
+		// nameMap.values().stream().map(Map::keySet).flatMap(Set::stream)
+		// .collect(Collectors.toSet());
+		//
+		// return set.contains(wrapper);
 
 	}
 

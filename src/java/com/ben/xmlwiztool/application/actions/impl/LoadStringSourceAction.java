@@ -10,7 +10,7 @@ import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.factory.ElementWrapperFactory;
 import com.ben.xmlwiztool.application.wrapper.processor.impl.AliasesProcessor;
 import com.ben.xmlwiztool.application.wrapper.processor.impl.SetFilterableProcessor;
-import com.ben.xmlwiztool.gui.controls.tab.WizTab;
+import com.ben.xmlwiztool.gui.controls.tab.factory.TabFactory;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
 
 public class LoadStringSourceAction implements IAction {
@@ -47,7 +47,7 @@ public class LoadStringSourceAction implements IAction {
 			Long filter = System.currentTimeMillis();
 			System.out.println("Filtering made in " + (filter - alias) + "ms");
 
-			GuiFacade.getInstance().getTabPane().getTabs().add(new WizTab(wrapper));
+			GuiFacade.getInstance().getTabPane().getTabs().add(TabFactory.getTab(wrapper));
 
 			Long after = System.currentTimeMillis();
 

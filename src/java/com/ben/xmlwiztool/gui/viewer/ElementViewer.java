@@ -25,7 +25,6 @@ public class ElementViewer extends HBox {
 	private SimpleBooleanProperty fold = new SimpleBooleanProperty();
 	private SimpleBooleanProperty filter = new SimpleBooleanProperty();
 	private SimpleBooleanProperty state = new SimpleBooleanProperty();
-
 	private Region region = new Region();
 	private VBox content = new VBox();
 	private Sticker sticker;

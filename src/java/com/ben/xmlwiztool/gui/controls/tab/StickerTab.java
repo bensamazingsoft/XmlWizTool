@@ -11,14 +11,15 @@ import com.ben.xmlwiztool.gui.viewer.ElementViewer;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 
-public class WizTab extends Tab {
+public class StickerTab extends Tab {
 
 	ScrollPane scrollPane = new ScrollPane();
 
-	public WizTab(ElementWrapper wrapper) {
+	public StickerTab(ElementWrapper wrapper) {
 		super();
 
 		Long start = System.currentTimeMillis();
+
 		this.setUserData(wrapper);
 		this.setText(wrapper.getElement().getTagName());
 		this.setOnClosed((event) -> {

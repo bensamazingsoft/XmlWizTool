@@ -25,7 +25,7 @@ public class GuiFacade {
 
 	private TabPane tabPane;
 
-	private SimpleBooleanProperty hideEmpty, fastLoad;
+	private SimpleBooleanProperty hideEmpty, fastLoad, treeView;
 
 	private GuiFacade() {
 
@@ -41,10 +41,17 @@ public class GuiFacade {
 		tabLength.setValue(length);
 
 		hideEmpty = new SimpleBooleanProperty();
+
 		fastLoad = new SimpleBooleanProperty();
 		fastLoad.set(Boolean.valueOf(AppContext.getInstance().getProperties().get("fastLoad")));
 		fastLoad.addListener((o, oldVal, newVal) -> {
 			AppContext.getInstance().getProperties().set("fastLoad", newVal.toString());
+		});
+
+		treeView = new SimpleBooleanProperty();
+		treeView.set(Boolean.valueOf(AppContext.getInstance().getProperties().get("treeView")));
+		fastLoad.addListener((o, oldVal, newVal) -> {
+			AppContext.getInstance().getProperties().set("treeView", newVal.toString());
 		});
 
 	}
@@ -140,6 +147,18 @@ public class GuiFacade {
 
 	public final void setFastLoad(final boolean fastLoad) {
 		this.fastLoadProperty().set(fastLoad);
+	}
+
+	public final SimpleBooleanProperty treeViewProperty() {
+		return this.treeView;
+	}
+
+	public final boolean isTreeView() {
+		return this.treeViewProperty().get();
+	}
+
+	public final void setTreeView(final boolean treeView) {
+		this.treeViewProperty().set(treeView);
 	}
 
 }

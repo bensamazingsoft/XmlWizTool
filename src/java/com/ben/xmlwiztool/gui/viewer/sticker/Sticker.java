@@ -14,8 +14,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -30,13 +28,7 @@ public class Sticker extends VBox {
 	private VBox bottom = new VBox();
 	private Node nameLabel;
 
-	private static final String IMAGEPATH = "images/buttons/";
-
 	public Sticker(ElementWrapper wrapper) {
-
-		final Image pathLabelImg = new Image(
-				getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "pathLabelImg.png"));
-		final ImageView pathLabelImgView = new ImageView(pathLabelImg);
 
 		this.getStyleClass().add("sticker");
 		this.getChildren().addAll(top, bottom);
@@ -66,7 +58,7 @@ public class Sticker extends VBox {
 			bottom.getChildren().add(label);
 		}
 
-		HBox pathBox = new HBox(pathLabelImgView, getElemPathTextFlow(wrapper));
+		HBox pathBox = new HBox(new Label("->"), getElemPathTextFlow(wrapper));
 		bottom.getChildren().add(pathBox);
 
 	}
