@@ -33,10 +33,9 @@ public class Sticker extends VBox {
 		this.getStyleClass().add("sticker");
 		this.getChildren().addAll(top, bottom);
 		this.minWidthProperty().bind(GuiFacade.getInstance().tabLengthProperty());
-		// this.maxWidthProperty().bind(GuiFacade.getInstance().tabLengthProperty());
 
 		// top
-		if (wrapper instanceof ComplexElementWrapper) {
+		if (wrapper instanceof ComplexElementWrapper && !GuiFacade.getInstance().isTreeView()) {
 
 			addExpandBut(wrapper);
 		}
@@ -61,6 +60,8 @@ public class Sticker extends VBox {
 		HBox pathBox = new HBox(new Label("->"), getElemPathTextFlow(wrapper));
 		bottom.getChildren().add(pathBox);
 
+		this.setMaxWidth(USE_COMPUTED_SIZE);
+
 	}
 
 	private void addShowBut(ElementWrapper wrapper) {
@@ -81,7 +82,7 @@ public class Sticker extends VBox {
 	private void addExpandBut(ElementWrapper wrapper) {
 
 		ToggleButton toggleExpandBut = new ToggleButton();
-		toggleExpandBut.getStyleClass().add("foldBut");
+		toggleExpandBut.getStyleClass().add("expandBut");
 		toggleExpandBut.textProperty().bind(Bindings.when(wrapper.expandProperty()).then("-").otherwise("+"));
 		toggleExpandBut.setOnAction((Event) -> {
 			toggleExpand(wrapper);
@@ -138,7 +139,7 @@ public class Sticker extends VBox {
 
 	private void toggleExpand(ElementWrapper wrapper) {
 
-		wrapper.setExpand(wrapper.isExpand());
+		wrapper.setExpand(!wrapper.isExpand());
 	}
 
 }
