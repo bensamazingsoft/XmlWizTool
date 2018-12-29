@@ -7,13 +7,17 @@ import com.ben.xmlwiztool.application.context.AppContext;
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.impl.ComplexElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.impl.SimpleElementWrapper;
+import com.ben.xmlwiztool.gui.controls.menu.context.sticker.StickerContextMenu;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
 
 import javafx.beans.binding.Bindings;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -27,12 +31,24 @@ public class Sticker extends VBox {
 	private HBox top = new HBox();
 	private VBox bottom = new VBox();
 	private Node nameLabel;
+	private ContextMenu contextMenu;
+	private Sticker sticker;
 
 	public Sticker(ElementWrapper wrapper) {
+
+		this.sticker = this;
 
 		this.getStyleClass().add("sticker");
 		this.getChildren().addAll(top, bottom);
 		this.minWidthProperty().bind(GuiFacade.getInstance().tabLengthProperty());
+
+		this.contextMenu = new StickerContextMenu(this);
+		this.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+			@Override
+			public void handle(ContextMenuEvent event) {
+				contextMenu.show(sticker, event.getScreenX(), event.getScreenY());
+			}
+		});
 
 		// top
 		if (wrapper instanceof ComplexElementWrapper && !GuiFacade.getInstance().isTreeView()) {
