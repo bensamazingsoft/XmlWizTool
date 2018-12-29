@@ -9,70 +9,57 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 
-public class WrapperTreeItem extends TreeItem<ElementWrapper>
-{
+public class WrapperTreeItem extends TreeItem<ElementWrapper> {
 
-      private final ElementWrapper wrapper;
-      private boolean		   load;
+	private final ElementWrapper wrapper;
+	private boolean load;
 
+	public WrapperTreeItem(ElementWrapper wrapper) {
 
-      public WrapperTreeItem(ElementWrapper wrapper)
-      {
+		super();
 
-	    super();
+		load = true;
+		this.wrapper = wrapper;
+		this.setValue(wrapper);
+		this.expandedProperty().bindBidirectional(wrapper.expandProperty());
+	}
 
-	    load = true;
-	    this.wrapper = wrapper;
-	    this.setValue(wrapper);
-	    this.expandedProperty().bindBidirectional(wrapper.foldProperty());
-      }
+	@Override
+	public ObservableList<TreeItem<ElementWrapper>> getChildren() {
 
+		if (load) {
+			if (wrapper instanceof ComplexElementWrapper) {
 
-      @Override
-      public ObservableList<TreeItem<ElementWrapper>> getChildren()
-      {
+				ComplexElementWrapper complex = (ComplexElementWrapper) wrapper;
 
-	    if (load)
-	    {
-		  if (wrapper instanceof ComplexElementWrapper)
-		  {
+				if (!complex.getChildren().isEmpty()) {
 
-			ComplexElementWrapper complex = (ComplexElementWrapper) wrapper;
+					super.getChildren().setAll(makeChilds(complex));
 
-			if (!complex.getChildren().isEmpty())
-			{
-
-			      super.getChildren().setAll(makeChilds(complex));
-
+				}
 			}
-		  }
-		  load = false;
-	    }
-	    return super.getChildren();
-      }
+			load = false;
+		}
+		return super.getChildren();
+	}
 
+	private ObservableList<TreeItem<ElementWrapper>> makeChilds(ComplexElementWrapper complex) {
 
-      private ObservableList<TreeItem<ElementWrapper>> makeChilds(ComplexElementWrapper complex)
-      {
+		ObservableList<TreeItem<ElementWrapper>> children = FXCollections.observableArrayList();
 
-	    ObservableList<TreeItem<ElementWrapper>> children = FXCollections.observableArrayList();
+		for (ElementWrapper child : complex.getChildren()) {
 
-	    for (ElementWrapper child : complex.getChildren())
-	    {
+			children.add(new WrapperTreeItem(child));
 
-		  children.add(new WrapperTreeItem(child));
+		}
 
-	    }
+		return children;
+	}
 
-	    return children;
-      }
+	@Override
+	public boolean isLeaf() {
 
-
-      @Override
-      public boolean isLeaf()
-      {
-
-	    return wrapper instanceof SimpleElementWrapper;
-      }
+		return wrapper instanceof SimpleElementWrapper;
+	}
 
 }

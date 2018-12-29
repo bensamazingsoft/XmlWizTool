@@ -11,7 +11,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 public abstract class ElementWrapper {
 
 	protected Element element;
-	protected SimpleBooleanProperty visible, fold, filterable;
+	protected SimpleBooleanProperty visible, expand, filterable;
 	protected ElementWrapper parent;
 
 	public ElementWrapper() {
@@ -19,10 +19,12 @@ public abstract class ElementWrapper {
 		super();
 
 		visible = new SimpleBooleanProperty();
-		fold = new SimpleBooleanProperty();
+		// fold = new SimpleBooleanProperty();
+		expand = new SimpleBooleanProperty();
 		filterable = new SimpleBooleanProperty();
 
-		setFold(false);
+		// setFold(false);
+		setExpand(true);
 		setVisible(true);
 		setFilterable(true);
 
@@ -162,21 +164,21 @@ public abstract class ElementWrapper {
 		}
 
 	}
-
-	public final SimpleBooleanProperty foldProperty() {
-
-		return this.fold;
-	}
-
-	public final boolean isFold() {
-
-		return this.foldProperty().get();
-	}
-
-	public final void setFold(final boolean fold) {
-
-		this.foldProperty().set(fold);
-	}
+	//
+	// public final SimpleBooleanProperty foldProperty() {
+	//
+	// return this.fold;
+	// }
+	//
+	// public final boolean isFold() {
+	//
+	// return this.foldProperty().get();
+	// }
+	//
+	// public final void setFold(final boolean fold) {
+	//
+	// this.foldProperty().set(fold);
+	// }
 
 	public boolean match(String text) {
 
@@ -212,6 +214,18 @@ public abstract class ElementWrapper {
 
 	public final void setFilterable(final boolean filterable) {
 		this.filterableProperty().set(filterable);
+	}
+
+	public final SimpleBooleanProperty expandProperty() {
+		return this.expand;
+	}
+
+	public final boolean isExpand() {
+		return this.expandProperty().get();
+	}
+
+	public final void setExpand(final boolean expand) {
+		this.expandProperty().set(expand);
 	}
 
 }

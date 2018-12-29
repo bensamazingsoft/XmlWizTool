@@ -7,7 +7,7 @@ public class FoldElementProcessor implements WrapperProcessor {
 
 	@Override
 	public void processSingle(ElementWrapper wrapper) {
-		wrapper.setFold(true);
+		wrapper.setExpand(false);
 
 	}
 

@@ -38,7 +38,7 @@ public class Sticker extends VBox {
 		// top
 		if (wrapper instanceof ComplexElementWrapper) {
 
-			addFoldBut(wrapper);
+			addExpandBut(wrapper);
 		}
 
 		nameLabel = new Label("<" + wrapper.getElement().getTagName() + ">");
@@ -78,16 +78,16 @@ public class Sticker extends VBox {
 		top.getChildren().add(hideBut);
 	}
 
-	private void addFoldBut(ElementWrapper wrapper) {
+	private void addExpandBut(ElementWrapper wrapper) {
 
-		ToggleButton toggleFoldBut = new ToggleButton();
-		toggleFoldBut.getStyleClass().add("foldBut");
-		toggleFoldBut.textProperty().bind(Bindings.when(wrapper.foldProperty()).then("+").otherwise("-"));
-		toggleFoldBut.setOnAction((Event) -> {
-			toggleFold(wrapper);
+		ToggleButton toggleExpandBut = new ToggleButton();
+		toggleExpandBut.getStyleClass().add("foldBut");
+		toggleExpandBut.textProperty().bind(Bindings.when(wrapper.expandProperty()).then("-").otherwise("+"));
+		toggleExpandBut.setOnAction((Event) -> {
+			toggleExpand(wrapper);
 		});
 
-		top.getChildren().add(toggleFoldBut);
+		top.getChildren().add(toggleExpandBut);
 	}
 
 	private TextFlow getElemPathTextFlow(ElementWrapper wrapper) {
@@ -136,9 +136,9 @@ public class Sticker extends VBox {
 
 	}
 
-	private void toggleFold(ElementWrapper wrapper) {
+	private void toggleExpand(ElementWrapper wrapper) {
 
-		wrapper.setFold(!wrapper.isFold());
+		wrapper.setExpand(wrapper.isExpand());
 	}
 
 }

@@ -22,7 +22,7 @@ public class ElementViewer extends HBox {
 	private final List<ElementViewer> foldContent = new ArrayList<>();
 	private SimpleDoubleProperty TABSIZE = GuiFacade.getInstance().getTabSize();
 	private SimpleBooleanProperty visibleElement = new SimpleBooleanProperty();
-	private SimpleBooleanProperty fold = new SimpleBooleanProperty();
+	private SimpleBooleanProperty expand = new SimpleBooleanProperty();
 	private SimpleBooleanProperty filter = new SimpleBooleanProperty();
 	private SimpleBooleanProperty state = new SimpleBooleanProperty();
 	private Region region = new Region();
@@ -56,8 +56,8 @@ public class ElementViewer extends HBox {
 			showOrNot();
 		});
 
-		fold.bindBidirectional(wrapper.foldProperty());
-		fold.addListener((ChangeListener) (o, oldVal, newVal) -> {
+		expand.bindBidirectional(wrapper.expandProperty());
+		expand.addListener((ChangeListener) (o, oldVal, newVal) -> {
 			showOrNot();
 		});
 
@@ -74,7 +74,7 @@ public class ElementViewer extends HBox {
 
 		sticker = new Sticker(wrapper);
 
-		if (wrapper instanceof ComplexElementWrapper && !isFold()) {
+		if (wrapper instanceof ComplexElementWrapper && isExpand()) {
 
 			ComplexElementWrapper complexElement = (ComplexElementWrapper) wrapper;
 
@@ -111,7 +111,7 @@ public class ElementViewer extends HBox {
 
 		content.getChildren().add(sticker);
 
-		if (wrapper instanceof ComplexElementWrapper && !isFold()) {
+		if (wrapper instanceof ComplexElementWrapper && isExpand()) {
 
 			content.getChildren().addAll(foldContent);
 
@@ -157,19 +157,19 @@ public class ElementViewer extends HBox {
 		this.TABSIZEProperty().set(TABSIZE);
 	}
 
-	public final SimpleBooleanProperty foldProperty() {
+	public final SimpleBooleanProperty expandProperty() {
 
-		return this.fold;
+		return this.expand;
 	}
 
-	public final boolean isFold() {
+	public final boolean isExpand() {
 
-		return this.foldProperty().get();
+		return this.expandProperty().get();
 	}
 
-	public final void setFold(final boolean fold) {
+	public final void setExpand(final boolean fold) {
 
-		this.foldProperty().set(fold);
+		this.expandProperty().set(fold);
 	}
 
 	public final SimpleBooleanProperty visibleElementProperty() {

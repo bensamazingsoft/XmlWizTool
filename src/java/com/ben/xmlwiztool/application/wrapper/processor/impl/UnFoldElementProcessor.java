@@ -7,7 +7,7 @@ public class UnFoldElementProcessor implements WrapperProcessor {
 
 	@Override
 	public void processSingle(ElementWrapper wrapper) {
-		wrapper.setFold(false);
+		wrapper.setExpand(true);
 
 	}
 
