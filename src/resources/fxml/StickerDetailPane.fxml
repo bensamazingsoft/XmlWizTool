@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+
+
+
+<fx:root type="javafx.scene.control.ScrollPane"
+	xmlns:fx="http://javafx.com/fxml">
+
+
+	<VBox>
+
+		<TextFlow>
+			<Text text="%root" />
+			<Text text=" : " />
+			<Text fx:id="rootName" />
+		</TextFlow>
+
+		<TextFlow>
+			<Text text="%root" />
+			<Text text=" : " />
+			<Text fx:id="tagName" />
+		</TextFlow>
+
+
+		<Label text="%attributes"/>
+		<TableView fx:id="attrTable">
+			<Columns>
+				<TableColumn text="%name"/>
+				<TableColumn text="%value"/>
+			</Columns>
+		</TableView>
+
+		<Label text="%value" />
+		<TextArea fx:id="valueTextArea" />
+
+		<PathBox fx:id="pathBox" />
+
+
+	</VBox>
+
+
+
+
+
+</fx:root>

@@ -26,136 +26,175 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-public class Sticker extends VBox {
+public class Sticker extends VBox
+{
 
-	private HBox top = new HBox();
-	private VBox bottom = new VBox();
-	private Node nameLabel;
-	private ContextMenu contextMenu;
-	private Sticker sticker;
+      private HBox	     top    = new HBox();
+      private VBox	     bottom = new VBox();
+      private Node	     nameLabel;
+      private ContextMenu    contextMenu;
+      private Sticker	     sticker;
+      private ElementWrapper wrapper;
 
-	public Sticker(ElementWrapper wrapper) {
 
-		this.sticker = this;
+      public Sticker(ElementWrapper wrapper)
+      {
 
-		this.getStyleClass().add("sticker");
-		this.getChildren().addAll(top, bottom);
-		this.minWidthProperty().bind(GuiFacade.getInstance().tabLengthProperty());
+	    this.wrapper = wrapper;
+	    this.sticker = this;
 
-		this.contextMenu = new StickerContextMenu(this);
-		this.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-			@Override
-			public void handle(ContextMenuEvent event) {
-				contextMenu.show(sticker, event.getScreenX(), event.getScreenY());
-			}
-		});
+	    this.getStyleClass().add("sticker");
+	    this.getChildren().addAll(top, bottom);
+	    this.minWidthProperty().bind(GuiFacade.getInstance().tabLengthProperty());
 
-		// top
-		if (wrapper instanceof ComplexElementWrapper && !GuiFacade.getInstance().isTreeView()) {
+	    this.contextMenu = new StickerContextMenu(this);
+	    this.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>()
+	    {
 
-			addExpandBut(wrapper);
-		}
+		  @Override
+		  public void handle(ContextMenuEvent event)
+		  {
 
-		nameLabel = new Label("<" + wrapper.getElement().getTagName() + ">");
-		nameLabel.getStyleClass().add("tagNameLabel");
-		top.getChildren().add(nameLabel);
+			contextMenu.show(sticker, event.getScreenX(), event.getScreenY());
+		  }
+	    });
 
-		addShowBut(wrapper);
+	    // top
+	    if (wrapper instanceof ComplexElementWrapper && !GuiFacade.getInstance().isTreeView())
+	    {
 
-		// bottom
-		bottom.setId("bottom");
-		if (wrapper.getValue().length() > 0 && wrapper instanceof SimpleElementWrapper) {
+		  addExpandBut(wrapper);
+	    }
 
-			Label label = new Label(
-					AppContext.getInstance().getBundle().getString("value") + " : " + wrapper.getValue());
-			label.getStyleClass().add("valueLabel");
+	    nameLabel = new Label("<" + wrapper.getElement().getTagName() + ">");
+	    nameLabel.getStyleClass().add("tagNameLabel");
+	    top.getChildren().add(nameLabel);
 
-			bottom.getChildren().add(label);
-		}
+	    addShowBut(wrapper);
 
-		HBox pathBox = new HBox(new Label("->"), getElemPathTextFlow(wrapper));
-		bottom.getChildren().add(pathBox);
+	    // bottom
+	    bottom.setId("bottom");
+	    if (wrapper.getValue().length() > 0 && wrapper instanceof SimpleElementWrapper)
+	    {
 
-		this.setMaxWidth(USE_COMPUTED_SIZE);
+		  Label label = new Label(
+			      AppContext.getInstance().getBundle().getString("value") + " : " + wrapper.getValue());
+		  label.getStyleClass().add("valueLabel");
 
-	}
+		  bottom.getChildren().add(label);
+	    }
 
-	private void addShowBut(ElementWrapper wrapper) {
+	    HBox pathBox = new HBox(new Label("->"), getElemPathTextFlow(wrapper));
+	    bottom.getChildren().add(pathBox);
 
-		Button hideBut = new Button();
-		// hideBut.getStyleClass().add("foldBut");
-		hideBut.setText("X");
-		hideBut.setOnAction((Event) -> {
-			hide(wrapper);
-		});
+	    this.setMaxWidth(USE_COMPUTED_SIZE);
 
-		Region region = new Region();
-		top.getChildren().add(region);
-		HBox.setHgrow(region, Priority.ALWAYS);
-		top.getChildren().add(hideBut);
-	}
+      }
 
-	private void addExpandBut(ElementWrapper wrapper) {
 
-		ToggleButton toggleExpandBut = new ToggleButton();
-		toggleExpandBut.getStyleClass().add("expandBut");
-		toggleExpandBut.textProperty().bind(Bindings.when(wrapper.expandProperty()).then("-").otherwise("+"));
-		toggleExpandBut.setOnAction((Event) -> {
-			toggleExpand(wrapper);
-		});
+      private void addShowBut(ElementWrapper wrapper)
+      {
 
-		top.getChildren().add(toggleExpandBut);
-	}
+	    Button hideBut = new Button();
+	    // hideBut.getStyleClass().add("foldBut");
+	    hideBut.setText("X");
+	    hideBut.setOnAction((Event) -> {
+		  hide(wrapper);
+	    });
 
-	private TextFlow getElemPathTextFlow(ElementWrapper wrapper) {
+	    Region region = new Region();
+	    top.getChildren().add(region);
+	    HBox.setHgrow(region, Priority.ALWAYS);
+	    top.getChildren().add(hideBut);
+      }
 
-		TextFlow textFlow = new TextFlow();
-		LinkedList<ElementWrapper> ancestors = new LinkedList<>(wrapper.getAncestors());
-		ElementWrapper rootWrapper = ancestors.peekFirst();
 
-		while (!ancestors.isEmpty()) {
+      private void addExpandBut(ElementWrapper wrapper)
+      {
 
-			ElementWrapper current = ancestors.poll();
+	    ToggleButton toggleExpandBut = new ToggleButton();
+	    toggleExpandBut.getStyleClass().add("expandBut");
+	    toggleExpandBut.textProperty().bind(Bindings.when(wrapper.expandProperty()).then("-").otherwise("+"));
+	    toggleExpandBut.setOnAction((Event) -> {
+		  toggleExpand(wrapper);
+	    });
 
-			Text text = testForTagNameAlias(rootWrapper, current);
+	    top.getChildren().add(toggleExpandBut);
+      }
 
-			textFlow.getChildren().add(text);
 
-			Text sep = new Text(GuiFacade.getInstance().getSeparator());
+      private TextFlow getElemPathTextFlow(ElementWrapper wrapper)
+      {
 
-			sep.textProperty().bind(GuiFacade.getInstance().separatorProperty());
+	    TextFlow textFlow = new TextFlow();
+	    LinkedList<ElementWrapper> ancestors = new LinkedList<>(wrapper.getAncestors());
+	    ElementWrapper rootWrapper = ancestors.peekFirst();
 
-			textFlow.getChildren().add(sep);
-		}
+	    while (!ancestors.isEmpty())
+	    {
 
-		Text thisTag = testForTagNameAlias(rootWrapper, wrapper);
-		textFlow.getChildren().add(thisTag);
+		  ElementWrapper current = ancestors.poll();
 
-		return textFlow;
-	}
+		  Text text = testForTagNameAlias(rootWrapper, current);
 
-	private Text testForTagNameAlias(ElementWrapper rootWrapper, ElementWrapper current) {
+		  textFlow.getChildren().add(text);
 
-		Text text = new Text(current.getElement().getTagName());
+		  Text sep = new Text(GuiFacade.getInstance().getSeparator());
 
-		if (AppContext.getInstance().getTagNameAliasManager().aliased(current)) {
+		  sep.textProperty().bind(GuiFacade.getInstance().separatorProperty());
 
-			text = new Text(AppContext.getInstance().getTagNameAliasManager().getAlias(rootWrapper, current));
-			text.setFill(Color.RED);
-		}
+		  textFlow.getChildren().add(sep);
+	    }
 
-		return text;
-	}
+	    Text thisTag = testForTagNameAlias(rootWrapper, wrapper);
+	    textFlow.getChildren().add(thisTag);
 
-	private void hide(ElementWrapper wrapper) {
+	    return textFlow;
+      }
 
-		wrapper.setVisible(!wrapper.isVisible());
 
-	}
+      private Text testForTagNameAlias(ElementWrapper rootWrapper, ElementWrapper current)
+      {
 
-	private void toggleExpand(ElementWrapper wrapper) {
+	    Text text = new Text(current.getElement().getTagName());
 
-		wrapper.setExpand(!wrapper.isExpand());
-	}
+	    if (AppContext.getInstance().getTagNameAliasManager().aliased(current))
+	    {
+
+		  text = new Text(AppContext.getInstance().getTagNameAliasManager().getAlias(rootWrapper, current));
+		  text.setFill(Color.RED);
+	    }
+
+	    return text;
+      }
+
+
+      private void hide(ElementWrapper wrapper)
+      {
+
+	    wrapper.setVisible(!wrapper.isVisible());
+
+      }
+
+
+      private void toggleExpand(ElementWrapper wrapper)
+      {
+
+	    wrapper.setExpand(!wrapper.isExpand());
+      }
+
+
+      public ElementWrapper getWrapper()
+      {
+
+	    return wrapper;
+      }
+
+
+      public void setWrapper(ElementWrapper wrapper)
+      {
+
+	    this.wrapper = wrapper;
+      }
 
 }
