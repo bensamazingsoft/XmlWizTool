@@ -8,6 +8,7 @@ import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.gui.controls.viewer.ElementViewer;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 
@@ -38,8 +39,8 @@ public class StickerTab extends Tab {
 
 	private void onClose(ElementWrapper wrapper) {
 
-		Map<ElementWrapper, Map<ElementWrapper, String>> aliases = AppContext.getInstance().getTagNameAliasManager()
-				.getNameMap();
+		Map<ElementWrapper, Map<ElementWrapper, SimpleStringProperty>> aliases = AppContext.getInstance()
+				.getTagNameAliasManager().getNameMap();
 		aliases.remove(wrapper);
 
 	}

@@ -3,30 +3,36 @@ package com.ben.xmlwiztool.application.tagname.aliaser;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ben.xmlwiztool.application.context.AppContext;
+import com.ben.xmlwiztool.application.context.properties.PropertiesContext;
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
+
+import javafx.beans.property.SimpleStringProperty;
 
 public class TagNameAliasManager {
 
-	private final Map<ElementWrapper, Map<ElementWrapper, String>> nameMap = new HashMap<>();
+	private final Map<ElementWrapper, Map<ElementWrapper, SimpleStringProperty>> nameMap = new HashMap<>();
 	// move regex to properties and inject while init Appcontext
 	public final static String REGEX = "^((?:(?:\\w+\\.)+)[^\\.]+$)";
+
+	public static PropertiesContext prop = AppContext.getInstance().getProperties();
 
 	public TagNameAliasManager() {
 
 	}
 
-	public Map<ElementWrapper, String> get(ElementWrapper wrapper) {
+	public Map<ElementWrapper, SimpleStringProperty> get(ElementWrapper wrapper) {
 
 		return nameMap.get(wrapper);
 	}
 
-	public String getAlias(ElementWrapper rootWrapper, ElementWrapper wrapper) {
+	public SimpleStringProperty getAlias(ElementWrapper rootWrapper, ElementWrapper wrapper) {
 
-		String alias = "";
+		SimpleStringProperty alias = new SimpleStringProperty();
 
 		if (nameMap.keySet().contains(rootWrapper)) {
 
-			Map<ElementWrapper, String> tags = nameMap.get(rootWrapper);
+			Map<ElementWrapper, SimpleStringProperty> tags = nameMap.get(rootWrapper);
 
 			if (tags.keySet().contains(wrapper)) {
 
@@ -39,10 +45,16 @@ public class TagNameAliasManager {
 		return alias;
 	}
 
-	public static String getTagNameAlias(ElementWrapper wrapper) {
+	public static String getDefaultTagNameAlias(ElementWrapper wrapper) {
 
 		// if new source to get aliases, it goes here
 		if (aliasable(wrapper)) {
+
+			if (prop.get(wrapper.getElement().getTagName()) != null) {
+
+				return wrapper.getElement().getTagName();
+
+			}
 
 			String[] tags = wrapper.getElement().getTagName().split("\\.");
 
@@ -61,22 +73,16 @@ public class TagNameAliasManager {
 
 	public boolean aliased(ElementWrapper wrapper) {
 
-		for (Map<ElementWrapper, String> map : nameMap.values()) {
+		for (Map<ElementWrapper, SimpleStringProperty> map : nameMap.values()) {
 			if (map.keySet().contains(wrapper)) {
 				return true;
 			}
 		}
 		return false;
 
-		// Set<ElementWrapper> set =
-		// nameMap.values().stream().map(Map::keySet).flatMap(Set::stream)
-		// .collect(Collectors.toSet());
-		//
-		// return set.contains(wrapper);
-
 	}
 
-	public Map<ElementWrapper, Map<ElementWrapper, String>> getNameMap() {
+	public Map<ElementWrapper, Map<ElementWrapper, SimpleStringProperty>> getNameMap() {
 		return nameMap;
 	}
 

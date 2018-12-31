@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.TextFlow?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+
+<?import com.ben.xmlwiztool.gui.controls.pathbox.*?>
 
 
-
-<fx:root type="javafx.scene.control.ScrollPane"
-	xmlns:fx="http://javafx.com/fxml">
+<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml">
 
 
-	<VBox>
+	
 
 		<TextFlow>
 			<Text text="%root" />
@@ -28,21 +26,22 @@
 		</TextFlow>
 
 
-		<Label text="%attributes"/>
+		<Label text="%attributes" />
 		<TableView fx:id="attrTable">
-			<Columns>
-				<TableColumn text="%name"/>
-				<TableColumn text="%value"/>
-			</Columns>
+			<columns>
+				<TableColumn fx:id="nameCol" text="%name" />
+				<TableColumn fx:id="valCol" text="%value" />
+			</columns>
 		</TableView>
 
 		<Label text="%value" />
 		<TextArea fx:id="valueTextArea" />
 
+		<Label text="%path" />
 		<PathBox fx:id="pathBox" />
 
 
-	</VBox>
+	
 
 
 

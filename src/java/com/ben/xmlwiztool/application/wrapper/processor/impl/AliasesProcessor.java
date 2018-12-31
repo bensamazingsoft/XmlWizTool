@@ -7,6 +7,8 @@ import com.ben.xmlwiztool.application.tagname.aliaser.TagNameAliasManager;
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.processor.WrapperProcessor;
 
+import javafx.beans.property.SimpleStringProperty;
+
 public class AliasesProcessor implements WrapperProcessor {
 
 	private ElementWrapper root;
@@ -14,7 +16,8 @@ public class AliasesProcessor implements WrapperProcessor {
 	public AliasesProcessor(ElementWrapper root) {
 
 		this.root = root;
-		AppContext.getInstance().getTagNameAliasManager().getNameMap().put(root, new HashMap<ElementWrapper, String>());
+		AppContext.getInstance().getTagNameAliasManager().getNameMap().put(root,
+				new HashMap<ElementWrapper, SimpleStringProperty>());
 
 	}
 
@@ -23,7 +26,8 @@ public class AliasesProcessor implements WrapperProcessor {
 		if (TagNameAliasManager.aliasable(wrapper)) {
 
 			TagNameAliasManager aliasMgr = AppContext.getInstance().getTagNameAliasManager();
-			aliasMgr.getNameMap().get(root).put(wrapper, TagNameAliasManager.getTagNameAlias(wrapper));
+			aliasMgr.getNameMap().get(root).put(wrapper,
+					new SimpleStringProperty(TagNameAliasManager.getDefaultTagNameAlias(wrapper)));
 
 		}
 
