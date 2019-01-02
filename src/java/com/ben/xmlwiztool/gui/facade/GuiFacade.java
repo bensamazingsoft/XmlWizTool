@@ -50,7 +50,7 @@ public class GuiFacade {
 
 		treeView = new SimpleBooleanProperty();
 		treeView.set(Boolean.valueOf(AppContext.getInstance().getProperties().get("treeView")));
-		fastLoad.addListener((o, oldVal, newVal) -> {
+		treeView.addListener((o, oldVal, newVal) -> {
 			AppContext.getInstance().getProperties().set("treeView", newVal.toString());
 		});
 

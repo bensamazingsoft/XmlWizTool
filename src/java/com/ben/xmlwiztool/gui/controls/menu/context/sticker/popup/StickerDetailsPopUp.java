@@ -6,27 +6,29 @@ import com.ben.xmlwiztool.gui.controls.viewer.sticker.details.pane.StickerDetail
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
+import javafx.stage.Modality;
 
-public class StickerDetailsPopUp extends Alert
-{
+public class StickerDetailsPopUp extends Alert {
 
-      public StickerDetailsPopUp(Sticker sticker)
-      {
+	public StickerDetailsPopUp(Sticker sticker) {
 
-	    super(AlertType.CONFIRMATION);
+		super(AlertType.CONFIRMATION);
 
-	    setTitle("<" + sticker.getWrapper().getElement().getTagName() + ">");
-	    setHeaderText("");
-	    setGraphic(null);
+		setTitle("<" + sticker.getWrapper().getElement().getTagName() + ">");
+		setHeaderText("");
+		setGraphic(null);
 
-	    ScrollPane sp = new ScrollPane();
-	    sp.setContent(new StickerDetailPane(sticker));
-	    sp.setFitToHeight(true);
-	    sp.setFitToWidth(true);
+		ScrollPane sp = new ScrollPane();
+		sp.getStylesheets().add("/css/styles.css");
+		sp.getStyleClass().add("StickerDetailPane");
+		sp.setContent(new StickerDetailPane(sticker));
+		sp.setFitToHeight(true);
+		sp.setFitToWidth(true);
 
-	    getDialogPane().setContent(sp);
+		getDialogPane().setContent(sp);
 
-	    show();
-      }
+		initModality(Modality.NONE);
+		show();
+	}
 
 }

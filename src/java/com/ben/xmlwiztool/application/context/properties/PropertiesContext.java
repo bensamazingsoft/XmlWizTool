@@ -70,4 +70,8 @@ public class PropertiesContext {
 		properties.setProperty(key, value);
 	}
 
+	public void remove(String key) {
+		properties.remove(key);
+	}
+
 }

@@ -12,7 +12,6 @@ import com.ben.xmlwiztool.gui.controls.menu.context.sticker.StickerContextMenu;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -24,7 +23,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -134,9 +132,6 @@ public class Sticker extends VBox {
 			textFlow.getChildren().add(sep);
 		}
 
-		Text thisTag = makeAliasText(rootWrapper, wrapper);
-		textFlow.getChildren().add(thisTag);
-
 		return textFlow;
 	}
 
@@ -147,10 +142,6 @@ public class Sticker extends VBox {
 		if (AppContext.getInstance().getTagNameAliasManager().aliased(current)) {
 
 			text = new AliasText(rootWrapper, current, text.getText());
-			SimpleStringProperty aliasStringProp = AppContext.getInstance().getTagNameAliasManager()
-					.getAlias(rootWrapper, current);
-			text.textProperty().bindBidirectional(aliasStringProp);
-			text.setFill(Color.RED);
 		}
 
 		return text;

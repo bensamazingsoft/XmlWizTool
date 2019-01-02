@@ -95,7 +95,7 @@ public abstract class ElementWrapper {
 
 		LinkedList<ElementWrapper> ancestors = new LinkedList<>();
 
-		ElementWrapper ancestor = parent;
+		ElementWrapper ancestor = this;
 		while (ancestor != null) {
 			ancestors.addFirst(ancestor);
 			ancestor = ancestor.getParent();
@@ -164,21 +164,6 @@ public abstract class ElementWrapper {
 		}
 
 	}
-	//
-	// public final SimpleBooleanProperty foldProperty() {
-	//
-	// return this.fold;
-	// }
-	//
-	// public final boolean isFold() {
-	//
-	// return this.foldProperty().get();
-	// }
-	//
-	// public final void setFold(final boolean fold) {
-	//
-	// this.foldProperty().set(fold);
-	// }
 
 	public boolean match(String text) {
 
@@ -195,7 +180,6 @@ public abstract class ElementWrapper {
 		for (int i = 0; i < length; i++) {
 
 			if (text.regionMatches(i, patt, 0, patt.length())) {
-				System.out.println("matched : " + patt + " in " + text);
 				return true;
 			}
 

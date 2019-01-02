@@ -3,6 +3,7 @@ package com.ben.xmlwiztool.gui.controls.viewer.sticker.details.pane;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import org.w3c.dom.Attr;
@@ -10,6 +11,7 @@ import org.w3c.dom.NamedNodeMap;
 
 import com.ben.xmlwiztool.application.context.AppContext;
 import com.ben.xmlwiztool.application.wrapper.AttributeWrapper;
+import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.gui.controls.pathbox.PathBox;
 import com.ben.xmlwiztool.gui.controls.viewer.sticker.Sticker;
 import com.ben.xmlwiztool.gui.controls.viewer.sticker.details.pane.cellfactory.AttrTableCell;
@@ -32,12 +34,13 @@ public class StickerDetailPane extends VBox implements Initializable {
 
 	private Sticker sticker;
 	private ResourceBundle bundle;
+	private PathBox pathBox;
 
 	@FXML
 	Text rootName;
 
 	@FXML
-	Text tagname;
+	Text tagName;
 
 	@FXML
 	TableView<AttributeWrapper> attrTable;
@@ -51,10 +54,13 @@ public class StickerDetailPane extends VBox implements Initializable {
 	@FXML
 	TextArea valueTextArea;
 
-	@FXML
-	PathBox pathBox;
-
 	public StickerDetailPane(Sticker sticker) {
+
+		setSpacing(10.0);
+
+		getStylesheets().add("/css/styles.css");
+		getStyleClass().add("StickerDetailPane");
+
 		this.sticker = sticker;
 
 		bundle = AppContext.getInstance().getBundle();
@@ -71,6 +77,31 @@ public class StickerDetailPane extends VBox implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+
+		// root tag name
+		LinkedList<ElementWrapper> ancestors = sticker.getWrapper().getAncestors();
+		String rootTagName = "";
+
+		rootTagName = ancestors.peekFirst().getElement().getTagName();
+
+		rootName.textProperty().set(rootTagName);
+
+		// tag name
+		tagName.textProperty().set(sticker.getWrapper().getElement().getTagName());
+
+		// value
+		valueTextArea.setPrefRowCount(2);
+		valueTextArea.setText(sticker.getWrapper().getValue());
+
+		// attributes
+		makeAttrTable();
+
+		// path box
+		pathBox = new PathBox(sticker);
+		getChildren().add(pathBox);
+	}
+
+	private void makeAttrTable() {
 
 		nameCol.setCellValueFactory(new PropertyValueFactory<AttributeWrapper, String>("name"));
 		valCol.setCellValueFactory(new PropertyValueFactory<AttributeWrapper, String>("value"));
@@ -92,10 +123,8 @@ public class StickerDetailPane extends VBox implements Initializable {
 
 		}
 
+		attrTable.setPrefHeight(80.0 + (Math.max((tableList.size() - 1), 0) * 80.0));
 		attrTable.setItems(tableList);
-
-		pathBox = new PathBox(sticker);
-
 	}
 
 }

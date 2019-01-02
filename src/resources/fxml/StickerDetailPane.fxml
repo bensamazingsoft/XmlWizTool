@@ -10,41 +10,29 @@
 
 <fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml">
 
+	<TextFlow>
+		<Label text="%root" />
+		<Text text=" : " />
+		<Text fx:id="rootName" />
+	</TextFlow>
 
-	
+	<TextFlow>
+		<Label text="%element" />
+		<Text text=" : " />
+		<Text fx:id="tagName" />
+	</TextFlow>
 
-		<TextFlow>
-			<Text text="%root" />
-			<Text text=" : " />
-			<Text fx:id="rootName" />
-		</TextFlow>
+	<Label text="%attributes" />
+	<TableView fx:id="attrTable">
+		<columns>
+			<TableColumn fx:id="nameCol" text="%name" />
+			<TableColumn fx:id="valCol" text="%value" />
+		</columns>
+	</TableView>
 
-		<TextFlow>
-			<Text text="%root" />
-			<Text text=" : " />
-			<Text fx:id="tagName" />
-		</TextFlow>
+	<Label text="%value" />
+	<TextArea fx:id="valueTextArea" />
 
-
-		<Label text="%attributes" />
-		<TableView fx:id="attrTable">
-			<columns>
-				<TableColumn fx:id="nameCol" text="%name" />
-				<TableColumn fx:id="valCol" text="%value" />
-			</columns>
-		</TableView>
-
-		<Label text="%value" />
-		<TextArea fx:id="valueTextArea" />
-
-		<Label text="%path" />
-		<PathBox fx:id="pathBox" />
-
-
-	
-
-
-
-
+	<Label text="%path" />
 
 </fx:root>

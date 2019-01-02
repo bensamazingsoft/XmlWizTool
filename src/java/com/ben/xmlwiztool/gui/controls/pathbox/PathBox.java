@@ -25,192 +25,177 @@ import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-public class PathBox extends VBox implements Initializable
-{
+public class PathBox extends VBox implements Initializable {
 
-      private ResourceBundle	    bundle;
+	// TODO need a cancel option (save the initial state ina map that is
+	// restored if cancel)
 
-      private SimpleBooleanProperty modify;
+	private ResourceBundle bundle;
 
-      private TextFlow		    modFlow;
+	private SimpleBooleanProperty modify;
 
-      private Sticker		    sticker;
+	private TextFlow modFlow, flow;
 
-      @FXML
-      TextFlow			    flow;
+	private Sticker sticker;
 
-      @FXML
-      CheckBox			    globalCb;
+	@FXML
+	StackPane stack;
 
-      @FXML
-      CheckBox			    saveCb;
+	@FXML
+	CheckBox globalCb;
 
-      @FXML
-      HBox			    controls;
+	@FXML
+	CheckBox saveCb;
 
+	@FXML
+	HBox controls;
 
-      public PathBox()
-      {
+	public PathBox(Sticker sticker) {
 
-      }
+		this.sticker = sticker;
 
+		spacingProperty().set(5.0);
 
-      public PathBox(Sticker sticker)
-      {
+		modify = new SimpleBooleanProperty();
+		modify.addListener((o, oldVal, newVal) -> {
+			flow.setVisible(!modify.get());
+		});
+		modify.set(false);
 
-	    this.sticker = sticker;
+		bundle = AppContext.getInstance().getBundle();
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/PathBox.fxml"), bundle);
+		fxmlLoader.setRoot(this);
+		fxmlLoader.setController(this);
 
-	    modify = new SimpleBooleanProperty();
-	    modify.set(false);
-	    modify.addListener((o, oldVal, newVal) -> {
-		  flow.setVisible(!modify.get());
-	    });
+		try {
+			fxmlLoader.load();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-	    bundle = AppContext.getInstance().getBundle();
-	    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/PathBox.fxml"), bundle);
-	    fxmlLoader.setRoot(this);
-	    fxmlLoader.setController(this);
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
 
-	    try
-	    {
-		  fxmlLoader.load();
-	    }
-	    catch (IOException e)
-	    {
-		  throw new RuntimeException(e);
-	    }
-      }
+		saveCb.disableProperty().bind(globalCb.selectedProperty().not());
+		saveCb.disableProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				saveCb.selectedProperty().set(false);
+			}
+		});
 
+		controls.visibleProperty().bindBidirectional(modify);
+		flow = Sticker.makeElemPathTextFlow(sticker.getWrapper());
 
-      @Override
-      public void initialize(URL location, ResourceBundle resources)
-      {
+		modFlow = getModFlow();
+		modFlow.visibleProperty().bindBidirectional(modify);
 
-	    saveCb.disableProperty().bind(globalCb.selectedProperty());
-	    saveCb.disableProperty().addListener((o, oldVal, newVal) -> {
-		  if (!newVal)
-		  {
-			saveCb.selectedProperty().set(false);
-		  }
-	    });
+		stack.getChildren().addAll(flow, modFlow);
 
-	    controls.visibleProperty().bindBidirectional(modify);
-	    flow = Sticker.makeElemPathTextFlow(sticker.getWrapper());
+	}
 
-	    modFlow = getModFlow();
-	    modFlow.visibleProperty().bindBidirectional(modify);
+	private TextFlow getModFlow() {
 
-      }
+		TextFlow modFlowTemp = new TextFlow();
 
+		for (int i = 0; i < flow.getChildren().size(); i++) {
 
-      private TextFlow getModFlow()
-      {
+			Node node = flow.getChildren().get(i);
 
-	    TextFlow modFlowTemp = new TextFlow();
+			if (node instanceof AliasText) {
 
-	    for (int i = 0; i < flow.getChildren().size(); i++)
-	    {
+				TextField tf = new TextField();
+				tf.textProperty().bindBidirectional(((AliasText) node).textProperty());
+				modFlowTemp.getChildren().add(tf);
+				continue;
+			}
 
-		  Node node = flow.getChildren().get(i);
+			Text text = new Text();
+			text.textProperty().bindBidirectional(((Text) node).textProperty());
+			modFlowTemp.getChildren().add(text);
 
-		  if (node instanceof AliasText)
-		  {
+		}
 
-			TextField tf = new TextField();
-			tf.textProperty().bindBidirectional(((AliasText) node).textProperty());
-			modFlowTemp.getChildren().add(tf);
-			continue;
-		  }
-		  modFlowTemp.getChildren().add(node);
+		return modFlowTemp;
+	}
 
-	    }
+	@FXML
+	public void handleModifyBut(Event event) {
 
-	    return modFlowTemp;
-      }
+		modify.set(!modify.get());
 
+	}
 
-      @FXML
-      public void handleModifyBut(Event event)
-      {
+	// TODO needs a warning prompt if there are more than 2 aliasText that are
+	// getting saved or reset
+	@FXML
+	public void handleOKBut(Event event) {
 
-	    modify.set(!modify.get());
+		if (saveCb.isSelected()) {
+			// save Text values in properties
+			flow.getChildren().stream().filter(text -> text instanceof AliasText).forEach(text -> {
 
-      }
+				AliasText aliasText = (AliasText) text;
+				AppContext.getInstance().getProperties().set(aliasText.getWrapper().getElement().getTagName(),
+						aliasText.textProperty().get());
 
+			});
+		}
 
-      @FXML
-      public void handleOKBut(Event event)
-      {
+		if (globalCb.isSelected()) {
 
-	    if (saveCb.isSelected())
-	    {
-		  // save Text values in properties
-		  flow.getChildren().stream().filter(text -> text instanceof AliasText).forEach(text -> {
+			for (Node node : flow.getChildren()) {
 
-			AliasText aliasText = (AliasText) text;
-			AppContext.getInstance().getProperties().set(aliasText.getWrapper().getElement().getTagName(),
-				    aliasText.textProperty().get());
+				if (node instanceof AliasText) {
 
-		  });
-	    }
+					AliasText alias = (AliasText) node;
 
-	    if (globalCb.isSelected())
-	    {
+					// TODO this should be an alias manager method called by an
+					// action (action to be used in the name manager popup)
+					Set<Entry<ElementWrapper, SimpleStringProperty>> entrySet = AppContext.getInstance()
+							.getTagNameAliasManager().getNameMap().values().stream().map(Map::entrySet)
+							.flatMap(Set::stream).collect(Collectors.toSet());
 
-		  for (Node node : flow.getChildren())
-		  {
+					for (Entry<ElementWrapper, SimpleStringProperty> entry : entrySet) {
+						if (entry.getKey().getElement().getTagName()
+								.equals(alias.getWrapper().getElement().getTagName())) {
 
-			if (node instanceof AliasText)
-			{
+							entry.getValue().set(alias.getText());
 
-			      AliasText alias = (AliasText) node;
+						}
+					}
 
-			      Set<Entry<ElementWrapper, SimpleStringProperty>> entrySet = AppContext.getInstance()
-					  .getTagNameAliasManager().getNameMap().values().stream().map(Map::entrySet)
-					  .flatMap(Set::stream).collect(Collectors.toSet());
-
-			      for (Entry<ElementWrapper, SimpleStringProperty> entry : entrySet)
-			      {
-				    if (entry.getKey().getElement().getTagName()
-						.equals(alias.getWrapper().getElement().getTagName()))
-				    {
-
-					  entry.getValue().set(alias.getText());
-
-				    }
-			      }
+				}
 
 			}
 
-		  }
+		}
 
-	    }
+		modify.set(false);
 
-	    modify.set(false);
+	}
 
-      }
+	@FXML
+	public void handleResetBut(Event event) {
 
+		for (Node node : flow.getChildren()) {
 
-      @FXML
-      public void handleResetBut(Event event)
-      {
+			if (node instanceof AliasText) {
 
-	    for (Node node : flow.getChildren())
-	    {
+				AliasText alias = (AliasText) node;
+				AppContext.getInstance().getProperties().remove(alias.getWrapper().getElement().getTagName());
 
-		  if (node instanceof AliasText)
-		  {
+				alias.textProperty().set(TagNameAliasManager.getDefaultTagNameAlias(alias.getWrapper()));
 
-			AliasText alias = (AliasText) node;
-			alias.textProperty().set(TagNameAliasManager.getDefaultTagNameAlias(alias.getWrapper()));
+			}
 
-		  }
+		}
 
-	    }
-
-      }
+	}
 
 }

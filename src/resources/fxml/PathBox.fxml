@@ -6,17 +6,18 @@
 
 <fx:root xmlns:fx="http://javafx.com/fxml/1" type="VBox">
 
-	<HBox>
-		<TextFlow fx:id="flow" />
-		<Button onAction="#handleModifyBut" text="%modify" />
-	</HBox>
+	<VBox spacing="5.0">
+		<StackPane fx:id="stack"/>
 
-	<HBox fx:id="controls">
+		<Button onAction="#handleModifyBut" text="%modify" />
+	</VBox>
+
+	<HBox fx:id="controls" spacing="4.0">
 	
 		<CheckBox fx:id="globalCb" text="%global" />
 		<CheckBox fx:id="saveCb" text="%save" />
 		
-		<VBox>
+		<VBox spacing="3.0">
 			<Button onAction="#handleResetBut" text="reset" />
 			<Button onAction="#handleOKBut" text="OK" />
 		</VBox>

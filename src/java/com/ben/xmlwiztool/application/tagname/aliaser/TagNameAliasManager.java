@@ -52,7 +52,7 @@ public class TagNameAliasManager {
 
 			if (prop.get(wrapper.getElement().getTagName()) != null) {
 
-				return wrapper.getElement().getTagName();
+				return prop.get(wrapper.getElement().getTagName());
 
 			}
 
