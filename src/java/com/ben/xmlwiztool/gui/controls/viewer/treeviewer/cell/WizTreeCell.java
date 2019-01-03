@@ -15,7 +15,19 @@ public class WizTreeCell extends TreeCell<ElementWrapper> {
 		super.updateItem(wrapper, empty);
 
 		if (wrapper != null && !empty) {
-			setGraphic(new Sticker(getItem()));
+
+			Sticker sticker = new Sticker(getItem());
+
+			double maxCharSize = sticker.computeMaxSize();
+
+			sticker.setMinWidth(maxCharSize);
+			sticker.setMaxWidth(maxCharSize);
+
+			setGraphic(sticker);
+
+		} else {
+			setGraphic(null);
+			setText(null);
 		}
 
 	}

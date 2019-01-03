@@ -21,14 +21,11 @@ public class Main extends Application {
 
 	public void start(Stage stage) throws Exception {
 
-		// TODO disable filter and hide controls if treeView
 		// TODO set app icons
-		// TODO do something about treeview bug
 		// TODO limit stickers size in treeview
 		// TODO inquire about memory leak
 		// TODO dress (css) the detailpopup
 		// TODO refactor the alias frmwk
-		// TODO implement menu bar
 		// TODO implement tooltips
 
 		AppContext.init();

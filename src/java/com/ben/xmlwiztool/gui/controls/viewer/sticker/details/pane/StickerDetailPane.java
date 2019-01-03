@@ -79,7 +79,7 @@ public class StickerDetailPane extends VBox implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
 		// root tag name
-		LinkedList<ElementWrapper> ancestors = sticker.getWrapper().getAncestors();
+		LinkedList<ElementWrapper> ancestors = sticker.getWrapper().getLineage();
 		String rootTagName = "";
 
 		rootTagName = ancestors.peekFirst().getElement().getTagName();

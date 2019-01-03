@@ -10,6 +10,7 @@ public class SetFilterableTreeAction implements IAction {
 
 	@Override
 	public void execute() {
+
 		for (ElementWrapper elem : GuiFacade.getInstance().getOpenElements()) {
 
 			WrapperProcessor processor = new SetFilterableProcessor();

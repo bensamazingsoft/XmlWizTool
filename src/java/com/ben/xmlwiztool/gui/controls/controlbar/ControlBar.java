@@ -7,12 +7,15 @@ import java.util.ResourceBundle;
 
 import com.ben.xmlwiztool.application.actions.impl.FilterElementAction;
 import com.ben.xmlwiztool.application.actions.impl.FoldAllAction;
+import com.ben.xmlwiztool.application.actions.impl.HideAllAction;
 import com.ben.xmlwiztool.application.actions.impl.LoadClipBoardAction;
 import com.ben.xmlwiztool.application.actions.impl.LoadFileAction;
 import com.ben.xmlwiztool.application.actions.impl.ShowAllAction;
+import com.ben.xmlwiztool.application.actions.impl.ToggleSeparatorAction;
 import com.ben.xmlwiztool.application.actions.impl.UnFoldAllAction;
 import com.ben.xmlwiztool.application.context.AppContext;
 import com.ben.xmlwiztool.application.executor.Executor;
+import com.ben.xmlwiztool.gui.controls.alias.manager.popup.ManageAliasPopUp;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
 import com.ben.xmlwiztool.gui.settings.popup.SettingPopUp;
 
@@ -191,7 +194,7 @@ public class ControlBar extends ToolBar implements Initializable {
 	}
 
 	private void handleActionToggleSeparator() {
-		GuiFacade.getInstance().toggleSeparator();
+		Executor.getInstance().execute(new ToggleSeparatorAction());
 
 	}
 
@@ -202,7 +205,7 @@ public class ControlBar extends ToolBar implements Initializable {
 	}
 
 	private void handleActionManageNames() {
-		// TODO handleActionManageNames()
+		new ManageAliasPopUp();
 
 	}
 
@@ -220,8 +223,20 @@ public class ControlBar extends ToolBar implements Initializable {
 	@FXML
 
 	private void actionTextField() {
-		String text = textField.getText();
-		Executor.getInstance().execute(new FilterElementAction(text));
+
+		Executor.getInstance().execute(new HideAllAction());
+
+		String input = textField.getText();
+		String separator = AppContext.getInstance().getProperties().get("filterSeparator");
+
+		String[] terms = input.split(separator);
+
+		for (String term : terms) {
+
+			Executor.getInstance().execute(new FilterElementAction(term));
+
+		}
+
 	}
 
 	@Override
@@ -254,7 +269,9 @@ public class ControlBar extends ToolBar implements Initializable {
 		manageNamesButImgView.imageProperty().set(manageNamesButImg);
 
 		textField.setPromptText(bundle.getString("textFieldPromptText"));
+		textField.disableProperty().bindBidirectional(GuiFacade.getInstance().treeViewProperty());
 
+		hideEmptyCb.disableProperty().bindBidirectional(GuiFacade.getInstance().treeViewProperty());
 		hideEmptyCb.selectedProperty().bindBidirectional(GuiFacade.getInstance().hideEmptyProperty());
 		hideEmptyCb.selectedProperty().set(false);
 

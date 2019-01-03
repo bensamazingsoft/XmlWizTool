@@ -2,6 +2,7 @@
 package com.ben.xmlwiztool.application.wrapper;
 
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -91,17 +92,24 @@ public abstract class ElementWrapper {
 		return "";
 	}
 
-	public LinkedList<ElementWrapper> getAncestors() {
+	public LinkedList<ElementWrapper> getLineage() {
 
-		LinkedList<ElementWrapper> ancestors = new LinkedList<>();
+		LinkedList<ElementWrapper> lineage = new LinkedList<>();
 
-		ElementWrapper ancestor = this;
-		while (ancestor != null) {
-			ancestors.addFirst(ancestor);
-			ancestor = ancestor.getParent();
+		ElementWrapper relative = this;
+		while (relative != null) {
+			lineage.addFirst(relative);
+			relative = relative.getParent();
 		}
 
-		return ancestors;
+		return lineage;
+	}
+
+	public LinkedList<String> getTextLineage() {
+
+		return getLineage().stream().map(ElementWrapper::getElement).map(Element::getTagName)
+				.collect(Collectors.toCollection(LinkedList::new));
+
 	}
 
 	public Element getElement() {

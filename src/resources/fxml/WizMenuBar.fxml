@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+
+<fx:root type="javafx.scene.control.MenuBar" xmlns:fx="http://javafx.com/fxml">
+
+	<Menu text="%file" >
+		<MenuItem text="%open" onAction="#handleOpenAction" accelerator="Shortcut+o"/>
+		<MenuItem text="%loadClipBoard" onAction="#handleloadClipBoardAction" accelerator="Shortcut+b"/>			
+	</Menu>
+	
+	<Menu text="%actions">
+		<MenuItem text="%showAll" onAction="#handleShowAllAction" accelerator="Shortcut+i"/>
+		<MenuItem text="%foldAll" onAction="#handleFoldAllAction" accelerator="Shortcut+l"/>
+		<MenuItem text="%unFoldAll" onAction="#handleUnFoldAllAction" accelerator="Shortcut+p"/>
+		<MenuItem text="%toggleSeparator" onAction="#handleToggleSeparatorAction" accelerator="Shortcut+t"/>
+		<MenuItem text="%manageAliases" onAction="#handleManageAliasesAction" accelerator="Shortcut+m"/>
+		<MenuItem text="%hideEmpty" onAction="#handleHideEmptyAction" accelerator="Shortcut+h"/>
+	</Menu>
+
+	<Menu text="%settings">
+		<MenuItem text="%modify" onAction="#handleSettingsAction" accelerator="Shortcut+k"/>
+	</Menu>
+
+</fx:root>

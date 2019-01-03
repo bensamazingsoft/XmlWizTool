@@ -34,6 +34,9 @@ public class Sticker extends VBox {
 	private ContextMenu contextMenu;
 	private Sticker sticker;
 	private ElementWrapper wrapper;
+	private double MaxComputedTextControlSize;
+	private Label valueLabel;
+	private HBox pathBox;
 
 	public Sticker(ElementWrapper wrapper) {
 
@@ -42,7 +45,7 @@ public class Sticker extends VBox {
 
 		this.getStyleClass().add("sticker");
 		this.getChildren().addAll(top, bottom);
-		this.minWidthProperty().bind(GuiFacade.getInstance().tabLengthProperty());
+		// this.minWidthProperty().bind(GuiFacade.getInstance().tabLengthProperty());
 
 		this.contextMenu = new StickerContextMenu(this);
 		this.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
@@ -70,18 +73,23 @@ public class Sticker extends VBox {
 		bottom.setId("bottom");
 		if (wrapper.getValue().length() > 0 && wrapper instanceof SimpleElementWrapper) {
 
-			Label label = new Label(
+			valueLabel = new Label(
 					AppContext.getInstance().getBundle().getString("value") + " : " + wrapper.getValue());
-			label.getStyleClass().add("valueLabel");
+			valueLabel.getStyleClass().add("valueLabel");
 
-			bottom.getChildren().add(label);
+			bottom.getChildren().add(valueLabel);
 		}
 
-		HBox pathBox = new HBox(new Label("->"), makeElemPathTextFlow(wrapper));
+		pathBox = new HBox(new Label("->"), makeElemPathTextFlow(wrapper));
 		bottom.getChildren().add(pathBox);
 
-		this.setMaxWidth(USE_COMPUTED_SIZE);
+	}
 
+	public double computeMaxSize() {
+		double nameLabelWidth = top.getLayoutBounds().getWidth();
+		double valueLabelWidth = valueLabel != null ? valueLabel.getBoundsInLocal().getWidth() : 0;
+		double pathboxWidth = pathBox != null ? pathBox.getBoundsInLocal().getWidth() : 0;
+		return 50 + Math.max(nameLabelWidth, Math.max(valueLabelWidth, pathboxWidth));
 	}
 
 	private void addShowBut(ElementWrapper wrapper) {
@@ -114,12 +122,12 @@ public class Sticker extends VBox {
 	public static TextFlow makeElemPathTextFlow(ElementWrapper wrapper) {
 
 		TextFlow textFlow = new TextFlow();
-		LinkedList<ElementWrapper> ancestors = new LinkedList<>(wrapper.getAncestors());
-		ElementWrapper rootWrapper = ancestors.peekFirst();
+		LinkedList<ElementWrapper> lineage = new LinkedList<>(wrapper.getLineage());
+		ElementWrapper rootWrapper = lineage.peekFirst();
 
-		while (!ancestors.isEmpty()) {
+		while (!lineage.isEmpty()) {
 
-			ElementWrapper current = ancestors.poll();
+			ElementWrapper current = lineage.poll();
 
 			Text text = makeAliasText(rootWrapper, current);
 
@@ -166,6 +174,14 @@ public class Sticker extends VBox {
 	public void setWrapper(ElementWrapper wrapper) {
 
 		this.wrapper = wrapper;
+	}
+
+	public double getMaxComputedTextControlSize() {
+		return MaxComputedTextControlSize;
+	}
+
+	public void setMaxComputedTextControlSize(double maxComputedTextControlSize) {
+		MaxComputedTextControlSize = maxComputedTextControlSize;
 	}
 
 }

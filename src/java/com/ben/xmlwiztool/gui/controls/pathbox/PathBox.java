@@ -32,7 +32,7 @@ import javafx.scene.text.TextFlow;
 
 public class PathBox extends VBox implements Initializable {
 
-	// TODO need a cancel option (save the initial state ina map that is
+	// TODO need a cancel option (save the initial state in a map that is
 	// restored if cancel)
 
 	private ResourceBundle bundle;

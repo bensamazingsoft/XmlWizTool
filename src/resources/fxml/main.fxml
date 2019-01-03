@@ -3,11 +3,11 @@
 <?import java.lang.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.*?>
 
+
+<?import com.ben.xmlwiztool.gui.controls.menu.bar.WizMenuBar?>
 <?import com.ben.xmlwiztool.gui.controls.controlbar.ControlBar?>
-
 
 <BorderPane id="rootPane"
 	fx:controller="com.ben.xmlwiztool.gui.main.MainController"
@@ -16,9 +16,10 @@
 
 
 <top>
-
+	<VBox spacing="5">
+		<WizMenuBar/>
 		<ControlBar fx:id="controlBar" />
-
+	</VBox>
 </top>
 
 <center>
