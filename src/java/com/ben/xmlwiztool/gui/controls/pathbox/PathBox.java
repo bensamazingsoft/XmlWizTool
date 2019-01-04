@@ -3,6 +3,7 @@ package com.ben.xmlwiztool.gui.controls.pathbox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
@@ -22,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -32,16 +34,11 @@ import javafx.scene.text.TextFlow;
 
 public class PathBox extends VBox implements Initializable {
 
-	// TODO need a cancel option (save the initial state in a map that is
-	// restored if cancel)
-
 	private ResourceBundle bundle;
-
 	private SimpleBooleanProperty modify;
-
 	private TextFlow modFlow, flow;
-
 	private Sticker sticker;
+	private Map<TextField, String> initalState;
 
 	@FXML
 	StackPane stack;
@@ -55,9 +52,13 @@ public class PathBox extends VBox implements Initializable {
 	@FXML
 	HBox controls;
 
+	@FXML
+	Button modifyBut;
+
 	public PathBox(Sticker sticker) {
 
 		this.sticker = sticker;
+		initalState = new HashMap<>();
 
 		spacingProperty().set(5.0);
 
@@ -95,6 +96,8 @@ public class PathBox extends VBox implements Initializable {
 		modFlow = getModFlow();
 		modFlow.visibleProperty().bindBidirectional(modify);
 
+		modifyBut.visibleProperty().bind(modify.not());
+
 		stack.getChildren().addAll(flow, modFlow);
 
 	}
@@ -111,6 +114,7 @@ public class PathBox extends VBox implements Initializable {
 
 				TextField tf = new TextField();
 				tf.textProperty().bindBidirectional(((AliasText) node).textProperty());
+				initalState.put(tf, tf.getText());
 				modFlowTemp.getChildren().add(tf);
 				continue;
 			}
@@ -128,6 +132,14 @@ public class PathBox extends VBox implements Initializable {
 	public void handleModifyBut(Event event) {
 
 		modify.set(!modify.get());
+
+	}
+
+	@FXML
+	public void handleCancelBut(Event event) {
+
+		cancel();
+		modify.set(false);
 
 	}
 
@@ -196,6 +208,26 @@ public class PathBox extends VBox implements Initializable {
 
 		}
 
+	}
+
+	public void cancel() {
+		if (isModify()) {
+			initalState.forEach((txtField, txtValue) -> {
+				txtField.setText(txtValue);
+			});
+		}
+	}
+
+	public final SimpleBooleanProperty modifyProperty() {
+		return this.modify;
+	}
+
+	public final boolean isModify() {
+		return this.modifyProperty().get();
+	}
+
+	public final void setModify(final boolean modify) {
+		this.modifyProperty().set(modify);
 	}
 
 }

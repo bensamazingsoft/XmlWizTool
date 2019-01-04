@@ -46,7 +46,6 @@ public class Sticker extends VBox {
 
 		this.getStyleClass().add("sticker");
 		this.getChildren().addAll(top, bottom);
-		// this.minWidthProperty().bind(GuiFacade.getInstance().tabLengthProperty());
 
 		this.contextMenu = new StickerContextMenu(this);
 		this.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
@@ -87,9 +86,6 @@ public class Sticker extends VBox {
 	}
 
 	public double computeMaxSize() {
-
-		// FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
-		// fontLoader.computeStringWidth(label.getText(), label.getFont())
 
 		double nameLabelWidth = getLayoutWidth(nameLabel.getText());
 		double valueLabelWidth = valueLabel != null ? getLayoutWidth(valueLabel.getText()) : 0;

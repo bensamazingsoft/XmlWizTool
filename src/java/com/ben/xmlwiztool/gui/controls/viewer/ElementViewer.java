@@ -33,6 +33,7 @@ public class ElementViewer extends HBox {
 
 		super();
 
+		content.setSpacing(3.0);
 		this.getStyleClass().add("elementviewer");
 
 		this.wrapper = wrapper;

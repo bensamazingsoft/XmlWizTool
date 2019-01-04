@@ -17,7 +17,6 @@ public class GuiFacade {
 	private static GuiFacade instance;
 
 	private SimpleDoubleProperty tabSize;
-	private SimpleDoubleProperty tabLength;
 
 	private SimpleStringProperty separator;
 	private final String POINT = ".";
@@ -32,13 +31,10 @@ public class GuiFacade {
 		separator = new SimpleStringProperty(POINT);
 
 		tabSize = new SimpleDoubleProperty();
-		tabLength = new SimpleDoubleProperty();
 
 		Double value = Double.valueOf(AppContext.getInstance().getProperties().get("tabSize"));
-		Double length = Double.valueOf(AppContext.getInstance().getProperties().get("tabLength"));
 
 		tabSize.setValue(value);
-		tabLength.setValue(length);
 
 		hideEmpty = new SimpleBooleanProperty();
 
@@ -96,21 +92,6 @@ public class GuiFacade {
 	public void setTabPane(TabPane tabPane) {
 
 		this.tabPane = tabPane;
-	}
-
-	public final SimpleDoubleProperty tabLengthProperty() {
-
-		return this.tabLength;
-	}
-
-	public final double getTabLength() {
-
-		return this.tabLengthProperty().get();
-	}
-
-	public final void setTabLength(final double tabLength) {
-
-		this.tabLengthProperty().set(tabLength);
 	}
 
 	public final SimpleBooleanProperty hideEmptyProperty() {

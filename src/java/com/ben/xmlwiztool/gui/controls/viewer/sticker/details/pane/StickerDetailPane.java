@@ -127,4 +127,8 @@ public class StickerDetailPane extends VBox implements Initializable {
 		attrTable.setItems(tableList);
 	}
 
+	public void cancelPathBoxModification() {
+		pathBox.cancel();
+	}
+
 }

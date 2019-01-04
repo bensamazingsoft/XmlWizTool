@@ -8,21 +8,22 @@
 
 	<VBox spacing="5.0">
 		<StackPane fx:id="stack"/>
-
-		<Button onAction="#handleModifyBut" text="%modify" />
 	</VBox>
 
-	<HBox fx:id="controls" spacing="4.0">
-	
-		<CheckBox fx:id="globalCb" text="%global" />
-		<CheckBox fx:id="saveCb" text="%save" />
+	<StackPane alignment="CENTER_LEFT">
+		<Button fx:id="modifyBut" onAction="#handleModifyBut" text="%modify" />
+		<HBox fx:id="controls" spacing="4.0">
 		
-		<VBox spacing="3.0">
-			<Button onAction="#handleResetBut" text="reset" />
-			<Button onAction="#handleOKBut" text="OK" />
-		</VBox>
-		
-	</HBox>
+			<CheckBox fx:id="globalCb" text="%global" />
+			<CheckBox fx:id="saveCb" text="%save" />
+			
+			<HBox spacing="3.0">
+				<Button onAction="#handleResetBut" text="reset" />
+				<Button onAction="#handleOKBut" text="OK" />
+				<Button onAction="#handleCancelBut" text="%cancel" />
+			</HBox>		
+		</HBox>
+	</StackPane>
 	
 </fx:root>
 

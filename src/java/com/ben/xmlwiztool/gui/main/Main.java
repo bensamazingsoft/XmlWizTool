@@ -22,7 +22,6 @@ public class Main extends Application {
 	public void start(Stage stage) throws Exception {
 
 		// TODO set app icons
-		// TODO limit stickers size in treeview
 		// TODO inquire about memory leak
 		// TODO dress (css) the detailpopup
 		// TODO refactor the alias frmwk

@@ -19,16 +19,19 @@ public class StickerDetailsPopUp extends Alert {
 		setGraphic(null);
 
 		ScrollPane sp = new ScrollPane();
+		StickerDetailPane sdp = new StickerDetailPane(sticker);
+
 		sp.getStylesheets().add("/css/styles.css");
 		sp.getStyleClass().add("StickerDetailPane");
-		sp.setContent(new StickerDetailPane(sticker));
+		sp.setContent(sdp);
 		sp.setFitToHeight(true);
 		sp.setFitToWidth(true);
-
 		getDialogPane().setContent(sp);
 
 		initModality(Modality.NONE);
-		show();
+		showAndWait().ifPresent(response -> {
+			sdp.cancelPathBoxModification();
+		});
 	}
 
 }
