@@ -25,7 +25,6 @@ public class Main extends Application {
 		// TODO inquire about memory leak
 		// TODO dress (css) the detailpopup
 		// TODO refactor the alias frmwk
-		// TODO implement tooltips
 
 		AppContext.init();
 
