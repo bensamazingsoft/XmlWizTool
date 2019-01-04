@@ -4,6 +4,7 @@ package com.ben.xmlwiztool.gui.controls.pathbox;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
@@ -24,6 +25,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -148,46 +150,59 @@ public class PathBox extends VBox implements Initializable {
 	@FXML
 	public void handleOKBut(Event event) {
 
-		if (saveCb.isSelected()) {
-			// save Text values in properties
-			flow.getChildren().stream().filter(text -> text instanceof AliasText).forEach(text -> {
+		if (saveCb.isSelected() || globalCb.isSelected()) {
 
-				AliasText aliasText = (AliasText) text;
-				AppContext.getInstance().getProperties().set(aliasText.getWrapper().getElement().getTagName(),
-						aliasText.textProperty().get());
+			boolean doIt = true;
 
-			});
-		}
+			List<Node> aliasTexts = flow.getChildren().stream().filter(text -> text instanceof AliasText)
+					.collect(Collectors.toList());
+			if (aliasTexts.size() > 1) {
+				if (new AliasModificationWarningPopup().showAndWait().get() != ButtonType.OK) {
+					cancel();
+					doIt = false;
+				}
+			}
 
-		if (globalCb.isSelected()) {
+			if (saveCb.isSelected() && doIt) {
+				// save Text values in properties
+				flow.getChildren().stream().filter(text -> text instanceof AliasText).forEach(text -> {
 
-			for (Node node : flow.getChildren()) {
+					AliasText aliasText = (AliasText) text;
+					AppContext.getInstance().getProperties().set(aliasText.getWrapper().getElement().getTagName(),
+							aliasText.textProperty().get());
 
-				if (node instanceof AliasText) {
+				});
+			}
+			if (globalCb.isSelected() && doIt) {
 
-					AliasText alias = (AliasText) node;
+				for (Node node : flow.getChildren()) {
 
-					// TODO this should be an alias manager method called by an
-					// action (action to be used in the name manager popup)
-					Set<Entry<ElementWrapper, SimpleStringProperty>> entrySet = AppContext.getInstance()
-							.getTagNameAliasManager().getNameMap().values().stream().map(Map::entrySet)
-							.flatMap(Set::stream).collect(Collectors.toSet());
+					if (node instanceof AliasText) {
 
-					for (Entry<ElementWrapper, SimpleStringProperty> entry : entrySet) {
-						if (entry.getKey().getElement().getTagName()
-								.equals(alias.getWrapper().getElement().getTagName())) {
+						AliasText alias = (AliasText) node;
 
-							entry.getValue().set(alias.getText());
+						// TODO this should be an alias manager method called by
+						// an
+						// action (action to be used in the name manager popup)
+						Set<Entry<ElementWrapper, SimpleStringProperty>> entrySet = AppContext.getInstance()
+								.getTagNameAliasManager().getNameMap().values().stream().map(Map::entrySet)
+								.flatMap(Set::stream).collect(Collectors.toSet());
 
+						for (Entry<ElementWrapper, SimpleStringProperty> entry : entrySet) {
+							if (entry.getKey().getElement().getTagName()
+									.equals(alias.getWrapper().getElement().getTagName())) {
+
+								entry.getValue().set(alias.getText());
+
+							}
 						}
+
 					}
 
 				}
 
 			}
-
 		}
-
 		modify.set(false);
 
 	}

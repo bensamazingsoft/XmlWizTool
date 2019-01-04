@@ -18,6 +18,8 @@ import com.ben.xmlwiztool.application.executor.Executor;
 import com.ben.xmlwiztool.gui.controls.alias.manager.popup.ManageAliasPopUp;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
 import com.ben.xmlwiztool.gui.settings.popup.SettingPopUp;
+import com.ben.xmlwiztool.gui.tooltips.Tips;
+import com.ben.xmlwiztool.gui.tooltips.factory.TipsFactory;
 
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
@@ -270,10 +272,12 @@ public class ControlBar extends ToolBar implements Initializable {
 
 		textField.setPromptText(bundle.getString("textFieldPromptText"));
 		textField.disableProperty().bindBidirectional(GuiFacade.getInstance().treeViewProperty());
+		textField.setTooltip(TipsFactory.getTips(Tips.FILTER));
 
 		hideEmptyCb.disableProperty().bindBidirectional(GuiFacade.getInstance().treeViewProperty());
 		hideEmptyCb.selectedProperty().bindBidirectional(GuiFacade.getInstance().hideEmptyProperty());
 		hideEmptyCb.selectedProperty().set(false);
+		hideEmptyCb.setTooltip(TipsFactory.getTips(Tips.HIDE));
 
 	}
 
