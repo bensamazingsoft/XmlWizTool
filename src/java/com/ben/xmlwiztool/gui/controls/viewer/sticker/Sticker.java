@@ -13,7 +13,8 @@ import com.ben.xmlwiztool.gui.facade.GuiFacade;
 
 import javafx.beans.binding.Bindings;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -30,7 +31,7 @@ public class Sticker extends VBox {
 
 	private HBox top = new HBox();
 	private VBox bottom = new VBox();
-	private Node nameLabel;
+	private Label nameLabel;
 	private ContextMenu contextMenu;
 	private Sticker sticker;
 	private ElementWrapper wrapper;
@@ -86,10 +87,30 @@ public class Sticker extends VBox {
 	}
 
 	public double computeMaxSize() {
-		double nameLabelWidth = top.getLayoutBounds().getWidth();
-		double valueLabelWidth = valueLabel != null ? valueLabel.getBoundsInLocal().getWidth() : 0;
+
+		// FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
+		// fontLoader.computeStringWidth(label.getText(), label.getFont())
+
+		double nameLabelWidth = getLayoutWidth(nameLabel.getText());
+		double valueLabelWidth = valueLabel != null ? getLayoutWidth(valueLabel.getText()) : 0;
 		double pathboxWidth = pathBox != null ? pathBox.getBoundsInLocal().getWidth() : 0;
-		return 50 + Math.max(nameLabelWidth, Math.max(valueLabelWidth, pathboxWidth));
+
+		double max = Math.max(nameLabelWidth, Math.max(valueLabelWidth, pathboxWidth));
+
+		return 50 + max;
+
+	}
+
+	private double getLayoutWidth(String str) {
+
+		final Text txt = new Text(str);
+		Scene scene = new Scene(new Group(txt));
+		scene.getStylesheets().add("/css/styles.css");
+		txt.getStyleClass().add("tagNameLabel");
+		txt.applyCss();
+		double width = txt.getLayoutBounds().getWidth();
+
+		return width;
 	}
 
 	private void addShowBut(ElementWrapper wrapper) {
