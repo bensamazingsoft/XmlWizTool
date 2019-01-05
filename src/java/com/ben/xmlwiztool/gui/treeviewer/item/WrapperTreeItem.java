@@ -4,62 +4,84 @@ package com.ben.xmlwiztool.gui.treeviewer.item;
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.impl.ComplexElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.impl.SimpleElementWrapper;
+import com.ben.xmlwiztool.gui.facade.GuiFacade;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 
-public class WrapperTreeItem extends TreeItem<ElementWrapper> {
+public class WrapperTreeItem extends TreeItem<ElementWrapper>
+{
 
-	private final ElementWrapper wrapper;
-	private boolean load;
+      private final ElementWrapper wrapper;
+      private boolean		   load;
 
-	public WrapperTreeItem(ElementWrapper wrapper) {
 
-		super();
+      public WrapperTreeItem(ElementWrapper wrapper)
+      {
 
-		load = true;
-		this.wrapper = wrapper;
-		this.setValue(wrapper);
-		this.expandedProperty().bindBidirectional(wrapper.expandProperty());
-	}
+	    super();
 
-	@Override
-	public ObservableList<TreeItem<ElementWrapper>> getChildren() {
+	    load = true;
+	    this.wrapper = wrapper;
+	    this.setValue(wrapper);
+	    this.expandedProperty().bindBidirectional(wrapper.expandProperty());
+      }
 
-		if (load) {
-			if (wrapper instanceof ComplexElementWrapper) {
 
-				ComplexElementWrapper complex = (ComplexElementWrapper) wrapper;
+      @Override
+      public ObservableList<TreeItem<ElementWrapper>> getChildren()
+      {
 
-				if (!complex.getChildren().isEmpty()) {
+	    if (load)
+	    {
+		  if (wrapper instanceof ComplexElementWrapper)
+		  {
 
-					super.getChildren().setAll(makeChilds(complex));
+			ComplexElementWrapper complex = (ComplexElementWrapper) wrapper;
 
-				}
+			if (!complex.getChildren().isEmpty())
+			{
+
+			      super.getChildren().setAll(makeChilds(complex));
+
 			}
-			load = false;
-		}
-		return super.getChildren();
-	}
+		  }
+		  load = false;
+	    }
+	    return super.getChildren();
+      }
 
-	private ObservableList<TreeItem<ElementWrapper>> makeChilds(ComplexElementWrapper complex) {
 
-		ObservableList<TreeItem<ElementWrapper>> children = FXCollections.observableArrayList();
+      private ObservableList<TreeItem<ElementWrapper>> makeChilds(ComplexElementWrapper complex)
+      {
 
-		for (ElementWrapper child : complex.getChildren()) {
+	    ObservableList<TreeItem<ElementWrapper>> children = FXCollections.observableArrayList();
 
+	    for (ElementWrapper child : complex.getChildren())
+	    {
+
+		  if (GuiFacade.getInstance().isHideEmpty() && child.isEmpty())
+		  {
+			continue;
+		  }
+
+		  if (child.isVisible())
+		  {
 			children.add(new WrapperTreeItem(child));
+		  }
 
-		}
+	    }
 
-		return children;
-	}
+	    return children;
+      }
 
-	@Override
-	public boolean isLeaf() {
 
-		return wrapper instanceof SimpleElementWrapper;
-	}
+      @Override
+      public boolean isLeaf()
+      {
+
+	    return wrapper instanceof SimpleElementWrapper;
+      }
 
 }

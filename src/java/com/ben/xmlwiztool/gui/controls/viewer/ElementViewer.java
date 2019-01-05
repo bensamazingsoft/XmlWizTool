@@ -16,188 +16,242 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
-public class ElementViewer extends HBox {
+public class ElementViewer extends HBox
+{
 
-	private final ElementWrapper wrapper;
-	private final List<ElementViewer> foldContent = new ArrayList<>();
-	private SimpleDoubleProperty TABSIZE = GuiFacade.getInstance().getTabSize();
-	private SimpleBooleanProperty visibleElement = new SimpleBooleanProperty();
-	private SimpleBooleanProperty expand = new SimpleBooleanProperty();
-	private SimpleBooleanProperty filter = new SimpleBooleanProperty();
-	private SimpleBooleanProperty state = new SimpleBooleanProperty();
-	private Region region = new Region();
-	private VBox content = new VBox();
-	private Sticker sticker;
+      private final ElementWrapper	wrapper;
+      private final List<ElementViewer>	foldContent    = new ArrayList<>();
+      private SimpleDoubleProperty	TABSIZE	       = GuiFacade.getInstance().getTabSize();
+      private SimpleBooleanProperty	visibleElement = new SimpleBooleanProperty();
+      private SimpleBooleanProperty	expand	       = new SimpleBooleanProperty();
+      private SimpleBooleanProperty	filter	       = new SimpleBooleanProperty();
+      private SimpleBooleanProperty	state	       = new SimpleBooleanProperty();
+      private Region			region	       = new Region();
+      private VBox			content	       = new VBox();
+      private Sticker			sticker;
 
-	public ElementViewer(ElementWrapper wrapper) {
 
-		super();
+      public ElementViewer(ElementWrapper wrapper)
+      {
 
-		content.setSpacing(3.0);
-		this.getStyleClass().add("elementviewer");
+	    super();
 
-		this.wrapper = wrapper;
+	    content.setSpacing(3.0);
+	    this.getStyleClass().add("elementviewer");
 
-		bindProperties();
+	    this.wrapper = wrapper;
 
-		init();
+	    bindProperties();
 
-		showOrNot();
-	}
+	    init();
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void bindProperties() {
+	    showOrNot();
+      }
 
-		region.minWidthProperty().bind(TABSIZE);
 
-		// Node visibility binded to wrapper and viewer visible prop.
-		visibleElement.bindBidirectional(visibleProperty());
-		visibleElement.bindBidirectional(wrapper.visibleProperty());
-		visibleElement.addListener((ChangeListener) (o, oldVal, newVal) -> {
-			showOrNot();
-		});
+      @SuppressWarnings({
+		  "unchecked",
+		  "rawtypes" })
+      private void bindProperties()
+      {
 
-		expand.bindBidirectional(wrapper.expandProperty());
-		expand.addListener((ChangeListener) (o, oldVal, newVal) -> {
-			showOrNot();
-		});
+	    region.minWidthProperty().bind(TABSIZE);
 
-		filter.bind(wrapper.filterableProperty());
+	    // Node visibility binded to wrapper and viewer visible prop.
+	    visibleElement.bindBidirectional(visibleProperty());
+	    visibleElement.bindBidirectional(wrapper.visibleProperty());
+	    visibleElement.addListener((ChangeListener) (o, oldVal, newVal) -> {
+		  showOrNot();
+	    });
 
-		state.bind(GuiFacade.getInstance().hideEmptyProperty());
-		state.addListener((ChangeListener) (observable, oldVal, newVal) -> {
-			showOrNot();
-		});
+	    expand.bindBidirectional(wrapper.expandProperty());
+	    expand.addListener((ChangeListener) (o, oldVal, newVal) -> {
+		  showOrNot();
+	    });
 
-	}
+	    filter.bind(wrapper.emptyProperty());
 
-	private void init() {
+	    state.bind(GuiFacade.getInstance().hideEmptyProperty());
+	    state.addListener((ChangeListener) (observable, oldVal, newVal) -> {
+		  showOrNot();
+	    });
 
-		sticker = new Sticker(wrapper);
+      }
 
-		if (wrapper instanceof ComplexElementWrapper && isExpand()) {
 
-			ComplexElementWrapper complexElement = (ComplexElementWrapper) wrapper;
+      private void init()
+      {
 
-			if (!complexElement.getChildren().isEmpty()) {
+	    sticker = new Sticker(wrapper);
 
-				for (ElementWrapper child : complexElement.getChildren()) {
+	    if (wrapper instanceof ComplexElementWrapper && isExpand())
+	    {
 
-					if (GuiFacade.getInstance().isFastLoad() && child.isFilterable()) {
-						continue;
-					}
-					foldContent.add(new ElementViewer(child));
+		  ComplexElementWrapper complexElement = (ComplexElementWrapper) wrapper;
 
-				}
+		  if (!complexElement.getChildren().isEmpty())
+		  {
+
+			for (ElementWrapper child : complexElement.getChildren())
+			{
+
+			      if (child.isEmpty())
+			      {
+				    continue;
+			      }
+			      foldContent.add(new ElementViewer(child));
 
 			}
 
-		}
+		  }
 
-	}
+	    }
 
-	private void showOrNot() {
+      }
 
-		hide();
 
-		if (isVisible() && !isFiltered()) {
-			show();
-		}
-	}
+      private void showOrNot()
+      {
 
-	private void show() {
+	    hide();
 
-		this.getChildren().add(region);
-		this.getChildren().add(content);
+	    if (isVisible() && !isFiltered())
+	    {
+		  show();
+	    }
+      }
 
-		content.getChildren().add(sticker);
 
-		if (wrapper instanceof ComplexElementWrapper && isExpand()) {
+      private void show()
+      {
 
-			content.getChildren().addAll(foldContent);
+	    this.getChildren().add(region);
+	    this.getChildren().add(content);
 
-		}
-	}
+	    content.getChildren().add(sticker);
 
-	private void hide() {
+	    if (wrapper instanceof ComplexElementWrapper && isExpand())
+	    {
 
-		this.getChildren().clear();
-		this.content.getChildren().clear();
-	}
+		  content.getChildren().addAll(foldContent);
 
-	private boolean isFiltered() {
+	    }
+      }
 
-		if (!GuiFacade.getInstance().isHideEmpty()) {
-			return false;
-		}
 
-		if (!wrapper.isFilterable()) {
-			return false;
-		}
+      private void hide()
+      {
 
-		return true;
-	}
+	    this.getChildren().clear();
+	    this.content.getChildren().clear();
+      }
 
-	public ElementWrapper getElement() {
 
-		return wrapper;
-	}
+      private boolean isFiltered()
+      {
 
-	public final SimpleDoubleProperty TABSIZEProperty() {
+	    if (!GuiFacade.getInstance().isHideEmpty())
+	    {
+		  return false;
+	    }
 
-		return this.TABSIZE;
-	}
+	    if (!wrapper.isEmpty())
+	    {
+		  return false;
+	    }
 
-	public final double getTABSIZE() {
+	    return true;
+      }
 
-		return this.TABSIZEProperty().get();
-	}
 
-	public final void setTABSIZE(final double TABSIZE) {
+      public ElementWrapper getElement()
+      {
 
-		this.TABSIZEProperty().set(TABSIZE);
-	}
+	    return wrapper;
+      }
 
-	public final SimpleBooleanProperty expandProperty() {
 
-		return this.expand;
-	}
+      public final SimpleDoubleProperty TABSIZEProperty()
+      {
 
-	public final boolean isExpand() {
+	    return this.TABSIZE;
+      }
 
-		return this.expandProperty().get();
-	}
 
-	public final void setExpand(final boolean fold) {
+      public final double getTABSIZE()
+      {
 
-		this.expandProperty().set(fold);
-	}
+	    return this.TABSIZEProperty().get();
+      }
 
-	public final SimpleBooleanProperty visibleElementProperty() {
 
-		return this.visibleElement;
-	}
+      public final void setTABSIZE(final double TABSIZE)
+      {
 
-	public final boolean isVisibleElement() {
+	    this.TABSIZEProperty().set(TABSIZE);
+      }
 
-		return this.visibleElementProperty().get();
-	}
 
-	public final void setVisibleElement(final boolean visibleElement) {
+      public final SimpleBooleanProperty expandProperty()
+      {
 
-		this.visibleElementProperty().set(visibleElement);
-	}
+	    return this.expand;
+      }
 
-	public VBox getContent() {
-		return content;
-	}
 
-	public void setContent(VBox content) {
-		this.content = content;
-	}
+      public final boolean isExpand()
+      {
 
-	public List<ElementViewer> getFoldContent() {
-		return foldContent;
-	}
+	    return this.expandProperty().get();
+      }
+
+
+      public final void setExpand(final boolean fold)
+      {
+
+	    this.expandProperty().set(fold);
+      }
+
+
+      public final SimpleBooleanProperty visibleElementProperty()
+      {
+
+	    return this.visibleElement;
+      }
+
+
+      public final boolean isVisibleElement()
+      {
+
+	    return this.visibleElementProperty().get();
+      }
+
+
+      public final void setVisibleElement(final boolean visibleElement)
+      {
+
+	    this.visibleElementProperty().set(visibleElement);
+      }
+
+
+      public VBox getContent()
+      {
+
+	    return content;
+      }
+
+
+      public void setContent(VBox content)
+      {
+
+	    this.content = content;
+      }
+
+
+      public List<ElementViewer> getFoldContent()
+      {
+
+	    return foldContent;
+      }
 
 }

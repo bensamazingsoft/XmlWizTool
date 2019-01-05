@@ -8,8 +8,8 @@ public class SetFilterableProcessor implements WrapperProcessor {
 	@Override
 	public void processSingle(ElementWrapper wrapper) {
 
-		if (!wrapper.isFilterable()) {
-			wrapper.setBranchFilterable(false);
+		if (!wrapper.isEmpty()) {
+			wrapper.setBranchEmpty(false);
 		}
 
 	}

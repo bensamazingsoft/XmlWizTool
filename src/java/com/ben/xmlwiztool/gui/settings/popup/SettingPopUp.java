@@ -1,3 +1,4 @@
+
 package com.ben.xmlwiztool.gui.settings.popup;
 
 import com.ben.xmlwiztool.application.context.AppContext;
@@ -11,45 +12,45 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.StageStyle;
 
-public class SettingPopUp extends Alert {
+public class SettingPopUp extends Alert
+{
 
-	public SettingPopUp(AlertType arg0) {
-		super(arg0);
-	}
+      public SettingPopUp(AlertType arg0)
+      {
 
-	public SettingPopUp() {
-		super(AlertType.CONFIRMATION);
+	    super(arg0);
+      }
 
-		initStyle(StageStyle.UTILITY);
-		setTitle(AppContext.getInstance().getBundle().getString("settings"));
-		setHeaderText("");
-		setGraphic(null);
 
-		GridPane content = new GridPane();
-		content.setAlignment(Pos.BASELINE_LEFT);
+      public SettingPopUp()
+      {
 
-		Label fastLoadLabel = new Label(AppContext.getInstance().getBundle().getString("fastLoad") + "  ");
-		GridPane.setVgrow(fastLoadLabel, Priority.ALWAYS);
-		CheckBox fastLoadCb = new CheckBox();
-		GridPane.setVgrow(fastLoadCb, Priority.ALWAYS);
-		fastLoadCb.selectedProperty().bindBidirectional(GuiFacade.getInstance().fastLoadProperty());
+	    super(AlertType.CONFIRMATION);
 
-		Label treeViewLabel = new Label(AppContext.getInstance().getBundle().getString("treeView") + "  ");
-		GridPane.setVgrow(treeViewLabel, Priority.ALWAYS);
-		CheckBox treeViewCb = new CheckBox();
-		GridPane.setVgrow(treeViewCb, Priority.ALWAYS);
-		treeViewCb.selectedProperty().bindBidirectional(GuiFacade.getInstance().treeViewProperty());
+	    initStyle(StageStyle.UTILITY);
+	    setTitle(AppContext.getInstance().getBundle().getString("settings"));
+	    setHeaderText("");
+	    setGraphic(null);
 
-		content.setMaxWidth(Double.MAX_VALUE);
-		content.add(fastLoadLabel, 0, 0);
-		content.add(treeViewLabel, 0, 1);
-		content.add(fastLoadCb, 1, 0);
-		content.add(treeViewCb, 1, 1);
+	    GridPane content = new GridPane();
+	    content.setAlignment(Pos.BASELINE_LEFT);
 
-		getDialogPane().setContent(content);
+	    Label treeViewLabel = new Label(AppContext.getInstance().getBundle().getString("treeView") + "  ");
+	    GridPane.setVgrow(treeViewLabel, Priority.ALWAYS);
+	    CheckBox treeViewCb = new CheckBox();
+	    GridPane.setVgrow(treeViewCb, Priority.ALWAYS);
+	    treeViewCb.selectedProperty().bindBidirectional(GuiFacade.getInstance().treeViewProperty());
 
-		showAndWait();
+	    content.setMaxWidth(Double.MAX_VALUE);
 
-	}
+	    content.add(treeViewLabel, 0, 1);
+
+	    content.add(treeViewCb, 1, 1);
+
+	    getDialogPane().setContent(content);
+
+	    showAndWait();
+
+      }
 
 }

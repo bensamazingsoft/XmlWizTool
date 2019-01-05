@@ -3,11 +3,14 @@ package com.ben.xmlwiztool.gui.controls.viewer.treeviewer.tab;
 
 import java.util.Map;
 
+import com.ben.xmlwiztool.application.actions.impl.ResetChangedObservablesAction;
 import com.ben.xmlwiztool.application.context.AppContext;
+import com.ben.xmlwiztool.application.executor.Executor;
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.gui.controls.viewer.treeviewer.cell.WizTreeCell;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
 import com.ben.xmlwiztool.gui.treeviewer.item.WrapperTreeItem;
+import com.ben.xmlwiztool.observable.Observer;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.ScrollPane;
@@ -16,56 +19,92 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 import javafx.util.Callback;
 
-public class TreeViewTab extends Tab {
+public class TreeViewTab extends Tab implements Observer
+{
 
-	ScrollPane scrollPane = new ScrollPane();
+      private ScrollPane     scrollPane	= new ScrollPane();
+      private ElementWrapper wrapper;
 
-	public TreeViewTab(ElementWrapper wrapper) {
 
-		super();
+      public TreeViewTab(ElementWrapper wrapper)
+      {
 
-		this.setUserData(wrapper);
-		this.setText(wrapper.getElement().getTagName());
-		this.setOnClosed((event) -> {
-			onClose(wrapper);
-		});
+	    super();
 
-		TreeView<ElementWrapper> treeView = new TreeView<ElementWrapper>(new WrapperTreeItem(wrapper));
-		treeView.setCellFactory(new Callback<TreeView<ElementWrapper>, TreeCell<ElementWrapper>>() {
+	    this.wrapper = wrapper;
+	    wrapper.addObserver(this);
 
-			@Override
-			public TreeCell<ElementWrapper> call(TreeView<ElementWrapper> list) {
+	    this.setUserData(wrapper);
+	    this.setText(wrapper.getElement().getTagName());
+	    this.setOnClosed((event) -> {
+		  onClose(wrapper);
+	    });
 
-				return new WizTreeCell();
-			}
-		});
+	    populate();
 
-		scrollPane.setContent(treeView);
-		scrollPane.setFitToHeight(true);
-		scrollPane.setFitToWidth(true);
+	    GuiFacade.getInstance().getTabPane().getSelectionModel().select(this);
 
-		this.setContent(scrollPane);
+      }
 
-		GuiFacade.getInstance().getTabPane().getSelectionModel().select(this);
 
-	}
+      public void populate()
+      {
 
-	private void onClose(ElementWrapper wrapper) {
+	    scrollPane = new ScrollPane();
 
-		Map<ElementWrapper, Map<ElementWrapper, SimpleStringProperty>> aliases = AppContext.getInstance()
-				.getTagNameAliasManager().getNameMap();
-		aliases.remove(wrapper);
+	    TreeView<ElementWrapper> treeView = new TreeView<ElementWrapper>(new WrapperTreeItem(wrapper));
+	    treeView.setCellFactory(new Callback<TreeView<ElementWrapper>, TreeCell<ElementWrapper>>()
+	    {
 
-	}
+		  @Override
+		  public TreeCell<ElementWrapper> call(TreeView<ElementWrapper> list)
+		  {
 
-	@Override
-	public ElementWrapper getUserData() {
+			return new WizTreeCell();
+		  }
+	    });
 
-		return (ElementWrapper) super.getUserData();
-	}
+	    scrollPane.setContent(treeView);
 
-	public String getName() {
+	    scrollPane.setFitToHeight(true);
+	    scrollPane.setFitToWidth(true);
 
-		return getUserData().getElement().getTagName();
-	}
+	    this.setContent(scrollPane);
+
+      }
+
+
+      private void onClose(ElementWrapper wrapper)
+      {
+
+	    Map<ElementWrapper, Map<ElementWrapper, SimpleStringProperty>> aliases = AppContext.getInstance()
+			.getTagNameAliasManager().getNameMap();
+	    aliases.remove(wrapper);
+
+      }
+
+
+      @Override
+      public ElementWrapper getUserData()
+      {
+
+	    return (ElementWrapper) super.getUserData();
+      }
+
+
+      public String getName()
+      {
+
+	    return getUserData().getElement().getTagName();
+      }
+
+
+      @Override
+      public void update()
+      {
+
+	    populate();
+	    Executor.getInstance().execute(new ResetChangedObservablesAction(wrapper));
+
+      }
 }

@@ -3,11 +3,11 @@ package com.ben.xmlwiztool.application.wrapper.processor.impl;
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.processor.WrapperProcessor;
 
-public class ShowElementConditionnalProcessor implements WrapperProcessor {
+public class FilterElementProcessor implements WrapperProcessor {
 
 	private String text;
 
-	public ShowElementConditionnalProcessor(String text) {
+	public FilterElementProcessor(String text) {
 		super();
 		this.text = text;
 	}

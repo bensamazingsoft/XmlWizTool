@@ -1,223 +1,371 @@
 
 package com.ben.xmlwiztool.application.wrapper;
 
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.ben.xmlwiztool.observable.Observable;
+import com.ben.xmlwiztool.observable.Observer;
+
 import javafx.beans.property.SimpleBooleanProperty;
 
-public abstract class ElementWrapper {
+public abstract class ElementWrapper implements Observable, Observer
+{
 
-	protected Element element;
-	protected SimpleBooleanProperty visible, expand, filterable;
-	protected ElementWrapper parent;
+      protected Element		      element;
+      protected SimpleBooleanProperty visible, expand, empty;
+      protected ElementWrapper	      parent;
+      private Set<Observer>	      observers	= new HashSet<>();
+      private boolean		      changed	= false;
 
-	public ElementWrapper() {
 
-		super();
+      public ElementWrapper()
+      {
 
-		visible = new SimpleBooleanProperty();
-		// fold = new SimpleBooleanProperty();
-		expand = new SimpleBooleanProperty();
-		filterable = new SimpleBooleanProperty();
+	    super();
 
-		// setFold(false);
-		setExpand(true);
-		setVisible(true);
-		setFilterable(true);
+	    visible = new SimpleBooleanProperty();
+	    expand = new SimpleBooleanProperty();
+	    empty = new SimpleBooleanProperty();
 
-	}
+	    setExpand(true);
+	    setVisible(true);
+	    setEmpty(true);
 
-	public ElementWrapper(Element element) {
+	    visible.addListener((obs, oldVal, newVal) -> {
+		  notifyObservers();
+	    });
 
-		this();
-		this.element = element;
+      }
 
-	}
 
-	@Override
-	public String toString() {
+      public ElementWrapper(Element element)
+      {
 
-		return "ElementWrapper [element=" + element.getTagName() + "]";
-	}
+	    this();
+	    this.element = element;
 
-	@Override
-	public int hashCode() {
+      }
 
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((element == null) ? 0 : element.hashCode());
-		return result;
-	}
 
-	@Override
-	public boolean equals(Object obj) {
+      @Override
+      public String toString()
+      {
 
-		if (this == obj)
+	    return "ElementWrapper [element=" + element.getTagName() + "]";
+      }
+
+
+      @Override
+      public int hashCode()
+      {
+
+	    final int prime = 31;
+	    int result = 1;
+	    result = prime * result + ((element == null) ? 0 : element.hashCode());
+	    return result;
+      }
+
+
+      @Override
+      public boolean equals(Object obj)
+      {
+
+	    if (this == obj)
+		  return true;
+	    if (obj == null)
+		  return false;
+	    if (getClass() != obj.getClass())
+		  return false;
+	    ElementWrapper other = (ElementWrapper) obj;
+	    if (element == null)
+	    {
+		  if (other.element != null)
+			return false;
+	    }
+	    else if (!element.getTextContent().equals(other.element.getTextContent()))
+		  return false;
+	    return true;
+      }
+
+
+      public String getValue()
+      {
+
+	    if (element != null && element.hasChildNodes())
+	    {
+
+		  Node clone = element.cloneNode(true);
+
+		  for (int i = 0; i < clone.getChildNodes().getLength(); i++)
+		  {
+
+			Node node = clone.getChildNodes().item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE)
+			{
+
+			      clone.removeChild(node);
+			}
+		  }
+
+		  return clone.getTextContent();
+	    }
+
+	    return "";
+      }
+
+
+      public LinkedList<ElementWrapper> getLineage()
+      {
+
+	    LinkedList<ElementWrapper> lineage = new LinkedList<>();
+
+	    ElementWrapper relative = this;
+	    while (relative != null)
+	    {
+		  lineage.addFirst(relative);
+		  relative = relative.getParent();
+	    }
+
+	    return lineage;
+      }
+
+
+      public LinkedList<String> getTextLineage()
+      {
+
+	    return getLineage().stream().map(ElementWrapper::getElement).map(Element::getTagName)
+			.collect(Collectors.toCollection(LinkedList::new));
+
+      }
+
+
+      public Element getElement()
+      {
+
+	    return element;
+      }
+
+
+      public void setElement(Element element)
+      {
+
+	    this.element = element;
+      }
+
+
+      public ElementWrapper getParent()
+      {
+
+	    return parent;
+      }
+
+
+      public void setParent(ElementWrapper parent)
+      {
+
+	    this.parent = parent;
+      }
+
+
+      public final SimpleBooleanProperty visibleProperty()
+      {
+
+	    return this.visible;
+      }
+
+
+      public final boolean isVisible()
+      {
+
+	    return this.visibleProperty().get();
+      }
+
+
+      public final void setVisible(final boolean visible)
+      {
+
+	    this.visibleProperty().set(visible);
+      }
+
+
+      public void setBranchVisible(boolean b)
+      {
+
+	    setVisible(b);
+
+	    ElementWrapper father = parent;
+
+	    while (father != null)
+	    {
+		  father.setVisible(b);
+		  father = father.getParent();
+	    }
+
+      }
+
+
+      public void setBranchEmpty(boolean b)
+      {
+
+	    setEmpty(b);
+
+	    ElementWrapper father = parent;
+
+	    while (father != null)
+	    {
+		  father.setEmpty(b);
+		  father = father.getParent();
+	    }
+
+      }
+
+
+      public boolean match(String text)
+      {
+
+	    String tagName = element.getTagName().toLowerCase().trim();
+	    String val = getValue().toLowerCase().trim();
+
+	    return match(text, tagName) || match(text, val);
+      }
+
+
+      private boolean match(String patt, String text)
+      {
+
+	    int length = text.length() - patt.length();
+
+	    for (int i = 0; i < length; i++)
+	    {
+
+		  if (text.regionMatches(i, patt, 0, patt.length()))
+		  {
 			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ElementWrapper other = (ElementWrapper) obj;
-		if (element == null) {
-			if (other.element != null)
-				return false;
-		} else if (!element.getTextContent().equals(other.element.getTextContent()))
-			return false;
-		return true;
-	}
+		  }
 
-	public String getValue() {
+	    }
 
-		if (element != null && element.hasChildNodes()) {
+	    return false;
+      }
 
-			Node clone = element.cloneNode(true);
 
-			for (int i = 0; i < clone.getChildNodes().getLength(); i++) {
+      public final SimpleBooleanProperty emptyProperty()
+      {
 
-				Node node = clone.getChildNodes().item(i);
-				if (node.getNodeType() == Node.ELEMENT_NODE) {
+	    return this.empty;
+      }
 
-					clone.removeChild(node);
-				}
-			}
 
-			return clone.getTextContent();
-		}
+      public final boolean isEmpty()
+      {
 
-		return "";
-	}
+	    return this.emptyProperty().get();
+      }
 
-	public LinkedList<ElementWrapper> getLineage() {
 
-		LinkedList<ElementWrapper> lineage = new LinkedList<>();
+      public final void setEmpty(final boolean filterable)
+      {
 
-		ElementWrapper relative = this;
-		while (relative != null) {
-			lineage.addFirst(relative);
-			relative = relative.getParent();
-		}
+	    this.emptyProperty().set(filterable);
+      }
 
-		return lineage;
-	}
 
-	public LinkedList<String> getTextLineage() {
+      public final SimpleBooleanProperty expandProperty()
+      {
 
-		return getLineage().stream().map(ElementWrapper::getElement).map(Element::getTagName)
-				.collect(Collectors.toCollection(LinkedList::new));
+	    return this.expand;
+      }
 
-	}
 
-	public Element getElement() {
+      public final boolean isExpand()
+      {
 
-		return element;
-	}
+	    return this.expandProperty().get();
+      }
 
-	public void setElement(Element element) {
 
-		this.element = element;
-	}
+      public final void setExpand(final boolean expand)
+      {
 
-	public ElementWrapper getParent() {
+	    this.expandProperty().set(expand);
+      }
 
-		return parent;
-	}
 
-	public void setParent(ElementWrapper parent) {
+      @Override
+      public void update()
+      {
 
-		this.parent = parent;
-	}
+	    if (!isChanged())
+	    {
+		  setChanged(true);
+		  notifyObservers();
+	    }
 
-	public final SimpleBooleanProperty visibleProperty() {
+      }
 
-		return this.visible;
-	}
 
-	public final boolean isVisible() {
+      @Override
+      public void addObserver(Observer observer)
+      {
 
-		return this.visibleProperty().get();
-	}
+	    observers.add(observer);
 
-	public final void setVisible(final boolean visible) {
+      }
 
-		this.visibleProperty().set(visible);
-	}
 
-	public void setBranchVisible(boolean b) {
+      @Override
+      public void removeObserver(Observer observer)
+      {
 
-		setVisible(b);
+	    observers.remove(observer);
 
-		ElementWrapper father = parent;
+      }
 
-		while (father != null) {
-			father.setVisible(b);
-			father = father.getParent();
-		}
 
-	}
+      @Override
+      public void notifyObservers()
+      {
 
-	public void setBranchFilterable(boolean b) {
+	    for (Observer observer : observers)
+	    {
+		  observer.update();
+	    }
 
-		setFilterable(b);
+      }
 
-		ElementWrapper father = parent;
 
-		while (father != null) {
-			father.setFilterable(b);
-			father = father.getParent();
-		}
+      public Set<Observer> getObservers()
+      {
 
-	}
+	    return observers;
+      }
 
-	public boolean match(String text) {
 
-		String tagName = element.getTagName().toLowerCase().trim();
-		String val = getValue().toLowerCase().trim();
+      public void setObservers(Set<Observer> observers)
+      {
 
-		return match(text, tagName) || match(text, val);
-	}
+	    this.observers = observers;
+      }
 
-	private boolean match(String patt, String text) {
 
-		int length = text.length() - patt.length();
+      public boolean isChanged()
+      {
 
-		for (int i = 0; i < length; i++) {
+	    return changed;
+      }
 
-			if (text.regionMatches(i, patt, 0, patt.length())) {
-				return true;
-			}
 
-		}
+      public void setChanged(boolean change)
+      {
 
-		return false;
-	}
+	    this.changed = change;
 
-	public final SimpleBooleanProperty filterableProperty() {
-		return this.filterable;
-	}
-
-	public final boolean isFilterable() {
-		return this.filterableProperty().get();
-	}
-
-	public final void setFilterable(final boolean filterable) {
-		this.filterableProperty().set(filterable);
-	}
-
-	public final SimpleBooleanProperty expandProperty() {
-		return this.expand;
-	}
-
-	public final boolean isExpand() {
-		return this.expandProperty().get();
-	}
-
-	public final void setExpand(final boolean expand) {
-		this.expandProperty().set(expand);
-	}
+      }
 
 }
