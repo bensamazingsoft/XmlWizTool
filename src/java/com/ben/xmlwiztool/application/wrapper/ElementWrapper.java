@@ -241,7 +241,7 @@ public abstract class ElementWrapper implements Observable, Observer
 
 	    int length = text.length() - patt.length();
 
-	    for (int i = 0; i < length; i++)
+	    for (int i = 0; i <= length; i++)
 	    {
 
 		  if (text.regionMatches(i, patt, 0, patt.length()))
