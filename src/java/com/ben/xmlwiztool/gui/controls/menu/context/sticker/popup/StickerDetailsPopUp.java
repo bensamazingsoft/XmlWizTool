@@ -8,30 +8,34 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Modality;
 
-public class StickerDetailsPopUp extends Alert {
+public class StickerDetailsPopUp extends Alert
+{
 
-	public StickerDetailsPopUp(Sticker sticker) {
+      public StickerDetailsPopUp(Sticker sticker)
+      {
 
-		super(AlertType.CONFIRMATION);
+	    super(AlertType.CONFIRMATION);
 
-		setTitle("<" + sticker.getWrapper().getElement().getTagName() + ">");
-		setHeaderText("");
-		setGraphic(null);
+	    initOwner(null);
 
-		ScrollPane sp = new ScrollPane();
-		StickerDetailPane sdp = new StickerDetailPane(sticker);
+	    setTitle("<" + sticker.getWrapper().getElement().getTagName() + ">");
+	    setHeaderText("");
+	    setGraphic(null);
 
-		sp.getStylesheets().add("/css/styles.css");
-		sp.getStyleClass().add("StickerDetailPane");
-		sp.setContent(sdp);
-		sp.setFitToHeight(true);
-		sp.setFitToWidth(true);
-		getDialogPane().setContent(sp);
+	    ScrollPane sp = new ScrollPane();
+	    StickerDetailPane sdp = new StickerDetailPane(sticker);
 
-		initModality(Modality.NONE);
-		showAndWait().ifPresent(response -> {
-			sdp.cancelPathBoxModification();
-		});
-	}
+	    sp.getStylesheets().add("/css/styles.css");
+	    sp.getStyleClass().add("StickerDetailPane");
+	    sp.setContent(sdp);
+	    sp.setFitToHeight(true);
+	    sp.setFitToWidth(true);
+	    getDialogPane().setContent(sp);
+
+	    initModality(Modality.NONE);
+	    showAndWait().ifPresent(response -> {
+		  sdp.cancelPathBoxModification();
+	    });
+      }
 
 }

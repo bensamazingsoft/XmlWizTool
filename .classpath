@@ -9,5 +9,10 @@
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/bmo/Documents/GitHub/XmlWizTool/src/resources/lib/commons-io-2.6/commons-io-2.6-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="src/resources/lib/commons-collections4-4.2/commons-collections4-4.2.jar" sourcepath="src/resources/lib/commons-collections4-4.2/commons-collections4-4.2-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/Users/ben/git/XmlWizTool/src/resources/lib/commons-collections4-4.2/commons-collections4-4.2-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

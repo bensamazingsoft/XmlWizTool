@@ -1,3 +1,4 @@
+
 package com.ben.xmlwiztool.application.actions.impl;
 
 import java.io.File;
@@ -13,34 +14,42 @@ import com.ben.xmlwiztool.application.executor.Executor;
 
 import javafx.stage.FileChooser;
 
-public class LoadFileAction implements IAction {
+public class LoadFileAction implements IAction
+{
 
-	@Override
-	public void execute() {
-		FileChooser fileChooser = new FileChooser();
+      @Override
+      public void execute()
+      {
 
-		fileChooser.setTitle(AppContext.getInstance().getBundle().getString("fileChooserTitle"));
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XML", "*.xml"),
-				new FileChooser.ExtensionFilter("HTML", "*.html"), new FileChooser.ExtensionFilter("XHTML", "*.xhtml"));
+	    FileChooser fileChooser = new FileChooser();
 
-		File file = fileChooser.showOpenDialog(null);
-		if (file != null) {
+	    fileChooser.setTitle(AppContext.getInstance().getBundle().getString("fileChooserTitle"));
+	    fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XML", "*.xml"),
+			new FileChooser.ExtensionFilter("HTML", "*.html"), new FileChooser.ExtensionFilter("XHTML", "*.xhtml"));
 
-			List<String> sources = new ArrayList<>();
-			try {
+	    File file = fileChooser.showOpenDialog(null);
+	    if (file != null)
+	    {
 
-				sources = Files.readAllLines(file.toPath());
+		  List<String> sources = new ArrayList<>();
+		  try
+		  {
 
-				String source = String.join("\n", sources);
+			sources = Files.readAllLines(file.toPath());
 
-				Executor.getInstance().execute(new LoadStringSourceAction(source));
+			String source = String.join("\n", sources);
 
-			} catch (IOException e) {
-				new ExceptionPopUp(e);
-			}
+			Executor.getInstance().execute(new LoadStringSourceAction(source));
+			AppContext.getInstance().getRecentFiles().add(file);
 
-		}
+		  }
+		  catch (IOException e)
+		  {
+			new ExceptionPopUp(e);
+		  }
 
-	}
+	    }
+
+      }
 
 }

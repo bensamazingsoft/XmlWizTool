@@ -7,71 +7,108 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
-public class PropertiesContext {
+public class PropertiesContext
+{
 
-	private Properties defaultProp, properties;
-	private File propFile = new File("config.properties");
-	private final String defaultPropertiesFileName = "properties/default.properties";
+      private Properties   defaultProp, properties;
+      private File	   propFile		     = new File("config.properties");
+      private final String defaultPropertiesFileName = "properties/default.properties";
 
-	public PropertiesContext() throws IOException {
 
-		initProperties();
-	}
+      public PropertiesContext() throws IOException
+      {
 
-	private void initProperties() throws IOException {
+	    initProperties();
+      }
 
-		// initialize default properties
 
-		defaultProp = new Properties();
-		properties = new Properties();
+      private void initProperties() throws IOException
+      {
 
-		ClassLoader classloader = getClass().getClassLoader();
-		InputStream is = classloader.getResourceAsStream(defaultPropertiesFileName);
-		defaultProp.load(is);
+	    // initialize default properties
 
-		// initialize properties with default in case there are new ones
-		properties = new Properties(defaultProp);
+	    defaultProp = new Properties();
+	    properties = new Properties();
 
-		if (propFile.exists()) {
+	    ClassLoader classloader = getClass().getClassLoader();
+	    InputStream is = classloader.getResourceAsStream(defaultPropertiesFileName);
+	    defaultProp.load(is);
 
-			properties.load(new FileInputStream(propFile.toString()));
+	    // initialize properties with default in case there are new ones
+	    properties = new Properties(defaultProp);
 
-		}
+	    if (propFile.exists())
+	    {
 
-	}
+		  properties.load(new FileInputStream(propFile.toString()));
 
-	public void save() throws FileNotFoundException, IOException {
-		properties.store(new FileOutputStream(propFile), null);
-	}
+	    }
 
-	public void reset() {
+      }
 
-		properties = new Properties(defaultProp);
-	}
 
-	public void reset(String key) {
-		properties.setProperty(key, defaultProp.getProperty(key));
-	}
+      public void save() throws FileNotFoundException, IOException
+      {
 
-	public String getDefault(String key) {
+	    properties.store(new FileOutputStream(propFile), null);
+      }
 
-		return defaultProp.getProperty(key);
-	}
 
-	public String get(String key) {
+      public void reset()
+      {
 
-		return properties.getProperty(key);
-	}
+	    properties = new Properties(defaultProp);
+      }
 
-	public void set(String key, String value) {
 
-		properties.setProperty(key, value);
-	}
+      public void reset(String key)
+      {
 
-	public void remove(String key) {
-		properties.remove(key);
-	}
+	    properties.setProperty(key, defaultProp.getProperty(key));
+      }
+
+
+      public String getDefault(String key)
+      {
+
+	    return defaultProp.getProperty(key);
+      }
+
+
+      public String get(String key)
+      {
+
+	    return properties.getProperty(key);
+      }
+
+
+      public void set(String key, String value)
+      {
+
+	    properties.setProperty(key, value);
+      }
+
+
+      public void remove(String key)
+      {
+
+	    properties.remove(key);
+      }
+
+
+      public Map<String, String> properties()
+      {
+
+	    Map<String, String> map = new HashMap<>();
+	    properties.forEach((key, value) -> {
+		  map.put((String) key, (String) value);
+	    });
+	    return map;
+
+      }
 
 }

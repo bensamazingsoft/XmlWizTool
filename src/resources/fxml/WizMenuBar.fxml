@@ -3,14 +3,17 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 
 
 
 <fx:root type="javafx.scene.control.MenuBar" xmlns:fx="http://javafx.com/fxml">
 
-	<Menu text="%file" >
+	<Menu text="%file" fx:id="fileMenu">
 		<MenuItem text="%open" onAction="#handleOpenAction" accelerator="Shortcut+o"/>
 		<MenuItem text="%loadClipBoard" onAction="#handleloadClipBoardAction" accelerator="Shortcut+b"/>			
+		<SeparatorMenuItem text="%recentFiles"/>
+		
 	</Menu>
 	
 	<Menu text="%actions">
