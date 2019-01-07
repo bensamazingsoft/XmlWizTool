@@ -14,50 +14,43 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-public class Main extends Application
-{
+public class Main extends Application {
 
-      private final String IMAGEPATH = "images/";
+	private final String IMAGEPATH = "images/";
 
+	public static void main(String[] args) throws Exception {
 
-      public static void main(String[] args) throws Exception
-      {
+		launch(args);
+	}
 
-	    launch(args);
-      }
+	public void start(Stage stage) throws Exception {
+		// TODO clean the ElementViewer code
+		// TODO dress (css) the detailpopup
+		// TODO refactor the alias frmwk
 
+		AppContext.init();
 
-      public void start(Stage stage) throws Exception
-      {
-	    // TODO inquire about memory leak
-	    // TODO dress (css) the detailpopup
-	    // TODO refactor the alias frmwk
-	    // TODO impl recent files menu item (+update via observation)
+		ResourceBundle bundle = ResourceBundle.getBundle("i18n/trad");
 
-	    AppContext.init();
+		Image appIcon = new Image(getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "appIcon.png"));
 
-	    ResourceBundle bundle = ResourceBundle.getBundle("i18n/trad");
+		String fxmlFile = "/fxml/main.fxml";
+		FXMLLoader loader = new FXMLLoader();
+		Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(fxmlFile));
 
-	    Image appIcon = new Image(
-			getClass().getClassLoader().getResourceAsStream(IMAGEPATH + "appIcon.png"));
+		Scene scene = new Scene(rootNode, 800, 600);
+		scene.getStylesheets().add("/css/styles.css");
 
-	    String fxmlFile = "/fxml/main.fxml";
-	    FXMLLoader loader = new FXMLLoader();
-	    Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(fxmlFile));
+		stage.setOnCloseRequest((event) -> {
 
-	    Scene scene = new Scene(rootNode, 800, 600);
-	    scene.getStylesheets().add("/css/styles.css");
+			Executor.getInstance().execute(new AppClosingAction());
 
-	    stage.setOnCloseRequest((event) -> {
+		});
 
-		  Executor.getInstance().execute(new AppClosingAction());
-
-	    });
-
-	    stage.setTitle(bundle.getString("appTitle"));
-	    stage.getIcons().add(appIcon);
-	    stage.setScene(scene);
-	    stage.show();
-      }
+		stage.setTitle(bundle.getString("appTitle"));
+		stage.getIcons().add(appIcon);
+		stage.setScene(scene);
+		stage.show();
+	}
 
 }

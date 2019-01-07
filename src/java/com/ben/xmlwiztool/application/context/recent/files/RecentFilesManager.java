@@ -10,120 +10,99 @@ import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 import com.ben.xmlwiztool.application.context.AppContext;
 
-public class RecentFilesManager extends CircularFifoQueue<String>
-{
+public class RecentFilesManager extends CircularFifoQueue<String> {
 
-      /**
-       * 
-       */
-      private static final long		serialVersionUID = -414543987547750749L;
-      private static final int		SIZE		 = Integer.valueOf(AppContext.getInstance().getProperties().get("maxRecentfiles"));
-      private static final String	REGEX		 = AppContext.getInstance().getProperties().get("recentFilesPropRegex");
-      private static RecentFilesManager	instance;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -414543987547750749L;
+	private static final int SIZE = Integer.valueOf(AppContext.getInstance().getProperties().get("maxRecentfiles"));
+	private static final String REGEX = AppContext.getInstance().getProperties().get("recentFilesPropRegex");
+	private static RecentFilesManager instance;
 
+	private RecentFilesManager() {
 
-      private RecentFilesManager()
-      {
+		super(SIZE);
 
-	    super(SIZE);
+		Map<String, String> prop = filePathProperties();
 
-	    Map<String, String> prop = filePathProperties();
+		if (!prop.isEmpty()) {
 
-	    if (!prop.isEmpty())
-	    {
+			for (int idx = prop.size(); idx > 0; idx--) {
+				add(new File(prop.get("file_" + idx)));
+			}
+		}
 
-		  for (int idx = prop.size(); idx > 0; idx--)
-		  {
-			add(new File(prop.get("file_" + idx)));
-		  }
-	    }
+	}
 
-      }
+	public void add(File file) {
 
+		String path = file.toString();
 
-      public void add(File file)
-      {
+		if (file.exists() && !file.isDirectory() && !contains(path)) {
+			this.add(file.toString());
+		}
+	}
 
-	    if (file.exists() && !file.isDirectory())
-	    {
-		  this.add(file.toString());
-	    }
-      }
+	public File[] getFiles() {
 
+		File[] files = new File[this.size()];
 
-      public File[] getFiles()
-      {
+		int a = 0;
+		for (int i = this.size() - 1; i >= 0; i--) {
 
-	    File[] files = new File[this.size()];
+			String path = this.get(i);
 
-	    int a = 0;
-	    for (int i = this.size() - 1; i >= 0; i--)
-	    {
+			File file = new File(path);
 
-		  String path = this.get(i);
+			if (file.exists()) {
+				files[a++] = file;
+			}
 
-		  File file = new File(path);
+		}
 
-		  if (file.exists())
-		  {
-			files[a++] = file;
-		  }
+		return files;
 
-	    }
+	}
 
-	    return files;
+	public void save() {
 
-      }
+		Map<String, String> prop = filePathProperties();
 
+		prop.forEach((key, value) -> AppContext.getInstance().getProperties().remove(key));
 
-      public void save()
-      {
+		if (!this.isEmpty()) {
 
-	    Map<String, String> prop = filePathProperties();
+			int idx = this.size();
+			Iterator<String> it = this.iterator();
+			while (it.hasNext()) {
+				String fileProp = it.next();
+				AppContext.getInstance().getProperties().set("file_" + idx--, fileProp);
+			}
 
-	    prop.forEach((key, value) -> AppContext.getInstance().getProperties().remove(key));
+		}
 
-	    if (!this.isEmpty())
-	    {
+	}
 
-		  int idx = this.size();
-		  Iterator<String> it = this.iterator();
-		  while (it.hasNext())
-		  {
-			String fileProp = it.next();
-			AppContext.getInstance().getProperties().set("file_" + idx--, fileProp);
-		  }
+	private Map<String, String> filePathProperties() {
 
-	    }
+		return AppContext.getInstance().getProperties().properties().entrySet().stream()
+				.filter(entry -> isFileKey((String) entry.getKey()))
+				.collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
+	}
 
-      }
+	public static boolean isFileKey(String str) {
 
+		return str.matches(REGEX);
+	}
 
-      private Map<String, String> filePathProperties()
-      {
+	public static RecentFilesManager getInstance() {
 
-	    return AppContext.getInstance().getProperties().properties().entrySet().stream()
-			.filter(entry -> isFileKey((String) entry.getKey()))
-			.collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
-      }
+		if (instance == null) {
+			instance = new RecentFilesManager();
+		}
 
-
-      public static boolean isFileKey(String str)
-      {
-
-	    return str.matches(REGEX);
-      }
-
-
-      public static RecentFilesManager getInstance()
-      {
-
-	    if (instance == null)
-	    {
-		  instance = new RecentFilesManager();
-	    }
-
-	    return instance;
-      }
+		return instance;
+	}
 
 }

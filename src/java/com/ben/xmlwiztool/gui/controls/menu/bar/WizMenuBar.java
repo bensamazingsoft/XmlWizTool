@@ -16,7 +16,7 @@ import com.ben.xmlwiztool.application.actions.impl.UnFoldAllAction;
 import com.ben.xmlwiztool.application.context.AppContext;
 import com.ben.xmlwiztool.application.executor.Executor;
 import com.ben.xmlwiztool.gui.controls.alias.manager.popup.ManageAliasPopUp;
-import com.ben.xmlwiztool.gui.controls.menu.menuitem.RecentfileMenuItem;
+import com.ben.xmlwiztool.gui.controls.menu.menuitem.RecentFileMenuItem;
 import com.ben.xmlwiztool.gui.settings.popup.SettingPopUp;
 
 import javafx.event.Event;
@@ -26,197 +26,150 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 
-public class WizMenuBar extends MenuBar implements Initializable
-{
+public class WizMenuBar extends MenuBar implements Initializable {
 
-      private ResourceBundle bundle;
+	private ResourceBundle bundle;
 
+	public WizMenuBar() {
 
-      public WizMenuBar()
-      {
+		bundle = AppContext.getInstance().getBundle();
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/WizMenuBar.fxml"), bundle);
+		fxmlLoader.setRoot(this);
+		fxmlLoader.setController(this);
 
-	    bundle = AppContext.getInstance().getBundle();
-	    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/WizMenuBar.fxml"), bundle);
-	    fxmlLoader.setRoot(this);
-	    fxmlLoader.setController(this);
+		try {
+			fxmlLoader.load();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 
-	    try
-	    {
-		  fxmlLoader.load();
-	    }
-	    catch (IOException e)
-	    {
-		  throw new RuntimeException(e);
-	    }
+	}
 
-      }
+	@FXML
+	Menu fileMenu;
 
-      @FXML
-      Menu fileMenu;
+	@FXML
+	public void handleOpenAction(Event event) {
 
+		openAction();
+	}
 
-      @FXML
-      public void handleOpenAction(Event event)
-      {
+	private void openAction() {
 
-	    openAction();
-      }
+		Executor.getInstance().execute(new LoadFileAction());
 
+	}
 
-      private void openAction()
-      {
+	@FXML
+	public void handleloadClipBoardAction(Event event) {
 
-	    Executor.getInstance().execute(new LoadFileAction());
+		loadClipBoardAction();
+	}
 
-      }
+	private void loadClipBoardAction() {
 
+		Executor.getInstance().execute(new LoadClipBoardAction());
 
-      @FXML
-      public void handleloadClipBoardAction(Event event)
-      {
+	}
 
-	    loadClipBoardAction();
-      }
+	@FXML
+	public void handleShowAllAction(Event event) {
 
+		showAllAction();
+	}
 
-      private void loadClipBoardAction()
-      {
+	private void showAllAction() {
 
-	    Executor.getInstance().execute(new LoadClipBoardAction());
+		Executor.getInstance().execute(new ShowAllAction());
 
-      }
+	}
 
+	@FXML
+	public void handleFoldAllAction(Event event) {
 
-      @FXML
-      public void handleShowAllAction(Event event)
-      {
+		foldAllAction();
+	}
 
-	    showAllAction();
-      }
+	private void foldAllAction() {
 
+		Executor.getInstance().execute(new FoldAllAction());
 
-      private void showAllAction()
-      {
+	}
 
-	    Executor.getInstance().execute(new ShowAllAction());
+	@FXML
+	public void handleUnFoldAllAction(Event event) {
 
-      }
+		unFoldAllAction();
+	}
 
+	private void unFoldAllAction() {
 
-      @FXML
-      public void handleFoldAllAction(Event event)
-      {
+		Executor.getInstance().execute(new UnFoldAllAction());
 
-	    foldAllAction();
-      }
+	}
 
+	@FXML
+	public void handleToggleSeparatorAction(Event event) {
 
-      private void foldAllAction()
-      {
+		toggleSeparatorAction();
+	}
 
-	    Executor.getInstance().execute(new FoldAllAction());
+	private void toggleSeparatorAction() {
 
-      }
+		Executor.getInstance().execute(new ToggleSeparatorAction());
 
+	}
 
-      @FXML
-      public void handleUnFoldAllAction(Event event)
-      {
+	@FXML
+	public void handleManageAliasesAction(Event event) {
 
-	    unFoldAllAction();
-      }
+		manageAliasesAction();
+	}
 
+	private void manageAliasesAction() {
 
-      private void unFoldAllAction()
-      {
+		new ManageAliasPopUp();
 
-	    Executor.getInstance().execute(new UnFoldAllAction());
+	}
 
-      }
+	@FXML
+	public void handleHideEmptyAction(Event event) {
 
+		hideEmptyAction();
+	}
 
-      @FXML
-      public void handleToggleSeparatorAction(Event event)
-      {
+	private void hideEmptyAction() {
 
-	    toggleSeparatorAction();
-      }
+		Executor.getInstance().execute(new ToggleHideEmptyAction());
 
+	}
 
-      private void toggleSeparatorAction()
-      {
+	@FXML
+	public void handleSettingsAction(Event event) {
 
-	    Executor.getInstance().execute(new ToggleSeparatorAction());
+		settingsAction();
+	}
 
-      }
+	private void settingsAction() {
 
+		new SettingPopUp();
 
-      @FXML
-      public void handleManageAliasesAction(Event event)
-      {
+	}
 
-	    manageAliasesAction();
-      }
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
 
+		addRecentFilesMenuItem();
+	}
 
-      private void manageAliasesAction()
-      {
+	private void addRecentFilesMenuItem() {
 
-	    new ManageAliasPopUp();
+		fileMenu.getItems().removeIf(menuItem -> menuItem instanceof RecentFileMenuItem);
 
-      }
+		for (File file : AppContext.getInstance().getRecentFiles().getFiles()) {
+			fileMenu.getItems().add(new RecentFileMenuItem(file));
+		}
 
-
-      @FXML
-      public void handleHideEmptyAction(Event event)
-      {
-
-	    hideEmptyAction();
-      }
-
-
-      private void hideEmptyAction()
-      {
-
-	    Executor.getInstance().execute(new ToggleHideEmptyAction());
-
-      }
-
-
-      @FXML
-      public void handleSettingsAction(Event event)
-      {
-
-	    settingsAction();
-      }
-
-
-      private void settingsAction()
-      {
-
-	    new SettingPopUp();
-
-      }
-
-
-      @Override
-      public void initialize(URL arg0, ResourceBundle arg1)
-      {
-
-	    addRecentFilesMenuItem();
-      }
-
-
-      private void addRecentFilesMenuItem()
-      {
-
-	    fileMenu.getItems().removeIf(menuitem -> menuItem instanceof RecentFileMenuItem);
-
-	    for (File file : AppContext.getInstance().getRecentFiles().getFiles())
-	    {
-		  fileMenu.getItems().add(new RecentfileMenuItem(file));
-	    }
-
-      }
+	}
 
 }
