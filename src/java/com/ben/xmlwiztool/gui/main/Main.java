@@ -26,7 +26,6 @@ public class Main extends Application {
 	public void start(Stage stage) throws Exception {
 		// TODO clean the ElementViewer code
 		// TODO dress (css) the detailpopup
-		// TODO refactor the alias frmwk
 
 		AppContext.init();
 

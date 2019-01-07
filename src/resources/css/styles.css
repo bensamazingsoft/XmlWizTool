@@ -40,6 +40,19 @@
 	-fx-background-color:whitesmoke;
 }
 
+
+#attrLabel{
+	-fx-font-size:0.8em;
+	-fx-font-weight: bold;
+	-fx-text-fill:teal;
+	-fx-background-color:gold;
+
+	-fx-padding:4px;
+
+}
+
+
+
 .valueLabel{
 	-fx-font-size:1.2em;
 	-fx-font-weight: bold;

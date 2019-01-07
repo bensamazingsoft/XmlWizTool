@@ -10,6 +10,8 @@ import com.ben.xmlwiztool.application.wrapper.impl.SimpleElementWrapper;
 import com.ben.xmlwiztool.gui.controls.aliastext.AliasText;
 import com.ben.xmlwiztool.gui.controls.menu.context.sticker.StickerContextMenu;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
+import com.ben.xmlwiztool.gui.tooltips.Tips;
+import com.ben.xmlwiztool.gui.tooltips.factory.TipsFactory;
 
 import javafx.beans.binding.Bindings;
 import javafx.event.EventHandler;
@@ -20,6 +22,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -27,213 +30,196 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-public class Sticker extends VBox
-{
+public class Sticker extends VBox {
 
-      private HBox	     top    = new HBox();
-      private VBox	     bottom = new VBox();
-      private Label	     nameLabel;
-      private ContextMenu    contextMenu;
-      private Sticker	     sticker;
-      private ElementWrapper wrapper;
-      private double	     MaxComputedTextControlSize;
-      private Label	     valueLabel;
-      private HBox	     pathBox;
+	private HBox top = new HBox();
+	private HBox bottom = new HBox();
+	private Label nameLabel;
+	private ContextMenu contextMenu;
+	private Sticker sticker;
+	private ElementWrapper wrapper;
+	private double MaxComputedTextControlSize;
+	private Label valueLabel;
+	private HBox pathBox;
 
+	public Sticker(ElementWrapper wrapper) {
 
-      public Sticker(ElementWrapper wrapper)
-      {
+		this.wrapper = wrapper;
+		this.sticker = this;
 
-	    this.wrapper = wrapper;
-	    this.sticker = this;
+		this.getStyleClass().add("sticker");
+		this.getChildren().addAll(top, bottom);
 
-	    this.getStyleClass().add("sticker");
-	    this.getChildren().addAll(top, bottom);
+		this.contextMenu = new StickerContextMenu(this);
+		this.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
 
-	    this.contextMenu = new StickerContextMenu(this);
-	    this.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>()
-	    {
+			@Override
+			public void handle(ContextMenuEvent event) {
 
-		  @Override
-		  public void handle(ContextMenuEvent event)
-		  {
+				contextMenu.show(sticker, event.getScreenX(), event.getScreenY());
+			}
+		});
 
-			contextMenu.show(sticker, event.getScreenX(), event.getScreenY());
-		  }
-	    });
+		// top
+		if (wrapper instanceof ComplexElementWrapper && !GuiFacade.getInstance().isTreeView()) {
 
-	    // top
-	    if (wrapper instanceof ComplexElementWrapper && !GuiFacade.getInstance().isTreeView())
-	    {
+			addExpandBut(wrapper);
+		}
 
-		  addExpandBut(wrapper);
-	    }
+		nameLabel = new Label("<" + wrapper.getElement().getTagName() + ">");
+		nameLabel.getStyleClass().add("tagNameLabel");
+		top.getChildren().add(nameLabel);
 
-	    nameLabel = new Label("<" + wrapper.getElement().getTagName() + ">" + wrapper.isEmpty());
-	    nameLabel.getStyleClass().add("tagNameLabel");
-	    top.getChildren().add(nameLabel);
+		addShowBut(wrapper);
 
-	    addShowBut(wrapper);
+		// bottom
 
-	    // bottom
-	    bottom.setId("bottom");
-	    if (wrapper.getValue().length() > 0 && wrapper instanceof SimpleElementWrapper)
-	    {
+		AnchorPane anchor = new AnchorPane();
+		if (!wrapper.getAttributes().isEmpty()) {
+			Label attrLabel = new Label("Attr");
+			attrLabel.setId("attrLabel");
 
-		  valueLabel = new Label(
-			      AppContext.getInstance().getBundle().getString("value") + " : " + wrapper.getValue());
-		  valueLabel.getStyleClass().add("valueLabel");
+			AnchorPane.setRightAnchor(attrLabel, 0.0);
+			AnchorPane.setTopAnchor(attrLabel, 0.0);
+			anchor.getChildren().add(attrLabel);
+			attrLabel.setTooltip(TipsFactory.getTips(Tips.ATTR, wrapper));
+		}
 
-		  bottom.getChildren().add(valueLabel);
-	    }
+		VBox valPathBox = new VBox();
+		if (wrapper.getValue().length() > 0 && wrapper instanceof SimpleElementWrapper) {
 
-	    pathBox = new HBox(new Label("->"), makeElemPathTextFlow(wrapper));
-	    bottom.getChildren().add(pathBox);
+			valueLabel = new Label(
+					AppContext.getInstance().getBundle().getString("value") + " : " + wrapper.getValue());
+			valueLabel.getStyleClass().add("valueLabel");
 
-      }
+			valPathBox.getChildren().add(valueLabel);
+		}
 
+		pathBox = new HBox(new Label("->"), makeElemPathTextFlow(wrapper));
+		valPathBox.getChildren().add(pathBox);
 
-      public double computeMaxSize()
-      {
+		bottom.setId("bottom");
+		bottom.setSpacing(10);
+		bottom.getChildren().addAll(valPathBox, anchor);
 
-	    double nameLabelWidth = getLayoutWidth(nameLabel.getText());
-	    double valueLabelWidth = valueLabel != null ? getLayoutWidth(valueLabel.getText()) : 0;
-	    double pathboxWidth = pathBox != null ? pathBox.getBoundsInLocal().getWidth() : 0;
+	}
 
-	    double max = Math.max(nameLabelWidth, Math.max(valueLabelWidth, pathboxWidth));
+	public double computeMaxSize() {
 
-	    return 50 + max;
+		double nameLabelWidth = getLayoutWidth(nameLabel.getText());
+		double valueLabelWidth = valueLabel != null ? getLayoutWidth(valueLabel.getText()) : 0;
+		double pathboxWidth = pathBox != null ? pathBox.getBoundsInLocal().getWidth() : 0;
 
-      }
+		double max = Math.max(nameLabelWidth, Math.max(valueLabelWidth, pathboxWidth));
 
+		return 50 + max;
 
-      private double getLayoutWidth(String str)
-      {
+	}
 
-	    final Text txt = new Text(str);
-	    Scene scene = new Scene(new Group(txt));
-	    scene.getStylesheets().add("/css/styles.css");
-	    txt.getStyleClass().add("tagNameLabel");
-	    txt.applyCss();
-	    double width = txt.getLayoutBounds().getWidth();
+	private double getLayoutWidth(String str) {
 
-	    return width;
-      }
+		final Text txt = new Text(str);
+		Scene scene = new Scene(new Group(txt));
+		scene.getStylesheets().add("/css/styles.css");
+		txt.getStyleClass().add("tagNameLabel");
+		txt.applyCss();
+		double width = txt.getLayoutBounds().getWidth();
 
+		return width;
+	}
 
-      private void addShowBut(ElementWrapper wrapper)
-      {
+	private void addShowBut(ElementWrapper wrapper) {
 
-	    Button hideBut = new Button();
-	    // hideBut.getStyleClass().add("foldBut");
-	    hideBut.setText("X");
-	    hideBut.setOnAction((Event) -> {
-		  hide(wrapper);
-	    });
+		Button hideBut = new Button();
+		hideBut.setText("X");
+		hideBut.setStyle("-fx-font-size:0.7em");
+		hideBut.setOnAction((Event) -> {
+			hide(wrapper);
+		});
 
-	    Region region = new Region();
-	    top.getChildren().add(region);
-	    HBox.setHgrow(region, Priority.ALWAYS);
-	    top.getChildren().add(hideBut);
-      }
+		Region region = new Region();
+		top.getChildren().add(region);
+		HBox.setHgrow(region, Priority.ALWAYS);
+		top.getChildren().add(hideBut);
+	}
 
+	private void addExpandBut(ElementWrapper wrapper) {
 
-      private void addExpandBut(ElementWrapper wrapper)
-      {
+		ToggleButton toggleExpandBut = new ToggleButton();
+		toggleExpandBut.getStyleClass().add("expandBut");
+		toggleExpandBut.textProperty().bind(Bindings.when(wrapper.expandProperty()).then("-").otherwise("+"));
+		toggleExpandBut.setOnAction((Event) -> {
+			toggleExpand(wrapper);
+		});
 
-	    ToggleButton toggleExpandBut = new ToggleButton();
-	    toggleExpandBut.getStyleClass().add("expandBut");
-	    toggleExpandBut.textProperty().bind(Bindings.when(wrapper.expandProperty()).then("-").otherwise("+"));
-	    toggleExpandBut.setOnAction((Event) -> {
-		  toggleExpand(wrapper);
-	    });
+		top.getChildren().add(toggleExpandBut);
+	}
 
-	    top.getChildren().add(toggleExpandBut);
-      }
+	public static TextFlow makeElemPathTextFlow(ElementWrapper wrapper) {
 
+		TextFlow textFlow = new TextFlow();
+		LinkedList<ElementWrapper> lineage = new LinkedList<>(wrapper.getLineage());
+		ElementWrapper rootWrapper = lineage.peekFirst();
 
-      public static TextFlow makeElemPathTextFlow(ElementWrapper wrapper)
-      {
+		while (!lineage.isEmpty()) {
 
-	    TextFlow textFlow = new TextFlow();
-	    LinkedList<ElementWrapper> lineage = new LinkedList<>(wrapper.getLineage());
-	    ElementWrapper rootWrapper = lineage.peekFirst();
+			ElementWrapper current = lineage.poll();
 
-	    while (!lineage.isEmpty())
-	    {
+			Text text = makeAliasText(rootWrapper, current);
 
-		  ElementWrapper current = lineage.poll();
+			textFlow.getChildren().add(text);
 
-		  Text text = makeAliasText(rootWrapper, current);
+			Text sep = new Text(GuiFacade.getInstance().getSeparator());
 
-		  textFlow.getChildren().add(text);
+			sep.textProperty().bind(GuiFacade.getInstance().separatorProperty());
 
-		  Text sep = new Text(GuiFacade.getInstance().getSeparator());
+			textFlow.getChildren().add(sep);
+		}
 
-		  sep.textProperty().bind(GuiFacade.getInstance().separatorProperty());
+		return textFlow;
+	}
 
-		  textFlow.getChildren().add(sep);
-	    }
+	public static Text makeAliasText(ElementWrapper rootWrapper, ElementWrapper current) {
 
-	    return textFlow;
-      }
+		Text text = new Text(current.getElement().getTagName());
 
+		if (AppContext.getInstance().getTagNameAliasManager().aliased(current)) {
 
-      public static Text makeAliasText(ElementWrapper rootWrapper, ElementWrapper current)
-      {
+			text = new AliasText(rootWrapper, current, text.getText());
+		}
 
-	    Text text = new Text(current.getElement().getTagName());
+		return text;
+	}
 
-	    if (AppContext.getInstance().getTagNameAliasManager().aliased(current))
-	    {
+	private void hide(ElementWrapper wrapper) {
 
-		  text = new AliasText(rootWrapper, current, text.getText());
-	    }
+		wrapper.setVisible(!wrapper.isVisible());
 
-	    return text;
-      }
+	}
 
+	private void toggleExpand(ElementWrapper wrapper) {
 
-      private void hide(ElementWrapper wrapper)
-      {
+		wrapper.setExpand(!wrapper.isExpand());
+	}
 
-	    wrapper.setVisible(!wrapper.isVisible());
+	public ElementWrapper getWrapper() {
 
-      }
+		return wrapper;
+	}
 
+	public void setWrapper(ElementWrapper wrapper) {
 
-      private void toggleExpand(ElementWrapper wrapper)
-      {
+		this.wrapper = wrapper;
+	}
 
-	    wrapper.setExpand(!wrapper.isExpand());
-      }
+	public double getMaxComputedTextControlSize() {
 
+		return MaxComputedTextControlSize;
+	}
 
-      public ElementWrapper getWrapper()
-      {
+	public void setMaxComputedTextControlSize(double maxComputedTextControlSize) {
 
-	    return wrapper;
-      }
-
-
-      public void setWrapper(ElementWrapper wrapper)
-      {
-
-	    this.wrapper = wrapper;
-      }
-
-
-      public double getMaxComputedTextControlSize()
-      {
-
-	    return MaxComputedTextControlSize;
-      }
-
-
-      public void setMaxComputedTextControlSize(double maxComputedTextControlSize)
-      {
-
-	    MaxComputedTextControlSize = maxComputedTextControlSize;
-      }
+		MaxComputedTextControlSize = maxComputedTextControlSize;
+	}
 
 }

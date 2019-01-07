@@ -2,24 +2,22 @@ package com.ben.xmlwiztool.application.tagname.aliaser;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.ben.xmlwiztool.application.context.AppContext;
 import com.ben.xmlwiztool.application.context.properties.PropertiesContext;
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
+import com.ben.xmlwiztool.gui.controls.aliastext.AliasText;
 
 import javafx.beans.property.SimpleStringProperty;
 
 public class TagNameAliasManager {
 
 	private final Map<ElementWrapper, Map<ElementWrapper, SimpleStringProperty>> nameMap = new HashMap<>();
-	// move regex to properties and inject while init Appcontext
-	public final static String REGEX = "^((?:(?:\\w+\\.)+)[^\\.]+$)";
-
-	public static PropertiesContext prop = AppContext.getInstance().getProperties();
-
-	public TagNameAliasManager() {
-
-	}
+	public final static String REGEX = AppContext.getInstance().getProperties().get("TagNameAliasManagerRegex");
+	public final static PropertiesContext prop = AppContext.getInstance().getProperties();
 
 	public Map<ElementWrapper, SimpleStringProperty> get(ElementWrapper wrapper) {
 
@@ -84,6 +82,21 @@ public class TagNameAliasManager {
 
 	public Map<ElementWrapper, Map<ElementWrapper, SimpleStringProperty>> getNameMap() {
 		return nameMap;
+	}
+
+	public void globalize(AliasText alias) {
+
+		Set<Entry<ElementWrapper, SimpleStringProperty>> entrySet = AppContext.getInstance().getTagNameAliasManager()
+				.getNameMap().values().stream().map(Map::entrySet).flatMap(Set::stream).collect(Collectors.toSet());
+
+		for (Entry<ElementWrapper, SimpleStringProperty> entry : entrySet) {
+			if (entry.getKey().getElement().getTagName().equals(alias.getWrapper().getElement().getTagName())) {
+
+				entry.getValue().set(alias.getText());
+
+			}
+		}
+
 	}
 
 }

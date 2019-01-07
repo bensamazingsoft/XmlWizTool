@@ -6,9 +6,6 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.NamedNodeMap;
-
 import com.ben.xmlwiztool.application.context.AppContext;
 import com.ben.xmlwiztool.application.wrapper.AttributeWrapper;
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
@@ -114,14 +111,8 @@ public class StickerDetailPane extends VBox implements Initializable {
 					}
 				});
 
-		ObservableList<AttributeWrapper> tableList = FXCollections.observableArrayList();
-		NamedNodeMap nodeMap = sticker.getWrapper().getElement().getAttributes();
-		for (int i = 0; i < nodeMap.getLength(); i++) {
-
-			Attr attr = (Attr) nodeMap.item(i);
-			tableList.add(new AttributeWrapper(attr.getName(), attr.getValue()));
-
-		}
+		ObservableList<AttributeWrapper> tableList = FXCollections
+				.observableArrayList(sticker.getWrapper().getAttributes());
 
 		attrTable.setPrefHeight(80.0 + (Math.max((tableList.size() - 1), 0) * 80.0));
 		attrTable.setItems(tableList);
