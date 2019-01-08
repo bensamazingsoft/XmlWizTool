@@ -11,12 +11,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import com.ben.xmlwiztool.observable.Observable;
 import com.ben.xmlwiztool.observable.Observer;
 
 import javafx.beans.property.SimpleBooleanProperty;
 
-public abstract class ElementWrapper implements Observable, Observer {
+public abstract class ElementWrapper {
 
 	protected Element element;
 	protected Set<AttributeWrapper> attributes = new HashSet<>();
@@ -36,10 +35,6 @@ public abstract class ElementWrapper implements Observable, Observer {
 		setExpand(true);
 		setVisible(true);
 		setEmpty(true);
-
-		visible.addListener((obs, oldVal, newVal) -> {
-			notifyObservers();
-		});
 
 	}
 
@@ -244,60 +239,6 @@ public abstract class ElementWrapper implements Observable, Observer {
 	public final void setExpand(final boolean expand) {
 
 		this.expandProperty().set(expand);
-	}
-
-	@Override
-	public void update() {
-
-		if (!isChanged()) {
-			setChanged(true);
-			notifyObservers();
-		}
-
-	}
-
-	@Override
-	public void addObserver(Observer observer) {
-
-		observers.add(observer);
-
-	}
-
-	@Override
-	public void removeObserver(Observer observer) {
-
-		observers.remove(observer);
-
-	}
-
-	@Override
-	public void notifyObservers() {
-
-		for (Observer observer : observers) {
-			observer.update();
-		}
-
-	}
-
-	public Set<Observer> getObservers() {
-
-		return observers;
-	}
-
-	public void setObservers(Set<Observer> observers) {
-
-		this.observers = observers;
-	}
-
-	public boolean isChanged() {
-
-		return changed;
-	}
-
-	public void setChanged(boolean change) {
-
-		this.changed = change;
-
 	}
 
 	public Set<AttributeWrapper> getAttributes() {

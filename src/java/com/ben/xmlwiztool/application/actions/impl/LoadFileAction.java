@@ -38,7 +38,7 @@ public class LoadFileAction implements IAction {
 			file = fileChooser.showOpenDialog(null);
 		}
 
-		if (file != null) {
+		if (file.exists()) {
 
 			loadFile(file);
 

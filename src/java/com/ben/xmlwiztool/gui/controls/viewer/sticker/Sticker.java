@@ -3,9 +3,10 @@ package com.ben.xmlwiztool.gui.controls.viewer.sticker;
 
 import java.util.LinkedList;
 
+import com.ben.xmlwiztool.application.actions.impl.RefreshTabsAction;
 import com.ben.xmlwiztool.application.context.AppContext;
+import com.ben.xmlwiztool.application.executor.Executor;
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
-import com.ben.xmlwiztool.application.wrapper.impl.ComplexElementWrapper;
 import com.ben.xmlwiztool.application.wrapper.impl.SimpleElementWrapper;
 import com.ben.xmlwiztool.gui.controls.aliastext.AliasText;
 import com.ben.xmlwiztool.gui.controls.menu.context.sticker.StickerContextMenu;
@@ -61,10 +62,6 @@ public class Sticker extends VBox {
 		});
 
 		// top
-		if (wrapper instanceof ComplexElementWrapper && !GuiFacade.getInstance().isTreeView()) {
-
-			addExpandBut(wrapper);
-		}
 
 		nameLabel = new Label("<" + wrapper.getElement().getTagName() + ">");
 		nameLabel.getStyleClass().add("tagNameLabel");
@@ -194,6 +191,7 @@ public class Sticker extends VBox {
 	private void hide(ElementWrapper wrapper) {
 
 		wrapper.setVisible(!wrapper.isVisible());
+		Executor.getInstance().execute(new RefreshTabsAction());
 
 	}
 
