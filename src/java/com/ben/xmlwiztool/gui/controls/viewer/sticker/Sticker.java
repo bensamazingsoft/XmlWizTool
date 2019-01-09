@@ -11,6 +11,7 @@ import com.ben.xmlwiztool.application.wrapper.impl.SimpleElementWrapper;
 import com.ben.xmlwiztool.gui.controls.aliastext.AliasText;
 import com.ben.xmlwiztool.gui.controls.menu.context.sticker.StickerContextMenu;
 import com.ben.xmlwiztool.gui.facade.GuiFacade;
+import com.ben.xmlwiztool.gui.settings.popup.ShowPathSetting;
 import com.ben.xmlwiztool.gui.tooltips.Tips;
 import com.ben.xmlwiztool.gui.tooltips.factory.TipsFactory;
 
@@ -33,15 +34,15 @@ import javafx.scene.text.TextFlow;
 
 public class Sticker extends VBox {
 
-	private HBox top = new HBox();
-	private HBox bottom = new HBox();
-	private Label nameLabel;
-	private ContextMenu contextMenu;
-	private Sticker sticker;
-	private ElementWrapper wrapper;
-	private double MaxComputedTextControlSize;
-	private Label valueLabel;
-	private HBox pathBox;
+	private HBox			top		= new HBox();
+	private HBox			bottom	= new HBox();
+	private Label			nameLabel;
+	private ContextMenu		contextMenu;
+	private Sticker			sticker;
+	private ElementWrapper	wrapper;
+	private double			MaxComputedTextControlSize;
+	private Label			valueLabel;
+	private HBox			pathBox;
 
 	public Sticker(ElementWrapper wrapper) {
 
@@ -92,13 +93,29 @@ public class Sticker extends VBox {
 			valPathBox.getChildren().add(valueLabel);
 		}
 
-		pathBox = new HBox(new Label("->"), makeElemPathTextFlow(wrapper));
-		valPathBox.getChildren().add(pathBox);
-
+		if (showPath()) {
+			pathBox = new HBox(new Label("->"), makeElemPathTextFlow(wrapper));
+			valPathBox.getChildren().add(pathBox);
+		}
 		bottom.setId("bottom");
 		bottom.setSpacing(10);
 		bottom.getChildren().addAll(valPathBox, anchor);
 
+	}
+
+	private boolean showPath() {
+
+		ShowPathSetting setting = GuiFacade.getInstance().showPathProperty().get();
+
+		if (setting == ShowPathSetting.LEAF && wrapper instanceof SimpleElementWrapper) {
+			return true;
+		}
+
+		if (setting == ShowPathSetting.ALWAYS) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public double computeMaxSize() {

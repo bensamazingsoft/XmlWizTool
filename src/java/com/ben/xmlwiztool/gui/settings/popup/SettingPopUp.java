@@ -1,52 +1,56 @@
 
 package com.ben.xmlwiztool.gui.settings.popup;
 
+import com.ben.xmlwiztool.application.actions.impl.RefreshTabsAction;
 import com.ben.xmlwiztool.application.context.AppContext;
+import com.ben.xmlwiztool.application.executor.Executor;
+import com.ben.xmlwiztool.application.restorable.Restorable;
+import com.ben.xmlwiztool.gui.controls.settings.factory.SettingcontrolFactory;
+import com.ben.xmlwiztool.gui.facade.GuiFacade;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.GridPane;
 import javafx.stage.StageStyle;
 
-public class SettingPopUp extends Alert
-{
+public class SettingPopUp extends Alert {
 
-      public SettingPopUp(AlertType arg0)
-      {
+	public SettingPopUp(AlertType arg0) {
 
-	    super(arg0);
-      }
+		super(arg0);
+	}
 
+	public SettingPopUp() {
 
-      public SettingPopUp()
-      {
+		super(AlertType.CONFIRMATION);
 
-	    super(AlertType.CONFIRMATION);
+		initStyle(StageStyle.UTILITY);
+		setTitle(AppContext.getInstance().getBundle().getString("settings"));
+		setHeaderText("");
+		setGraphic(null);
 
-	    initStyle(StageStyle.UTILITY);
-	    setTitle(AppContext.getInstance().getBundle().getString("settings"));
-	    setHeaderText("");
-	    setGraphic(null);
+		GridPane content = new GridPane();
+		content.setAlignment(Pos.BASELINE_LEFT);
+		content.setMaxWidth(Double.MAX_VALUE);
 
-	    GridPane content = new GridPane();
-	    content.setAlignment(Pos.BASELINE_LEFT);
+		Restorable<SimpleObjectProperty<ShowPathSetting>, ShowPathSetting> showPathProp = new Restorable<>(
+				GuiFacade.getInstance().showPathProperty());
+		Restorable.Memento<ShowPathSetting> showPathMemento = showPathProp.save();
 
-	    // Label treeViewLabel = new Label(AppContext.getInstance().getBundle().getString("treeView") + " ");
-	    // GridPane.setVgrow(treeViewLabel, Priority.ALWAYS);
-	    // CheckBox treeViewCb = new CheckBox();
-	    // GridPane.setVgrow(treeViewCb, Priority.ALWAYS);
-	    // treeViewCb.selectedProperty().bindBidirectional(GuiFacade.getInstance().treeViewProperty());
+		content.add(SettingcontrolFactory.getcontrol(showPathProp));
 
-	    content.setMaxWidth(Double.MAX_VALUE);
+		getDialogPane().setContent(content);
 
-	    // content.add(treeViewLabel, 0, 1);
+		showAndWait().ifPresent(response -> {
+			if (response == ButtonType.OK) {
+				Executor.getInstance().execute(new RefreshTabsAction());
+			} else {
+				showPathProp.restore(showPathMemento);
+			}
+		});
 
-	    // content.add(treeViewCb, 1, 1);
-
-	    getDialogPane().setContent(content);
-
-	    showAndWait();
-
-      }
+	}
 
 }

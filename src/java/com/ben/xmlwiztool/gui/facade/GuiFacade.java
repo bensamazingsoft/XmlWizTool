@@ -4,174 +4,159 @@ package com.ben.xmlwiztool.gui.facade;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.ben.xmlwiztool.application.actions.impl.ReloadActiveTabAction;
+import com.ben.xmlwiztool.application.actions.impl.RefreshTabsAction;
 import com.ben.xmlwiztool.application.context.AppContext;
 import com.ben.xmlwiztool.application.executor.Executor;
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
+import com.ben.xmlwiztool.gui.settings.popup.ShowPathSetting;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TabPane;
 
-public class GuiFacade
-{
+public class GuiFacade {
 
-      private static GuiFacade	    instance;
+	private static GuiFacade instance;
 
-      private SimpleDoubleProperty  tabSize;
+	private SimpleDoubleProperty tabSize;
 
-      private SimpleStringProperty  separator;
-      private final String	    POINT = ".";
-      private final String	    SLASH = "\\";
+	private SimpleStringProperty separator;
+	private final String POINT = ".";
+	private final String SLASH = "\\";
 
-      private TabPane		    tabPane;
+	private TabPane tabPane;
 
-      private SimpleBooleanProperty hideEmpty, treeView;
+	private SimpleBooleanProperty hideEmpty, treeView;
+	private SimpleObjectProperty<ShowPathSetting> showPath = new SimpleObjectProperty<>();
 
+	private GuiFacade() {
 
-      private GuiFacade()
-      {
+		separator = new SimpleStringProperty(POINT);
 
-	    separator = new SimpleStringProperty(POINT);
+		tabSize = new SimpleDoubleProperty();
 
-	    tabSize = new SimpleDoubleProperty();
+		Double value = Double.valueOf(AppContext.getInstance().getProperties().get("tabSize"));
 
-	    Double value = Double.valueOf(AppContext.getInstance().getProperties().get("tabSize"));
+		showPath.set(
+				ShowPathSetting.valueOf(AppContext.getInstance().getProperties().get("ShowPathSetting")));
+		showPath.addListener((obs, oldValue, newValue) -> {
+			AppContext.getInstance().getProperties().set("ShowPathSetting", newValue.name());
+		});
 
-	    tabSize.setValue(value);
+		tabSize.setValue(value);
 
-	    hideEmpty = new SimpleBooleanProperty();
-	    hideEmpty.addListener((obs, oldVal, newVal) -> {
-		  Executor.getInstance().execute(new ReloadActiveTabAction());
-	    });
+		hideEmpty = new SimpleBooleanProperty();
+		hideEmpty.addListener((obs, oldVal, newVal) -> {
+			Executor.getInstance().execute(new RefreshTabsAction());
+		});
 
-	    treeView = new SimpleBooleanProperty();
-	    treeView.set(Boolean.valueOf(AppContext.getInstance().getProperties().get("treeView")));
-	    treeView.addListener((o, oldVal, newVal) -> {
-		  AppContext.getInstance().getProperties().set("treeView", newVal.toString());
-	    });
+		treeView = new SimpleBooleanProperty();
+		treeView.set(Boolean.valueOf(AppContext.getInstance().getProperties().get("treeView")));
+		treeView.addListener((o, oldVal, newVal) -> {
+			AppContext.getInstance().getProperties().set("treeView", newVal.toString());
+		});
 
-      }
+	}
 
+	public static GuiFacade getInstance() {
 
-      public static GuiFacade getInstance()
-      {
+		if (instance == null) {
+			instance = new GuiFacade();
+		}
 
-	    if (instance == null)
-	    {
-		  instance = new GuiFacade();
-	    }
+		return instance;
 
-	    return instance;
+	}
 
-      }
+	public SimpleDoubleProperty getTabSize() {
 
+		return tabSize;
+	}
 
-      public SimpleDoubleProperty getTabSize()
-      {
+	public void setTabSize(SimpleDoubleProperty tabSize) {
 
-	    return tabSize;
-      }
+		this.tabSize = tabSize;
+	}
 
+	public void toggleSeparator() {
 
-      public void setTabSize(SimpleDoubleProperty tabSize)
-      {
+		separator.set(separator.get().equals(POINT) ? SLASH : POINT);
 
-	    this.tabSize = tabSize;
-      }
+	}
 
+	public List<ElementWrapper> getOpenElements() {
 
-      public void toggleSeparator()
-      {
+		return tabPane.getTabs().stream().map(tab -> (ElementWrapper) tab.getUserData()).collect(Collectors.toList());
 
-	    separator.set(separator.get().equals(POINT) ? SLASH : POINT);
+	}
 
-      }
+	public TabPane getTabPane() {
 
+		return tabPane;
+	}
 
-      public List<ElementWrapper> getOpenElements()
-      {
+	public void setTabPane(TabPane tabPane) {
 
-	    return tabPane.getTabs().stream().map(tab -> (ElementWrapper) tab.getUserData()).collect(Collectors.toList());
+		this.tabPane = tabPane;
+	}
 
-      }
+	public final SimpleBooleanProperty hideEmptyProperty() {
 
+		return this.hideEmpty;
+	}
 
-      public TabPane getTabPane()
-      {
+	public final boolean isHideEmpty() {
 
-	    return tabPane;
-      }
+		return this.hideEmptyProperty().get();
+	}
 
+	public final void setHideEmpty(final boolean hideEmpty) {
 
-      public void setTabPane(TabPane tabPane)
-      {
+		this.hideEmptyProperty().set(hideEmpty);
+	}
 
-	    this.tabPane = tabPane;
-      }
+	public final SimpleStringProperty separatorProperty() {
 
+		return this.separator;
+	}
 
-      public final SimpleBooleanProperty hideEmptyProperty()
-      {
+	public final String getSeparator() {
 
-	    return this.hideEmpty;
-      }
+		return this.separatorProperty().get();
+	}
 
+	public final void setSeparator(final String separator) {
 
-      public final boolean isHideEmpty()
-      {
+		this.separatorProperty().set(separator);
+	}
 
-	    return this.hideEmptyProperty().get();
-      }
+	public final SimpleBooleanProperty treeViewProperty() {
 
+		return this.treeView;
+	}
 
-      public final void setHideEmpty(final boolean hideEmpty)
-      {
+	public final boolean isTreeView() {
 
-	    this.hideEmptyProperty().set(hideEmpty);
-      }
+		return this.treeViewProperty().get();
+	}
 
+	public final void setTreeView(final boolean treeView) {
 
-      public final SimpleStringProperty separatorProperty()
-      {
+		this.treeViewProperty().set(treeView);
+	}
 
-	    return this.separator;
-      }
+	public final SimpleObjectProperty<ShowPathSetting> showPathProperty() {
+		return this.showPath;
+	}
 
+	public final ShowPathSetting getShowPath() {
+		return this.showPathProperty().get();
+	}
 
-      public final String getSeparator()
-      {
-
-	    return this.separatorProperty().get();
-      }
-
-
-      public final void setSeparator(final String separator)
-      {
-
-	    this.separatorProperty().set(separator);
-      }
-
-
-      public final SimpleBooleanProperty treeViewProperty()
-      {
-
-	    return this.treeView;
-      }
-
-
-      public final boolean isTreeView()
-      {
-
-	    return this.treeViewProperty().get();
-      }
-
-
-      public final void setTreeView(final boolean treeView)
-      {
-
-	    this.treeViewProperty().set(treeView);
-      }
+	public final void setShowPath(final ShowPathSetting showPath) {
+		this.showPathProperty().set(showPath);
+	}
 
 }
