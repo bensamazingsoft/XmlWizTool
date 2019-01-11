@@ -22,14 +22,14 @@ public class GuiFacade {
 
 	private SimpleDoubleProperty tabSize;
 
-	private SimpleStringProperty separator;
-	private final String POINT = ".";
-	private final String SLASH = "\\";
+	private SimpleStringProperty	separator;
+	private final String			POINT	= ".";
+	private final String			SLASH	= "\\";
 
 	private TabPane tabPane;
 
-	private SimpleBooleanProperty hideEmpty, treeView;
-	private SimpleObjectProperty<ShowPathSetting> showPath = new SimpleObjectProperty<>();
+	private SimpleBooleanProperty					hideEmpty, treeView;
+	private SimpleObjectProperty<ShowPathSetting>	showPath	= new SimpleObjectProperty<>();
 
 	private GuiFacade() {
 
@@ -39,10 +39,10 @@ public class GuiFacade {
 
 		Double value = Double.valueOf(AppContext.getInstance().getProperties().get("tabSize"));
 
-		showPath.set(
-				ShowPathSetting.valueOf(AppContext.getInstance().getProperties().get("ShowPathSetting")));
+		showPath.set(ShowPathSetting.valueOf(AppContext.getInstance().getProperties().get("ShowPathSetting")));
 		showPath.addListener((obs, oldValue, newValue) -> {
 			AppContext.getInstance().getProperties().set("ShowPathSetting", newValue.name());
+
 		});
 
 		tabSize.setValue(value);
