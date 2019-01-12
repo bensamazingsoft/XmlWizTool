@@ -60,7 +60,7 @@
 }
 
 .tagNameLabel{
-	-fx-font-size:1.2em;
+	-fx-font-size:1em;
 	-fx-font-weight: bold;
 	-fx-text-fill:#008080;
 }

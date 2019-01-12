@@ -26,33 +26,18 @@ public class LoadStringSourceAction implements IAction {
 	public void execute() {
 
 		try {
-			Long before = System.currentTimeMillis();
 
 			Document doc = DocumentFactory.getDocument(source);
 
 			ElementWrapper wrapper = ElementWrapperFactory.getElementWrapper(doc.getDocumentElement());
 
-			Long docu = System.currentTimeMillis();
-			System.out.println("Document made in " + (docu - before) + "ms");
-
 			AliasesProcessor processor = new AliasesProcessor(wrapper);
 			processor.process(wrapper);
-
-			Long alias = System.currentTimeMillis();
-			System.out.println("Aliases made in " + (alias - docu) + "ms");
 
 			SetFilterableProcessor filtering = new SetFilterableProcessor();
 			filtering.process(wrapper);
 
-			Long filter = System.currentTimeMillis();
-			System.out.println("Filtering made in " + (filter - alias) + "ms");
-
 			GuiFacade.getInstance().getTabPane().getTabs().add(TabFactory.getTab(wrapper));
-
-			Long after = System.currentTimeMillis();
-
-			System.out.println("Tab made in " + (after - alias) + "ms");
-			System.out.println("loaded in : " + (after - before) + "ms");
 
 		} catch (DocumentParsingException e) {
 			new ExceptionPopUp(e);

@@ -15,14 +15,13 @@ import com.ben.xmlwiztool.gui.settings.popup.ShowPathSetting;
 import com.ben.xmlwiztool.gui.tooltips.Tips;
 import com.ben.xmlwiztool.gui.tooltips.factory.TipsFactory;
 
-import javafx.beans.binding.Bindings;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -146,7 +145,8 @@ public class Sticker extends VBox {
 
 		Button hideBut = new Button();
 		hideBut.setText("X");
-		hideBut.setStyle("-fx-font-size:0.7em");
+		hideBut.setStyle("-fx-font-size:0.7em;-fx-font-weight: bold;");
+		hideBut.setPadding(new Insets(2, 6, 2, 6));
 		hideBut.setOnAction((Event) -> {
 			hide(wrapper);
 		});
@@ -155,18 +155,6 @@ public class Sticker extends VBox {
 		top.getChildren().add(region);
 		HBox.setHgrow(region, Priority.ALWAYS);
 		top.getChildren().add(hideBut);
-	}
-
-	private void addExpandBut(ElementWrapper wrapper) {
-
-		ToggleButton toggleExpandBut = new ToggleButton();
-		toggleExpandBut.getStyleClass().add("expandBut");
-		toggleExpandBut.textProperty().bind(Bindings.when(wrapper.expandProperty()).then("-").otherwise("+"));
-		toggleExpandBut.setOnAction((Event) -> {
-			toggleExpand(wrapper);
-		});
-
-		top.getChildren().add(toggleExpandBut);
 	}
 
 	public static TextFlow makeElemPathTextFlow(ElementWrapper wrapper) {
@@ -210,11 +198,6 @@ public class Sticker extends VBox {
 		wrapper.setVisible(!wrapper.isVisible());
 		Executor.getInstance().execute(new RefreshTabsAction());
 
-	}
-
-	private void toggleExpand(ElementWrapper wrapper) {
-
-		wrapper.setExpand(!wrapper.isExpand());
 	}
 
 	public ElementWrapper getWrapper() {
