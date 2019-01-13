@@ -8,6 +8,10 @@
 	
 }
 
+#LeafViewTabContent{
+	-fx-padding:15.0;
+}
+
 .StickerDetailPane{
 		-fx-background-color:white;
 }
