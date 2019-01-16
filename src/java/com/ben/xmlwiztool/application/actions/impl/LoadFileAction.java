@@ -3,9 +3,11 @@ package com.ben.xmlwiztool.application.actions.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.ben.xmlwiztool.application.actions.IAction;
 import com.ben.xmlwiztool.application.actions.exception.NullFileException;
@@ -53,7 +55,8 @@ public class LoadFileAction implements IAction {
 		List<String> sources = new ArrayList<>();
 		try {
 
-			sources = Files.readAllLines(file.toPath());
+			// sources = Files.readAllLines(file.toPath());
+			sources = Files.lines(file.toPath(), StandardCharsets.ISO_8859_1).collect(Collectors.toList());
 
 			String source = String.join("\n", sources);
 
