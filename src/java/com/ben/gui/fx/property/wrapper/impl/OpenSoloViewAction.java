@@ -1,5 +1,4 @@
-
-package com.ben.xmlwiztool.application.actions.impl;
+package com.ben.gui.fx.property.wrapper.impl;
 
 import com.ben.xmlwiztool.application.actions.IAction;
 import com.ben.xmlwiztool.application.wrapper.ElementWrapper;
@@ -8,11 +7,11 @@ import com.ben.xmlwiztool.gui.facade.GuiFacade;
 
 import javafx.scene.control.TabPane;
 
-public class OpenLeafViewAction implements IAction {
+public class OpenSoloViewAction implements IAction {
 
 	private final ElementWrapper wrapper;
 
-	public OpenLeafViewAction(ElementWrapper wrapper) {
+	public OpenSoloViewAction(ElementWrapper wrapper) {
 
 		this.wrapper = wrapper;
 	}
@@ -21,8 +20,7 @@ public class OpenLeafViewAction implements IAction {
 	public void execute() {
 
 		TabPane tabPane = GuiFacade.getInstance().getTabPane();
-		tabPane.getTabs().add(TabFactory.getTab(wrapper, TabFactory.Type.LEAF));
+		tabPane.getTabs().add(TabFactory.getTab(wrapper, TabFactory.Type.TREE));
 
 	}
-
 }

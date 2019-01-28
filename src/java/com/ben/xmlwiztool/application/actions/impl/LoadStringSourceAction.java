@@ -37,7 +37,7 @@ public class LoadStringSourceAction implements IAction {
 			SetFilterableProcessor filtering = new SetFilterableProcessor();
 			filtering.process(wrapper);
 
-			GuiFacade.getInstance().getTabPane().getTabs().add(TabFactory.getTab(wrapper));
+			GuiFacade.getInstance().getTabPane().getTabs().add(TabFactory.getTab(wrapper, TabFactory.Type.TREE));
 
 		} catch (DocumentParsingException e) {
 			new ExceptionPopUp(e);
