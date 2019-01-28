@@ -23,6 +23,10 @@ public class TipsFactory {
 			break;
 		case HIDE:
 			tooltip.setText(bundle.getString("tip_hide"));
+		case ATTR:
+			break;
+		default:
+			break;
 		}
 
 		return tooltip;
@@ -44,6 +48,12 @@ public class TipsFactory {
 
 			}
 			tooltip.setText(sb.toString());
+		case FILTER:
+			break;
+		case HIDE:
+			break;
+		default:
+			break;
 		}
 		return tooltip;
 	}
