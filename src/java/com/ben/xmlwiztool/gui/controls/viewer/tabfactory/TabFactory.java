@@ -17,9 +17,11 @@ public class TabFactory {
 		switch (type) {
 		case LEAF:
 			tab = new LeafViewTab(wrapper);
+			break;
 		case TREE:
 			boolean treeView = GuiFacade.getInstance().isTreeView();
 			tab = treeView ? new TreeViewTab(wrapper) : new StickerTab(wrapper);
+			break;
 
 		default:
 			break;
